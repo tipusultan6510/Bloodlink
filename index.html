@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BloodLink - Blood Donor Network</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f2f2f2;color:#111;font-size:15px}
+.hdr{background:#C0392B;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:99;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hdr-left{display:flex;align-items:center;gap:9px}
+.drop{width:22px;height:22px;background:white;border-radius:50% 50% 50% 0;transform:rotate(-45deg);flex-shrink:0}
+.hdr-title{color:white;font-size:19px;font-weight:800}
+.hdr-sub{color:rgba(255,255,255,.7);font-size:11px}
+.lbadge{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:white;font-size:12px;font-weight:700;padding:4px 11px;border-radius:20px}
+.ldot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0}
+.ldot.pulse{animation:bl .9s infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.2}}
+.tabs{background:#9b2226;display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,.55);padding:12px 4px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:all .15s;text-align:center}
+.tab:hover{color:white;background:rgba(255,255,255,.07)}
+.tab.on{color:white;border-bottom-color:white}
+.bgbar{background:white;border-bottom:1px solid #ddd;padding:9px 14px;display:none}
+.bgbar.show{display:block}
+.bglbl{font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+.bgrow{display:flex;gap:5px;flex-wrap:wrap}
+.bgchip{padding:5px 11px;border-radius:20px;border:2px solid;font-size:13px;font-weight:800;cursor:pointer;background:white;transition:all .15s}
+.notice{padding:10px 14px;font-size:13px;font-weight:700;text-align:center;display:none;border-bottom:1px solid}
+.notice.show{display:block}
+.notice.ok{background:#e6f4ee;color:#1a7a4a;border-color:#b2dfc8}
+.notice.err{background:#fde8e6;color:#a32d2d;border-color:#f5c6c2}
+.notice.info{background:#e3f2fd;color:#1565C0;border-color:#bbdefb}
+.wrap{max-width:860px;margin:0 auto;padding:16px 14px 56px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px}
+.stat{background:white;border:1px solid #ddd;border-radius:10px;padding:12px 8px;text-align:center}
+.stat-n{font-size:24px;font-weight:800;line-height:1;margin-bottom:3px}
+.stat-l{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.4px;font-weight:700}
+.sbox{background:white;border:1px solid #ddd;border-radius:10px;padding:13px;margin-bottom:14px}
+.inp{width:100%;border:1px solid #ddd;border-radius:8px;padding:10px 13px;font-family:inherit;font-size:15px;color:#111;background:#f9f9f9;outline:none;-webkit-appearance:none}
+.inp:focus{border-color:#C0392B;background:white}
+.inp::placeholder{color:#bbb}
+.frow{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap;align-items:center}
+.flbl{font-size:10px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.5px}
+.fchip{background:#f5f5f5;border:1px solid #ddd;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700;cursor:pointer;color:#777;font-family:inherit}
+.fchip.on{background:#fde8e6;border-color:#C0392B;color:#96281B}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px}
+.dc{background:white;border:1px solid #ddd;border-radius:12px;padding:14px}
+.dc.dim{opacity:.6}
+.dc-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
+.bb{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:white;flex-shrink:0}
+.dc-name{font-weight:700;font-size:15px;line-height:1.3}
+.dc-loc{font-size:12px;color:#777;margin-top:2px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;margin-left:auto;flex-shrink:0}
+.pill.av{background:#e6f4ee;color:#1a7a4a}
+.pill.un{background:#f0f0f0;color:#888}
+.pdot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.dc-phone{background:#f9f9f9;border:1px solid #eee;border-radius:7px;padding:7px 11px;font-size:13px;color:#555;font-weight:600;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cpbtn{background:none;border:1px solid #ddd;border-radius:5px;padding:4px 6px;cursor:pointer;color:#bbb;display:inline-flex;align-items:center;flex-shrink:0;transition:all .15s;line-height:1}
+.cpbtn:hover{color:#1565C0;border-color:#1565C0;background:#e3f2fd}
+.cpbtn svg{width:13px;height:13px;display:block}
+.dc-acts{display:flex;gap:6px}
+.btn{border:none;border-radius:8px;padding:8px 10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;min-height:38px}
+.bcall{background:#fde8e6;color:#96281B;flex:1}
+.bcall:hover,.bcall:active{background:#C0392B;color:white}
+.bwa{background:#e6f4ee;color:#1a7a4a;flex:1}
+.bwa:hover,.bwa:active{background:#1a7a4a;color:white}
+.bsm{background:#f0f0f0;color:#555;padding:8px 10px}
+.bsm:hover{background:#e0e0e0}
+.bdel:hover{background:#fde8e6;color:#C0392B}
+.pw{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#f9f9f9}
+.pw:focus-within{border-color:#C0392B}
+.pw-pre{background:#e8e8e8;border-right:1px solid #ddd;padding:11px 10px;font-size:15px;color:#333;font-weight:700;white-space:nowrap;flex-shrink:0;line-height:1.4}
+.pw input{border:none;background:transparent;flex:1;padding:11px 10px;font-family:inherit;font-size:15px;color:#111;outline:none;min-width:0;-webkit-appearance:none}
+.fc{background:white;border:1px solid #ddd;border-radius:12px;padding:20px;margin-bottom:14px}
+.fc-title{font-size:17px;font-weight:800;margin-bottom:16px}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:13px}
+.fg{display:flex;flex-direction:column;gap:5px}
+.fg.full{grid-column:1/-1}
+.fg label{font-size:11px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.5px}
+.fg input,.fg select{border:1px solid #ddd;border-radius:8px;padding:10px 12px;font-family:inherit;font-size:15px;color:#111;background:#f9f9f9;outline:none;width:100%;-webkit-appearance:none}
+.fg input:focus,.fg select:focus{border-color:#C0392B;background:white}
+.bprimary{background:#C0392B;color:white;border:none;border-radius:10px;padding:13px;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;width:100%;min-height:50px;transition:background .15s}
+.bprimary:hover{background:#96281B}
+.bprimary:disabled{opacity:.5;cursor:not-allowed}
+.bsecond{background:#f0f0f0;color:#555;border:1px solid #ddd;border-radius:8px;padding:9px 18px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.emg{background:#7f1d1d;border-radius:12px;padding:18px;color:white;margin-bottom:14px}
+.emg-t{font-size:20px;font-weight:800;margin-bottom:3px}
+.emg-s{font-size:12px;opacity:.8;margin-bottom:13px}
+.emg-bgs{display:flex;gap:7px;flex-wrap:wrap}
+.ebtn{padding:9px 14px;border-radius:8px;border:2px solid rgba(255,255,255,.4);color:white;font-family:inherit;font-size:15px;font-weight:800;cursor:pointer;background:rgba(255,255,255,.12);min-height:42px;transition:all .15s}
+.ebtn:hover{background:rgba(255,255,255,.25)}
+.ebtn.sel{background:white;border-color:white}
+.emg-wrap{margin-bottom:12px}
+.emg-topbar{display:flex;align-items:center;justify-content:space-between;background:white;border:1px solid #ddd;border-radius:10px 10px 0 0;padding:10px 14px;gap:8px;flex-wrap:wrap}
+.emg-tb-title{font-size:13px;font-weight:800;color:#111;flex:1}
+.cpall{background:#f0f0f0;border:1px solid #ddd;border-radius:6px;padding:6px 11px;font-family:inherit;font-size:12px;font-weight:700;color:#333;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:5px}
+.cpall:hover{background:#C0392B;color:white;border-color:#C0392B}
+.cpall svg{width:13px;height:13px;flex-shrink:0}
+.emg-cards{background:white;border:1px solid #ddd;border-top:none;border-radius:0 0 10px 10px;overflow:hidden}
+.emg-dc{padding:13px 14px;border-bottom:1px solid #eee}
+.emg-dc:last-child{border-bottom:none}
+.emg-dc-top{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.emg-rank{width:24px;height:24px;border-radius:50%;color:white;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.emg-dc-name{font-weight:800;font-size:14px;flex:1}
+.emg-fields{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#f9f9f9;border-radius:8px;padding:9px 11px;margin-bottom:9px}
+.emg-f{display:flex;flex-direction:column;gap:2px}
+.emg-fl{font-size:10px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:.4px}
+.emg-fv{font-size:13px;font-weight:700;color:#111}
+.emg-acts{display:flex;gap:6px;flex-wrap:wrap}
+.shcard{background:white;border:1px solid #ddd;border-radius:12px;padding:20px;margin-bottom:12px}
+.sh-title{font-size:17px;font-weight:800;margin-bottom:7px}
+.sh-desc{font-size:13px;color:#666;margin-bottom:14px;line-height:1.8}
+.sh-urlrow{display:flex;gap:8px;margin-bottom:12px}
+.sh-url{flex:1;border:1px solid #ddd;border-radius:8px;padding:10px 12px;font-family:inherit;font-size:12px;color:#111;background:#f9f9f9;outline:none}
+.sh-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px}
+.shbtn{background:#f5f5f5;border:1px solid #ddd;border-radius:10px;padding:13px 6px;font-family:inherit;font-size:12px;font-weight:700;color:#111;cursor:pointer;text-align:center;min-height:58px;transition:all .15s}
+.shbtn:hover{background:#e8e8e8}
+.shbtn b{display:block;font-size:17px;margin-bottom:4px;font-weight:800}
+.install{background:#fde8e6;border:1px solid rgba(192,57,43,.2);border-radius:10px;padding:13px;font-size:12px;color:#7f1d1d;line-height:1.9}
+.sh2{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sh2-t{font-size:17px;font-weight:800}
+.sh2-c{font-size:12px;color:#777;font-weight:600}
+.empty{text-align:center;padding:36px 14px;color:#777}
+.empty-t{font-size:15px;font-weight:700;margin-bottom:5px;color:#111}
+.empty-s{font-size:13px}
+.loading{text-align:center;padding:36px 14px;color:#777}
+.spin{width:32px;height:32px;border:3px solid #eee;border-top-color:#C0392B;border-radius:50%;animation:sp .8s linear infinite;margin:0 auto 10px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.mbox{background:white;border-radius:14px;padding:22px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.m-title{font-size:17px;font-weight:800;margin-bottom:16px}
+.m-acts{display:flex;gap:9px;justify-content:flex-end;margin-top:16px}
+/* SETUP SCREEN */
+.setup{max-width:580px;margin:32px auto;padding:0 14px}
+.setup-card{background:white;border:1px solid #ddd;border-radius:14px;padding:26px}
+.setup-h{font-size:20px;font-weight:800;color:#C0392B;margin-bottom:8px}
+.setup-p{font-size:13px;color:#555;line-height:1.8;margin-bottom:20px}
+.setup-step{background:#f9f9f9;border:1px solid #eee;border-radius:10px;padding:14px;margin-bottom:10px}
+.snum{background:#C0392B;color:white;width:22px;height:22px;border-radius:50%;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;vertical-align:middle;margin-right:6px}
+.stitle{font-size:13px;font-weight:800;vertical-align:middle}
+.setup-step p{font-size:12px;color:#555;line-height:1.7;margin-top:7px}
+.setup-step a{color:#C0392B;font-weight:700}
+.setup-step code{background:#eee;border-radius:4px;padding:1px 5px;font-size:11px;font-family:monospace}
+.cfg-lbl{font-size:11px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.4px;display:block;margin-top:9px;margin-bottom:3px}
+.cfg-inp{width:100%;border:1px solid #ddd;border-radius:7px;padding:8px 11px;font-family:monospace;font-size:13px;color:#111;background:white;outline:none}
+.cfg-inp:focus{border-color:#C0392B}
+.setup-err{color:#a32d2d;font-size:12px;font-weight:700;margin-top:8px;display:none}
+@media(max-width:560px){
+  .stats{grid-template-columns:1fr 1fr}
+  .fgrid{grid-template-columns:1fr}
+  .sh-btns{grid-template-columns:1fr 1fr}
+  .dgrid{grid-template-columns:1fr}
+  .hdr-sub{display:none}
+  .wrap{padding:12px 11px 52px}
+  .emg-fields{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SETUP SCREEN -->
+<div id="setup-screen">
+  <div style="text-align:center;padding:28px 0 14px">
+    <div style="font-size:30px;font-weight:800;color:#C0392B">BloodLink</div>
+    <div style="font-size:12px;color:#888;margin-top:3px">Community Blood Donor Network</div>
+  </div>
+  <div class="setup">
+    <div class="setup-card">
+      <div class="setup-h">Quick Setup (5 min, free)</div>
+      <div class="setup-p">BloodLink uses Google Firebase (free) so all your friends share the same live donor list in real time. You only do this once.</div>
+
+      <div class="setup-step">
+        <span class="snum">1</span><span class="stitle">Create a free Firebase project</span>
+        <p>Go to <a href="https://console.firebase.google.com" target="_blank">console.firebase.google.com</a> &rarr; Sign in with Google &rarr; Click <strong>Add project</strong> &rarr; Name it <code>bloodlink</code> &rarr; Click through to finish.</p>
+      </div>
+
+      <div class="setup-step">
+        <span class="snum">2</span><span class="stitle">Create Realtime Database</span>
+        <p>In your project: <strong>Build</strong> (left menu) &rarr; <strong>Realtime Database</strong> &rarr; <strong>Create database</strong> &rarr; Choose any region &rarr; Select <strong>Start in test mode</strong> &rarr; Click <strong>Enable</strong>.</p>
+      </div>
+
+      <div class="setup-step">
+        <span class="snum">3</span><span class="stitle">Set database rules to public</span>
+        <p>In Firebase Console &rarr; Realtime Database &rarr; <strong>Rules</strong> tab &rarr; Replace all text with the line below &rarr; Click <strong>Publish</strong>:</p>
+        <pre style="background:#f0f0f0;border-radius:6px;padding:9px;font-size:11px;font-family:monospace;margin-top:7px;overflow-x:auto">{ "rules": { ".read": true, ".write": true } }</pre>
+      </div>
+
+      <div class="setup-step">
+        <span class="snum">4</span><span class="stitle">Paste your Firebase config here</span>
+        <p>Gear icon &rarr; <strong>Project settings</strong> &rarr; scroll to <strong>Your apps</strong> &rarr; click <strong>&lt;/&gt;</strong> &rarr; Register app &rarr; copy the values from <code>firebaseConfig</code>.</p>
+        <span class="cfg-lbl">API Key</span>
+        <input class="cfg-inp" id="cfg-key" placeholder="AIzaSy...">
+        <span class="cfg-lbl">Database URL</span>
+        <input class="cfg-inp" id="cfg-db" placeholder="https://your-project-default-rtdb.firebaseio.com">
+        <span class="cfg-lbl">Project ID</span>
+        <input class="cfg-inp" id="cfg-pid" placeholder="your-project-id">
+        <span class="cfg-lbl">App ID</span>
+        <input class="cfg-inp" id="cfg-aid" placeholder="1:123456789:web:abc123">
+      </div>
+
+      <button class="bprimary" style="margin-top:10px" onclick="doSetup()">Save &amp; Launch BloodLink</button>
+      <div class="setup-err" id="setup-err"></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="main-app" style="display:none">
+
+<header class="hdr">
+  <div class="hdr-left">
+    <div class="drop"></div>
+    <div>
+      <div class="hdr-title">BloodLink</div>
+      <div class="hdr-sub">Community Donor Network</div>
+    </div>
+  </div>
+  <div class="lbadge">
+    <div class="ldot pulse" id="ldot"></div>
+    <span id="ltxt">Connecting</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab on"  onclick="goTab('donors')">Donors</button>
+  <button class="tab"     onclick="goTab('add')">Add Donor</button>
+  <button class="tab"     onclick="goTab('emergency')">Emergency</button>
+  <button class="tab"     onclick="goTab('share')">Share</button>
+</div>
+
+<div class="bgbar" id="bgbar">
+  <div class="bglbl">Filter by blood group</div>
+  <div class="bgrow" id="bgrow"></div>
+</div>
+<div class="notice" id="notice"></div>
+
+<div id="t-donors" class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="stat-n" id="sn-t" style="color:#C0392B">0</div><div class="stat-l">Total</div></div>
+    <div class="stat"><div class="stat-n" id="sn-a" style="color:#1a7a4a">0</div><div class="stat-l">Available</div></div>
+    <div class="stat"><div class="stat-n" id="sn-b">0</div><div class="stat-l">Groups</div></div>
+    <div class="stat"><div class="stat-n" id="sn-r">0</div><div class="stat-l">Areas</div></div>
+  </div>
+  <div class="sbox">
+    <input class="inp" id="msearch" placeholder="Search name, phone, or area..." oninput="renderDonors()">
+    <div class="frow">
+      <span class="flbl">Status:</span>
+      <button class="fchip on" onclick="setSt('all',this)">All</button>
+      <button class="fchip" onclick="setSt('available',this)">Available</button>
+      <button class="fchip" onclick="setSt('unavailable',this)">Unavailable</button>
+    </div>
+  </div>
+  <div class="sh2"><span class="sh2-t">All Donors</span><span class="sh2-c" id="dcnt"></span></div>
+  <div id="dlist"><div class="loading"><div class="spin"></div>Loading donors...</div></div>
+</div>
+
+<div id="t-add" class="wrap" style="display:none">
+  <div class="fc">
+    <div class="fc-title">Add New Donor</div>
+    <div class="fgrid">
+      <div class="fg"><label>Full Name *</label><input id="fn" placeholder="e.g. Rahim Uddin" autocomplete="name"></div>
+      <div class="fg">
+        <label>Phone Number *</label>
+        <div class="pw"><span class="pw-pre">+880</span><input id="fp" type="tel" placeholder="1XXXXXXXXX" inputmode="numeric"></div>
+      </div>
+      <div class="fg"><label>Blood Group *</label>
+        <select id="fb">
+          <option value="">-- Select --</option>
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+      <div class="fg"><label>Location / Area *</label><input id="fl" placeholder="e.g. Dhaka, Mirpur"></div>
+      <div class="fg full"><label>Availability</label>
+        <select id="fs">
+          <option value="available">Available to Donate</option>
+          <option value="unavailable">Not Available Right Now</option>
+        </select>
+      </div>
+    </div>
+    <button class="bprimary" id="addbtn" onclick="addDonor()">Add Donor to Network</button>
+  </div>
+  <div style="background:white;border:1px solid #ddd;border-radius:12px;padding:16px;text-align:center">
+    <div style="font-size:15px;font-weight:800;margin-bottom:4px;color:#C0392B">Every donor counts</div>
+    <div style="font-size:13px;color:#777">One donation can save up to 3 lives.</div>
+  </div>
+</div>
+
+<div id="t-emergency" class="wrap" style="display:none">
+  <div class="emg">
+    <div class="emg-t">EMERGENCY MODE</div>
+    <div class="emg-s">Tap a blood group to instantly find available donors</div>
+    <div class="emg-bgs" id="emgbtns"></div>
+  </div>
+  <div id="emgres"></div>
+</div>
+
+<div id="t-share" class="wrap" style="display:none">
+  <div class="shcard">
+    <div class="sh-title">Share BloodLink</div>
+    <div class="sh-desc">Share this link with your friends. Everyone who opens it sees the same live donor list. Anyone can add, edit, or remove donors — all changes update instantly for everyone.</div>
+    <div class="sh-urlrow">
+      <input class="sh-url" id="shurl" readonly>
+      <button class="bprimary" style="width:auto;padding:10px 16px;font-size:14px;min-height:auto" onclick="cpLink()">Copy Link</button>
+    </div>
+    <div class="sh-btns">
+      <button class="shbtn" onclick="shWA()"><b>WA</b>WhatsApp</button>
+      <button class="shbtn" onclick="shTG()"><b>TG</b>Telegram</button>
+      <button class="shbtn" onclick="shMore()"><b>+</b>More Apps</button>
+      <button class="shbtn" onclick="exCSV()"><b>CSV</b>Export</button>
+      <button class="shbtn" onclick="window.print()"><b>P</b>Print</button>
+      <button class="shbtn" onclick="goTab('add')"><b>+</b>Add Donor</button>
+    </div>
+    <div class="install">
+      <strong>Save to Phone Home Screen:</strong><br>
+      <strong>iPhone (Safari):</strong> Tap Share icon &rarr; "Add to Home Screen"<br>
+      <strong>Android (Chrome):</strong> Tap 3-dot menu &rarr; "Add to Home Screen"
+    </div>
+  </div>
+  <div style="background:white;border:1px solid #ddd;border-radius:12px;padding:16px">
+    <div style="font-size:15px;font-weight:800;margin-bottom:11px">Live Network Stats</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <div style="background:#fde8e6;border-radius:10px;padding:13px;text-align:center">
+        <div style="font-size:24px;font-weight:800;color:#96281B" id="sh-t">0</div>
+        <div style="font-size:11px;font-weight:700;color:#7f1d1d">Registered Donors</div>
+      </div>
+      <div style="background:#e6f4ee;border-radius:10px;padding:13px;text-align:center">
+        <div style="font-size:24px;font-weight:800;color:#1a7a4a" id="sh-a">0</div>
+        <div style="font-size:11px;font-weight:700;color:#145c38">Ready to Donate</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- main-app -->
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editmodal">
+  <div class="mbox">
+    <div class="m-title">Edit Donor</div>
+    <div class="fgrid">
+      <div class="fg"><label>Full Name</label><input id="en"></div>
+      <div class="fg">
+        <label>Phone</label>
+        <div class="pw"><span class="pw-pre">+880</span><input id="ep" type="tel" inputmode="numeric"></div>
+      </div>
+      <div class="fg"><label>Blood Group</label>
+        <select id="eb">
+          <option>A+</option><option>A-</option><option>B+</option><option>B-</option>
+          <option>O+</option><option>O-</option><option>AB+</option><option>AB-</option>
+        </select>
+      </div>
+      <div class="fg"><label>Location</label><input id="el"></div>
+      <div class="fg full"><label>Status</label>
+        <select id="es">
+          <option value="available">Available to Donate</option>
+          <option value="unavailable">Not Available Right Now</option>
+        </select>
+      </div>
+    </div>
+    <div class="m-acts">
+      <button class="bsecond" onclick="closeModal()">Cancel</button>
+      <button class="bprimary" id="saveedit" style="width:auto;padding:10px 20px;font-size:14px;min-height:auto" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script>
+var BC={
+  'A+':{bg:'#C62828',lt:'#ffebee'},'A-':{bg:'#B71C1C',lt:'#fce4ec'},
+  'B+':{bg:'#1565C0',lt:'#e3f2fd'},'B-':{bg:'#0D47A1',lt:'#e8eaf6'},
+  'O+':{bg:'#2E7D32',lt:'#e8f5e9'},'O-':{bg:'#1B5E20',lt:'#f1f8e9'},
+  'AB+':{bg:'#6A1B9A',lt:'#f3e5f5'},'AB-':{bg:'#4A148C',lt:'#ede7f6'}
+};
+var BLIST=['A+','A-','B+','B-','O+','O-','AB+','AB-'];
+var CFG_KEY='bl_cfg_v2';
+var donors={},editKey=null,stf='all',bgf='',busy=false,nTmr=null,db=null;
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5);}
+function fullPhone(r){var s=String(r||'').trim().replace(/[\s\-]/g,'');if(!s)return '';if(s.startsWith('+880'))return s;if(s.startsWith('880'))return '+'+s;if(s.startsWith('0'))return '+880'+s.substr(1);return '+880'+s;}
+function shortPhone(f){var s=String(f||'').trim();if(s.startsWith('+880'))return s.substr(4);if(s.startsWith('880'))return s.substr(3);return s;}
+
+function setSync(state,label){
+  var d=document.getElementById('ldot'),t=document.getElementById('ltxt');
+  if(!d||!t)return;
+  t.textContent=label;d.className='ldot';
+  if(state==='live')d.style.background='#4ade80';
+  else if(state==='busy'){d.className='ldot pulse';d.style.background='#fbbf24';}
+  else d.style.background='#f87171';
+}
+function notice(msg,type,ms){
+  var el=document.getElementById('notice');if(!el)return;
+  el.textContent=msg;el.className='notice show '+(type||'info');
+  clearTimeout(nTmr);if(ms!==0)nTmr=setTimeout(function(){el.className='notice';},ms||4000);
+}
+function cpText(text,label){
+  function done(){notice((label||'Text')+' copied!','ok',2500);}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done).catch(function(){lcp(text,done);});}
+  else lcp(text,done);
+}
+function lcp(text,cb){
+  var ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0;width:1px;height:1px';
+  document.body.appendChild(ta);ta.focus();ta.select();
+  try{document.execCommand('copy');if(cb)cb();}catch(e){}
+  document.body.removeChild(ta);
+}
+
+var ICOPY='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>';
+var IDOC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
+
+/* SETUP */
+function doSetup(){
+  var key=(document.getElementById('cfg-key').value||'').trim();
+  var dbu=(document.getElementById('cfg-db').value||'').trim();
+  var pid=(document.getElementById('cfg-pid').value||'').trim();
+  var aid=(document.getElementById('cfg-aid').value||'').trim();
+  var err=document.getElementById('setup-err');
+  if(!key||!dbu||!pid||!aid){err.textContent='Please fill in all four fields.';err.style.display='block';return;}
+  if(dbu.indexOf('firebaseio.com')<0){err.textContent='Database URL must contain firebaseio.com';err.style.display='block';return;}
+  var cfg={apiKey:key,databaseURL:dbu,projectId:pid,appId:aid,authDomain:pid+'.firebaseapp.com'};
+  try{localStorage.setItem(CFG_KEY,JSON.stringify(cfg));}catch(e){}
+  err.style.display='none';
+  launchApp(cfg);
+}
+
+function launchApp(cfg){
+  document.getElementById('setup-screen').style.display='none';
+  document.getElementById('main-app').style.display='block';
+  initFB(cfg);
+}
+
+function initFB(cfg){
+  try{
+    var app;try{app=firebase.app();}catch(e){app=firebase.initializeApp(cfg);}
+    db=firebase.database(app);
+    db.ref('donors').on('value',function(snap){
+      var val=snap.val();
+      donors=(val&&typeof val==='object')?val:{};
+      if(Object.keys(donors).length===0)seedDefs();
+      renderAll();setSync('live','Live');
+    },function(){setSync('offline','Offline');notice('Connection lost. Check internet and refresh.','err',0);});
+    db.ref('.info/connected').on('value',function(snap){setSync(snap.val()?'live':'busy',snap.val()?'Live':'Connecting');});
+  }catch(e){setSync('offline','Error');notice('Firebase error: '+e.message,'err',0);}
+}
+
+function seedDefs(){
+  if(!db)return;
+  [{name:'Rahim Uddin',phone:'+8801711234567',blood:'O+',location:'Dhaka, Mirpur',status:'available'},
+   {name:'Fatema Begum',phone:'+8801812345678',blood:'A+',location:'Chittagong',status:'available'},
+   {name:'Karim Hossain',phone:'+8801912345678',blood:'B+',location:'Sylhet',status:'available'},
+   {name:'Nasrin Akter',phone:'+8801612345678',blood:'AB-',location:'Rajshahi',status:'unavailable'},
+   {name:'Shahidul Islam',phone:'+8801511234567',blood:'O-',location:'Dhaka, Dhanmondi',status:'available'},
+   {name:'Roksana Khanam',phone:'+8801312345678',blood:'A-',location:'Khulna',status:'available'}
+  ].forEach(function(d){d.ts=Date.now();db.ref('donors').push(d);});
+}
+
+function getArr(){
+  return Object.keys(donors).map(function(k){var d=Object.assign({},donors[k]);d._k=k;return d;})
+    .sort(function(a,b){return(b.ts||0)-(a.ts||0);});
+}
+
+function renderAll(){
+  var a=getArr(),av=0,bgs={},areas={};
+  a.forEach(function(d){if(d.status==='available')av++;if(d.blood)bgs[d.blood]=1;if(d.location)areas[d.location.toLowerCase().trim()]=1;});
+  function sv(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  sv('sn-t',a.length);sv('sn-a',av);sv('sn-b',Object.keys(bgs).length);sv('sn-r',Object.keys(areas).length);
+  sv('sh-t',a.length);sv('sh-a',av);
+  renderBGChips();renderDonors();buildEmgBtns();
+}
+
+function renderBGChips(){
+  var row=document.getElementById('bgrow');if(!row)return;row.innerHTML='';
+  var ab=document.createElement('button');ab.className='bgchip';ab.textContent='All';
+  ab.style.cssText='background:'+(bgf===''?'#C0392B':'white')+';color:'+(bgf===''?'white':'#555')+';border-color:'+(bgf===''?'#C0392B':'#ccc');
+  ab.onclick=function(){setBG('');};row.appendChild(ab);
+  BLIST.forEach(function(b){
+    var c=BC[b];var sel=bgf===b;
+    var btn=document.createElement('button');btn.className='bgchip';btn.textContent=b;
+    btn.style.cssText='background:'+(sel?c.bg:c.lt)+';color:'+(sel?'white':c.bg)+';border-color:'+c.bg;
+    btn.onclick=function(){setBG(b);};row.appendChild(btn);
+  });
+}
+function setBG(b){bgf=b;renderBGChips();renderDonors();}
+
+function makeDonorCard(d){
+  var av=d.status==='available';var c=BC[d.blood]||{bg:'#C0392B',lt:'#fee'};
+  var ph=d.phone||'';var wn=ph.replace(/\D/g,'');
+  var wm=encodeURIComponent('Urgent: Blood needed. Blood type: '+(d.blood||'')+'. Please respond ASAP.');
+  var card=document.createElement('div');card.className='dc'+(av?'':' dim');
+  var top=document.createElement('div');top.className='dc-top';
+  var badge=document.createElement('div');badge.className='bb';badge.style.background=c.bg;badge.textContent=d.blood||'?';
+  var info=document.createElement('div');info.style.cssText='flex:1;min-width:0';
+  var nm=document.createElement('div');nm.className='dc-name';nm.textContent=d.name||'';
+  var lc=document.createElement('div');lc.className='dc-loc';lc.textContent=d.location||'';
+  info.appendChild(nm);info.appendChild(lc);
+  var pill=document.createElement('div');pill.className='pill '+(av?'av':'un');
+  var pd=document.createElement('div');pd.className='pdot';
+  pill.appendChild(pd);pill.appendChild(document.createTextNode(av?'Available':'Unavailable'));
+  top.appendChild(badge);top.appendChild(info);top.appendChild(pill);
+  var pr=document.createElement('div');pr.className='dc-phone';
+  var ps=document.createElement('span');ps.textContent=ph;
+  var cb=document.createElement('button');cb.className='cpbtn';cb.title='Copy phone number';cb.innerHTML=ICOPY;
+  cb.addEventListener('click',function(e){e.stopPropagation();cpText(ph,'Phone');});
+  pr.appendChild(ps);pr.appendChild(cb);
+  var acts=document.createElement('div');acts.className='dc-acts';
+  var ca=document.createElement('a');ca.className='btn bcall';ca.href='tel:'+ph;ca.textContent='Call Now';
+  var wa=document.createElement('a');wa.className='btn bwa';wa.href='https://wa.me/'+wn+'?text='+wm;wa.target='_blank';wa.textContent='WhatsApp';
+  var eb=document.createElement('button');eb.className='btn bsm';eb.textContent='Edit';eb.addEventListener('click',function(){openEdit(d._k);});
+  var db_=document.createElement('button');db_.className='btn bsm bdel';db_.textContent='Delete';db_.addEventListener('click',function(){delDonor(d._k,d.name||'');});
+  acts.appendChild(ca);acts.appendChild(wa);acts.appendChild(eb);acts.appendChild(db_);
+  card.appendChild(top);card.appendChild(pr);card.appendChild(acts);
+  return card;
+}
+
+function renderDonors(){
+  var q=((document.getElementById('msearch')||{}).value||'').toLowerCase().trim();
+  var list=getArr().filter(function(d){
+    var mq=!q||(d.name||'').toLowerCase().indexOf(q)>=0||(d.phone||'').indexOf(q)>=0||(d.location||'').toLowerCase().indexOf(q)>=0;
+    return mq&&(stf==='all'||d.status===stf)&&(!bgf||d.blood===bgf);
+  });
+  var lbl=document.getElementById('dcnt');if(lbl)lbl.textContent=list.length+' of '+getArr().length+(bgf?' — '+bgf:'');
+  var g=document.getElementById('dlist');if(!g)return;
+  if(!list.length){g.className='';g.innerHTML='<div class="empty"><div class="empty-t">No donors found</div><div class="empty-s">Try different filters or add a new donor.</div></div>';return;}
+  g.className='dgrid';g.innerHTML='';
+  list.forEach(function(d){g.appendChild(makeDonorCard(d));});
+}
+function setSt(s,btn){stf=s;document.querySelectorAll('#t-donors .fchip').forEach(function(c){c.classList.remove('on');});btn.classList.add('on');renderDonors();}
+
+function buildEmgBtns(){
+  var g=document.getElementById('emgbtns');if(!g)return;g.innerHTML='';
+  BLIST.forEach(function(b){var btn=document.createElement('button');btn.className='ebtn';btn.textContent=b;btn.addEventListener('click',function(){showEmg(b,btn);});g.appendChild(btn);});
+}
+
+function showEmg(bg,btn){
+  document.querySelectorAll('.ebtn').forEach(function(b){b.classList.remove('sel');b.style.color='white';});
+  btn.classList.add('sel');btn.style.color=BC[bg]?BC[bg].bg:'#C0392B';
+  var ms=getArr().filter(function(d){return d.blood===bg;}).sort(function(a,b){return a.status==='available'?-1:1;});
+  var res=document.getElementById('emgres');if(!res)return;res.innerHTML='';
+  if(!ms.length){res.innerHTML='<div class="empty"><div class="empty-t">No donors for '+bg+'</div><div class="empty-s">Add donors using the Add Donor tab.</div></div>';return;}
+  var av=ms.filter(function(d){return d.status==='available';}).length;
+  var c=BC[bg]||{bg:'#C0392B',lt:'#fee'};
+  function listText(){
+    var lines=['Blood Group: '+bg+' — '+ms.length+' donor(s), '+av+' available',''];
+    ms.forEach(function(d,i){lines.push((i+1)+'. '+d.name);lines.push('   Phone: '+(d.phone||''));lines.push('   Location: '+(d.location||''));lines.push('   Status: '+(d.status==='available'?'Available':'Unavailable'));lines.push('');});
+    return lines.join('\n');
+  }
+  var wrap=document.createElement('div');wrap.className='emg-wrap';
+  var topbar=document.createElement('div');topbar.className='emg-topbar';
+  var title=document.createElement('span');title.className='emg-tb-title';title.textContent=ms.length+' donor(s) for '+bg+' — '+av+' available now';
+  var cpAll=document.createElement('button');cpAll.className='cpall';cpAll.innerHTML=ICOPY+' Copy Full List';cpAll.addEventListener('click',function(){cpText(listText(),'Full list');});
+  topbar.appendChild(title);topbar.appendChild(cpAll);
+  var cardsDiv=document.createElement('div');cardsDiv.className='emg-cards';
+  ms.forEach(function(d,i){
+    var a=d.status==='available';var ph=d.phone||'';var wn=ph.replace(/\D/g,'');
+    var wm=encodeURIComponent('Urgent: Blood needed. Blood type: '+bg+'. Please respond ASAP.');
+    var detText=d.name+'\nPhone: '+ph+'\nBlood Group: '+bg+'\nLocation: '+(d.location||'')+'\nStatus: '+(a?'Available':'Unavailable');
+    var dc=document.createElement('div');dc.className='emg-dc';
+    var dt=document.createElement('div');dt.className='emg-dc-top';
+    var rank=document.createElement('div');rank.className='emg-rank';rank.style.background=a?c.bg:'#999';rank.textContent=i+1;
+    var dname=document.createElement('div');dname.className='emg-dc-name';dname.textContent=d.name||'';
+    var dpill=document.createElement('div');dpill.className='pill '+(a?'av':'un');
+    var dpdot=document.createElement('div');dpdot.className='pdot';
+    dpill.appendChild(dpdot);dpill.appendChild(document.createTextNode(a?'Available':'Unavailable'));
+    dt.appendChild(rank);dt.appendChild(dname);dt.appendChild(dpill);
+    var fields=document.createElement('div');fields.className='emg-fields';
+    [{l:'Phone',v:ph},{l:'Blood Group',v:bg},{l:'Location',v:d.location||''},{l:'Status',v:a?'Available':'Unavailable'}].forEach(function(f){
+      var fld=document.createElement('div');fld.className='emg-f';
+      var fl=document.createElement('span');fl.className='emg-fl';fl.textContent=f.l;
+      var fv=document.createElement('span');fv.className='emg-fv';fv.textContent=f.v;
+      fld.appendChild(fl);fld.appendChild(fv);fields.appendChild(fld);
+    });
+    var dacts=document.createElement('div');dacts.className='emg-acts';
+    var ca=document.createElement('a');ca.className='btn bcall';ca.href='tel:'+ph;ca.style.cssText='font-size:13px;padding:8px 10px;min-height:36px';ca.textContent='Call Now';
+    var wa=document.createElement('a');wa.className='btn bwa';wa.href='https://wa.me/'+wn+'?text='+wm;wa.target='_blank';wa.style.cssText='font-size:13px;padding:8px 10px;min-height:36px';wa.textContent='WhatsApp';
+    var cpPh=document.createElement('button');cpPh.className='cpbtn';cpPh.style.cssText='padding:5px 7px';cpPh.title='Copy phone number';cpPh.innerHTML=ICOPY;cpPh.addEventListener('click',function(){cpText(ph,'Phone');});
+    var cpDt=document.createElement('button');cpDt.className='cpbtn';cpDt.style.cssText='padding:5px 7px';cpDt.title='Copy full details';cpDt.innerHTML=IDOC;cpDt.addEventListener('click',function(){cpText(detText,'Details');});
+    dacts.appendChild(ca);dacts.appendChild(wa);dacts.appendChild(cpPh);dacts.appendChild(cpDt);
+    dc.appendChild(dt);dc.appendChild(fields);dc.appendChild(dacts);cardsDiv.appendChild(dc);
+  });
+  wrap.appendChild(topbar);wrap.appendChild(cardsDiv);res.appendChild(wrap);
+}
+
+function addDonor(){
+  if(busy||!db){if(!db)notice('Not connected to database.','err');return;}
+  var name=(document.getElementById('fn').value||'').trim();
+  var praw=(document.getElementById('fp').value||'').trim();
+  var blood=document.getElementById('fb').value;
+  var location=(document.getElementById('fl').value||'').trim();
+  var status=document.getElementById('fs').value;
+  if(!name){notice('Please enter the full name.','err');return;}
+  if(!praw){notice('Please enter a phone number.','err');return;}
+  if(!blood){notice('Please select a blood group.','err');return;}
+  if(!location){notice('Please enter a location.','err');return;}
+  var phone=fullPhone(praw);
+  busy=true;var btn=document.getElementById('addbtn');btn.disabled=true;btn.textContent='Saving...';setSync('busy','Saving');
+  db.ref('donors').push({name:name,phone:phone,blood:blood,location:location,status:status,ts:Date.now()},function(err){
+    btn.disabled=false;btn.textContent='Add Donor to Network';busy=false;
+    if(err){setSync('offline','Error');notice('Save failed: '+err.message,'err',6000);}
+    else{setSync('live','Live');notice(name+' added — visible to all users now.','ok',5000);
+      document.getElementById('fn').value='';document.getElementById('fp').value='';
+      document.getElementById('fb').value='';document.getElementById('fl').value='';document.getElementById('fs').value='available';}
+  });
+}
+
+function openEdit(key){
+  var d=donors[key];if(!d)return;editKey=key;
+  document.getElementById('en').value=d.name||'';document.getElementById('ep').value=shortPhone(d.phone||'');
+  document.getElementById('eb').value=d.blood||'O+';document.getElementById('el').value=d.location||'';document.getElementById('es').value=d.status||'available';
+  document.getElementById('editmodal').classList.add('open');
+}
+function closeModal(){document.getElementById('editmodal').classList.remove('open');editKey=null;}
+function saveEdit(){
+  if(!editKey||busy||!db)return;
+  var btn=document.getElementById('saveedit');btn.disabled=true;btn.textContent='Saving...';busy=true;setSync('busy','Saving');
+  var u={name:(document.getElementById('en').value||'').trim(),phone:fullPhone((document.getElementById('ep').value||'').trim()),blood:document.getElementById('eb').value,location:(document.getElementById('el').value||'').trim(),status:document.getElementById('es').value,ts:Date.now()};
+  db.ref('donors/'+editKey).update(u,function(err){
+    btn.disabled=false;btn.textContent='Save Changes';busy=false;
+    if(err){setSync('offline','Error');notice('Save failed: '+err.message,'err',5000);}
+    else{setSync('live','Live');closeModal();notice('Donor updated for all users.','ok',4000);}
+  });
+}
+
+function delDonor(key,name){
+  if(!db)return;if(!confirm('Remove "'+name+'" from the network?\nThis removes them for ALL users.'))return;
+  setSync('busy','Saving');
+  db.ref('donors/'+key).remove(function(err){
+    if(err){setSync('offline','Error');notice('Delete failed: '+err.message,'err',5000);}
+    else{setSync('live','Live');notice(name+' removed.','info',4000);}
+  });
+}
+
+function goTab(tab){
+  ['donors','add','emergency','share'].forEach(function(t){document.getElementById('t-'+t).style.display=t===tab?'':'none';});
+  document.querySelectorAll('.tab').forEach(function(b,i){b.classList.toggle('on',['donors','add','emergency','share'][i]===tab);});
+  document.getElementById('bgbar').className='bgbar'+(tab==='donors'?' show':'');
+  document.getElementById('notice').className='notice';
+  if(tab==='share'){document.getElementById('shurl').value=window.location.href;var a=getArr();document.getElementById('sh-t').textContent=a.length;document.getElementById('sh-a').textContent=a.filter(function(d){return d.status==='available';}).length;}
+}
+
+function cpLink(){cpText(document.getElementById('shurl').value||window.location.href,'Link');}
+function shWA(){var u=document.getElementById('shurl').value||window.location.href;window.open('https://wa.me/?text='+encodeURIComponent('Join BloodLink - community blood donor network! Find donors in emergencies. Open here: '+u),'_blank');}
+function shTG(){var u=document.getElementById('shurl').value||window.location.href;window.open('https://t.me/share/url?url='+encodeURIComponent(u)+'&text='+encodeURIComponent('BloodLink - Community Blood Donor Network'),'_blank');}
+function shMore(){var u=document.getElementById('shurl').value||window.location.href;if(navigator.share){navigator.share({title:'BloodLink',text:'Community blood donor network',url:u});}else cpLink();}
+function exCSV(){
+  var lines=['Name,Phone,Blood Group,Location,Status'];
+  getArr().forEach(function(d){lines.push('"'+(d.name||'')+'","'+(d.phone||'')+'","'+(d.blood||'')+'","'+(d.location||'')+'","'+(d.status||'')+'"');});
+  var blob=new Blob([lines.join('\n')],{type:'text/csv;charset=utf-8;'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='bloodlink.csv';a.click();notice('Exported as bloodlink.csv','ok',4000);
+}
+
+document.getElementById('editmodal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+
+var HARDCODED_CFG={
+  apiKey:"AIzaSyDJrZEOeWujaWXMK2aoJnaJ9HNMD2XUINg",
+  databaseURL:"https://bloodlink-71068-default-rtdb.firebaseio.com",
+  projectId:"bloodlink-71068",
+  appId:"1:813686913558:web:629db58e66f8afc1361337",
+  authDomain:"bloodlink-71068.firebaseapp.com"
+};
+
+window.addEventListener('load',function(){
+  document.getElementById('setup-screen').style.display='none';
+  launchApp(HARDCODED_CFG);
+});
+</script>
+</body>
+</html>
