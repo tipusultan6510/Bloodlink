@@ -55,30 +55,37 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .flbl{font-size:10px;font-weight:800;color:#777;text-transform:uppercase;letter-spacing:.5px}
 .fchip{background:#f5f5f5;border:1px solid #ddd;border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700;cursor:pointer;color:#777;font-family:inherit}
 .fchip.on{background:#fde8e6;border-color:#C0392B;color:#96281B}
-.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:12px}
-.dc{background:white;border:1px solid #ddd;border-radius:12px;padding:14px}
-.dc.dim{opacity:.6}
-.dc-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
-.bb{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:white;flex-shrink:0}
-.dc-name{font-weight:700;font-size:15px;line-height:1.3}
-.dc-loc{font-size:12px;color:#777;margin-top:2px}
+.dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.dc{background:white;border-radius:16px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.07);border:1px solid rgba(0,0,0,.06);transition:box-shadow .2s}
+.dc:hover{box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.dc.dim{opacity:.7}
+.dc-banner{height:6px;width:100%}
+.dc-body{padding:14px}
+.dc-top{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.bb{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900;color:white;flex-shrink:0;box-shadow:0 3px 10px rgba(0,0,0,.2);letter-spacing:-0.5px}
 .dc-info{flex:1;min-width:0}
-.pill{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:6px;font-size:10px;font-weight:700;flex-shrink:0;max-width:100%;white-space:normal;word-break:break-word;text-align:center;line-height:1.3}
-.pill.av{background:#e6f4ee;color:#1a7a4a}
-.pill.un{background:#fff3f3;color:#C0392B}
-.pdot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
-.dc-phone{background:#f9f9f9;border:1px solid #eee;border-radius:7px;padding:7px 11px;font-size:13px;color:#555;font-weight:600;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.cpbtn{background:none;border:1px solid #ddd;border-radius:5px;padding:4px 6px;cursor:pointer;color:#bbb;display:inline-flex;align-items:center;flex-shrink:0;transition:all .15s;line-height:1}
-.cpbtn:hover{color:#1565C0;border-color:#1565C0;background:#e3f2fd}
+.dc-name{font-weight:800;font-size:15px;line-height:1.2;color:#111;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dc-loc{font-size:11px;color:#999;margin-top:3px;display:flex;align-items:center;gap:3px}
+.pill{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:.2px}
+.pill.av{background:linear-gradient(135deg,#e6f4ee,#d0edd9);color:#1a7a4a}
+.pill.un{background:linear-gradient(135deg,#fde8e6,#fcd0cb);color:#96281B}
+.pdot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0}
+.dc-divider{height:1px;background:linear-gradient(90deg,transparent,#eee 20%,#eee 80%,transparent);margin:0 0 12px}
+.dc-phone-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;background:#f8f9fa;border-radius:10px;padding:9px 12px}
+.dc-phone-icon{width:28px;height:28px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.1);flex-shrink:0}
+.dc-phone-icon svg{width:13px;height:13px;color:#C0392B}
+.dc-phone-num{flex:1;font-size:13px;font-weight:700;color:#333;letter-spacing:.3px}
+.cpbtn{background:white;border:1px solid #eee;border-radius:7px;padding:5px 7px;cursor:pointer;color:#bbb;display:inline-flex;align-items:center;flex-shrink:0;transition:all .15s;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.cpbtn:hover{color:#C0392B;border-color:#C0392B;background:#fde8e6}
 .cpbtn svg{width:13px;height:13px;display:block}
-.dc-acts{display:flex;gap:6px}
-.btn{border:none;border-radius:10px;padding:9px 12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .18s;min-height:40px}
-.bcall{background:linear-gradient(135deg,#fde8e6,#fcd0cb);color:#96281B;flex:1;box-shadow:0 2px 6px rgba(192,57,43,.15)}
-.bcall:hover,.bcall:active{background:linear-gradient(135deg,#C0392B,#96281B);color:white;box-shadow:0 4px 12px rgba(192,57,43,.35)}
-.bwa{background:linear-gradient(135deg,#e6f4ee,#c8ecd8);color:#1a7a4a;flex:1;box-shadow:0 2px 6px rgba(26,122,74,.15)}
-.bwa:hover,.bwa:active{background:linear-gradient(135deg,#1a7a4a,#145c38);color:white;box-shadow:0 4px 12px rgba(26,122,74,.3)}
-.bsm{background:#f0f0f0;color:#555;padding:9px 12px}
-.bsm:hover{background:#e0e0e0}
+.dc-acts{display:grid;grid-template-columns:1fr 1fr auto auto;gap:6px}
+.btn{border:none;border-radius:10px;padding:9px 10px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:5px;transition:all .18s;min-height:38px;letter-spacing:.1px}
+.bcall{background:linear-gradient(135deg,#fde8e6,#fcd0cb);color:#96281B}
+.bcall:hover,.bcall:active{background:linear-gradient(135deg,#C0392B,#96281B);color:white;box-shadow:0 4px 14px rgba(192,57,43,.35);transform:translateY(-1px)}
+.bwa{background:linear-gradient(135deg,#e6f4ee,#c8ecd8);color:#1a7a4a}
+.bwa:hover,.bwa:active{background:linear-gradient(135deg,#1a7a4a,#145c38);color:white;box-shadow:0 4px 14px rgba(26,122,74,.3);transform:translateY(-1px)}
+.bsm{background:#f5f5f7;color:#555;padding:9px 11px;border-radius:10px}
+.bsm:hover{background:#ebebed;color:#111}
 .bdel:hover{background:#fde8e6;color:#C0392B}
 .pw{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#f9f9f9}
 .pw:focus-within{border-color:#C0392B}
@@ -594,56 +601,83 @@ function setBG(b){bgf=b;renderBGChips();renderDonors();}
 
 function makeDonorCard(d){
   var av=d.status==='available';
-  // Fix 5: auto-reset if 3 months passed since donation
   if(d.donatedDate){
     var threeMonths=90*24*60*60*1000;
-    var donated=new Date(d.donatedDate).getTime();
-    if(Date.now()-donated>=threeMonths&&d.status!=='available'){
-      db.ref('donors/'+d._k).update({status:'available',donatedDate:null});
-      av=true;
+    if(Date.now()-new Date(d.donatedDate).getTime()>=threeMonths&&!av){
+      db.ref('donors/'+d._k).update({status:'available',donatedDate:null});av=true;
     }
   }
   var c=BC[d.blood]||{bg:'#C0392B',lt:'#fee'};
   var ph=d.phone||'';var wn=ph.replace(/\D/g,'');
   var wm=encodeURIComponent('Urgent: Blood needed. Blood type: '+(d.blood||'')+'. Please respond ASAP.');
+  var statusText=av?'Waiting to help you':(d.donatedDate?'Donated – '+fmtDate(d.donatedDate):'Donated');
+
   var card=document.createElement('div');card.className='dc'+(av?'':' dim');
+
+  // Colored top banner
+  var banner=document.createElement('div');banner.className='dc-banner';
+  banner.style.background='linear-gradient(90deg,'+c.bg+','+c.bg+'99)';
+  card.appendChild(banner);
+
+  var body=document.createElement('div');body.className='dc-body';
+
+  // Top row: blood badge + name/location + status pill
   var top=document.createElement('div');top.className='dc-top';
-  var badge=document.createElement('div');badge.className='bb';badge.style.background=c.bg;badge.textContent=d.blood||'?';
+  var badge=document.createElement('div');badge.className='bb';
+  badge.style.background='linear-gradient(135deg,'+c.bg+','+c.bg+'cc)';
+  badge.textContent=d.blood||'?';
+
   var info=document.createElement('div');info.className='dc-info';
   var nm=document.createElement('div');nm.className='dc-name';nm.textContent=d.name||'';
-  var lc=document.createElement('div');lc.className='dc-loc';lc.textContent=d.location||'';
-  // Fix 2: pill below name, full width visible
-  var statusText=av?'Waiting to help you':(d.donatedDate?'Donated – '+fmtDate(d.donatedDate):'Donated');
-  var pill=document.createElement('div');pill.className='pill '+(av?'av':'un');pill.style.cssText='margin-top:5px;display:inline-flex';
+
+  var locRow=document.createElement('div');locRow.className='dc-loc';
+  locRow.innerHTML='<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#bbb" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+  var locTxt=document.createElement('span');locTxt.textContent=d.location||'';
+  locRow.appendChild(locTxt);
+
+  var pill=document.createElement('div');pill.className='pill '+(av?'av':'un');pill.style.marginTop='6px';
   var pd=document.createElement('div');pd.className='pdot';
   pill.appendChild(pd);pill.appendChild(document.createTextNode(statusText));
-  info.appendChild(nm);info.appendChild(lc);info.appendChild(pill);
-  top.appendChild(badge);top.appendChild(info);
-  var pr=document.createElement('div');pr.className='dc-phone';
-  var ps=document.createElement('span');ps.textContent=ph;
-  var cb=document.createElement('button');cb.className='cpbtn';cb.title='Copy phone number';cb.innerHTML=ICOPY;
+
+  info.appendChild(nm);info.appendChild(locRow);info.appendChild(pill);
+  top.appendChild(info);top.appendChild(badge);
+  body.appendChild(top);
+
+  // Divider
+  var div=document.createElement('div');div.className='dc-divider';body.appendChild(div);
+
+  // Phone row
+  var pr=document.createElement('div');pr.className='dc-phone-row';
+  var pico=document.createElement('div');pico.className='dc-phone-icon';
+  pico.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 1.18 2 2 0 013 .92h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
+  var pnum=document.createElement('div');pnum.className='dc-phone-num';pnum.textContent=ph;
+  var cb=document.createElement('button');cb.className='cpbtn';cb.title='Copy';cb.innerHTML=ICOPY;
   cb.addEventListener('click',function(e){e.stopPropagation();cpText(ph,'Phone');});
-  pr.appendChild(ps);pr.appendChild(cb);
+  pr.appendChild(pico);pr.appendChild(pnum);pr.appendChild(cb);
+  body.appendChild(pr);
+
+  // Action buttons
   var acts=document.createElement('div');acts.className='dc-acts';
-  // Fix 3: Modern icons, Fix 6: beautiful alert modal
+
   var ca=document.createElement('a');ca.className='btn bcall';
-  ca.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3" ry="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span style="font-size:12px">Call</span>';
-  ca.title='Call Now';ca.style.cssText='padding:9px 10px;flex:1';
-  ca.addEventListener('click',function(e){
-    if(!av){e.preventDefault();showDonorAlert();return;}
-    window.location.href='tel:'+ph;
-  });
+  ca.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 1.18 2 2 0 013 .92h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Call';
+  ca.addEventListener('click',function(e){if(!av){e.preventDefault();showDonorAlert();return;}window.location.href='tel:'+ph;});
+
   var wa=document.createElement('a');wa.className='btn bwa';
-  wa.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.124 1.526 5.855L0 24l6.303-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.52-5.16-1.427l-.37-.22-3.74.893.924-3.638-.242-.375A9.972 9.972 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg><span style="font-size:12px">WhatsApp</span>';
-  wa.title='WhatsApp';wa.style.cssText='padding:9px 10px;flex:1';
-  wa.addEventListener('click',function(e){
-    if(!av){e.preventDefault();showDonorAlert();return;}
-    window.open('https://wa.me/'+wn+'?text='+wm,'_blank');
-  });
-  var eb=document.createElement('button');eb.className='btn bsm';eb.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';eb.title='Edit';eb.addEventListener('click',function(){openEdit(d._k);});
-  var db_=document.createElement('button');db_.className='btn bsm bdel';db_.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>';db_.title='Delete';db_.addEventListener('click',function(){delDonor(d._k,d.name||'');});
+  wa.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.124 1.526 5.855L0 24l6.303-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.52-5.16-1.427l-.37-.22-3.74.893.924-3.638-.242-.375A9.972 9.972 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>WhatsApp';
+  wa.addEventListener('click',function(e){if(!av){e.preventDefault();showDonorAlert();return;}window.open('https://wa.me/'+wn+'?text='+wm,'_blank');});
+
+  var eb=document.createElement('button');eb.className='btn bsm';
+  eb.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
+  eb.title='Edit';eb.addEventListener('click',function(){openEdit(d._k);});
+
+  var db_=document.createElement('button');db_.className='btn bsm bdel';
+  db_.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>';
+  db_.title='Delete';db_.addEventListener('click',function(){delDonor(d._k,d.name||'');});
+
   acts.appendChild(ca);acts.appendChild(wa);acts.appendChild(eb);acts.appendChild(db_);
-  card.appendChild(top);card.appendChild(pr);card.appendChild(acts);
+  body.appendChild(acts);
+  card.appendChild(body);
   return card;
 }
 
