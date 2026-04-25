@@ -21,18 +21,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .tab:hover{color:white;background:rgba(255,255,255,.07)}
 .tab.on{color:white;border-bottom-color:white}
 .bgbar{display:none}
-.bglbl{font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
-.bgrow{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;flex-wrap:nowrap}
-.bgchip{padding:3px 9px;border-radius:20px;border:2px solid;font-size:11px;font-weight:800;cursor:pointer;background:white;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.bglbl{font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.bgrow{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.bgchip{padding:4px 2px;border-radius:8px;border:2px solid;font-size:11px;font-weight:800;cursor:pointer;background:white;transition:all .15s;text-align:center;width:100%}
 .notice{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.85);background:rgba(30,30,30,0.93);color:white;font-size:14px;font-weight:700;padding:13px 24px;border-radius:30px;z-index:9999;display:none;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.3);pointer-events:none}
 .notice.show{display:block;animation:popIn .2s ease forwards}
 @keyframes popIn{from{transform:translate(-50%,-50%) scale(0.8);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .notice.ok{background:rgba(26,122,74,0.95)}
 .notice.err{background:rgba(163,45,45,0.95)}
 .notice.info{background:rgba(21,101,192,0.95)}
+/* donor alert modal */
+.donor-alert-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
+.donor-alert-overlay.show{display:flex;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.donor-alert-box{background:white;border-radius:20px;padding:28px 22px 22px;max-width:320px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.donor-alert-icon{width:56px;height:56px;background:#fde8e6;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.donor-alert-icon svg{width:26px;height:26px}
+.donor-alert-title{font-size:16px;font-weight:800;color:#111;margin-bottom:8px}
+.donor-alert-msg{font-size:13px;color:#777;line-height:1.7;margin-bottom:20px}
+.donor-alert-btn{background:#C0392B;color:white;border:none;border-radius:12px;padding:12px 28px;font-size:14px;font-weight:800;cursor:pointer;width:100%;font-family:inherit;transition:background .15s}
+.donor-alert-btn:hover{background:#96281B}
 .wrap{max-width:860px;margin:0 auto;padding:16px 14px 56px}
-.stats{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px}
-.stat{background:white;border:1px solid #eee;border-radius:8px;padding:6px 10px;text-align:center;flex:1;min-width:0;white-space:nowrap}
+.stats{display:flex;gap:6px;margin-bottom:12px}
+.stat{background:white;border:1px solid #eee;border-radius:8px;padding:6px 4px;text-align:center;flex:1;min-width:0}
 .stat-n{font-size:15px;font-weight:800;line-height:1;margin-bottom:1px}
 .stat-l{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.3px;font-weight:700}
 .sbox{background:white;border:1px solid #ddd;border-radius:10px;padding:13px;margin-bottom:14px}
@@ -50,21 +62,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .bb{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:white;flex-shrink:0}
 .dc-name{font-weight:700;font-size:15px;line-height:1.3}
 .dc-loc{font-size:12px;color:#777;margin-top:2px}
-.pill{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;margin-left:auto;flex-shrink:0}
+.dc-info{flex:1;min-width:0}
+.pill{display:inline-flex;align-items:center;gap:3px;padding:3px 7px;border-radius:6px;font-size:10px;font-weight:700;flex-shrink:0;max-width:100%;white-space:normal;word-break:break-word;text-align:center;line-height:1.3}
 .pill.av{background:#e6f4ee;color:#1a7a4a}
-.pill.un{background:#f0f0f0;color:#888}
+.pill.un{background:#fff3f3;color:#C0392B}
 .pdot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
 .dc-phone{background:#f9f9f9;border:1px solid #eee;border-radius:7px;padding:7px 11px;font-size:13px;color:#555;font-weight:600;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .cpbtn{background:none;border:1px solid #ddd;border-radius:5px;padding:4px 6px;cursor:pointer;color:#bbb;display:inline-flex;align-items:center;flex-shrink:0;transition:all .15s;line-height:1}
 .cpbtn:hover{color:#1565C0;border-color:#1565C0;background:#e3f2fd}
 .cpbtn svg{width:13px;height:13px;display:block}
 .dc-acts{display:flex;gap:6px}
-.btn{border:none;border-radius:8px;padding:8px 10px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;min-height:38px}
-.bcall{background:#fde8e6;color:#96281B;flex:1}
-.bcall:hover,.bcall:active{background:#C0392B;color:white}
-.bwa{background:#e6f4ee;color:#1a7a4a;flex:1}
-.bwa:hover,.bwa:active{background:#1a7a4a;color:white}
-.bsm{background:#f0f0f0;color:#555;padding:8px 10px}
+.btn{border:none;border-radius:10px;padding:9px 12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .18s;min-height:40px}
+.bcall{background:linear-gradient(135deg,#fde8e6,#fcd0cb);color:#96281B;flex:1;box-shadow:0 2px 6px rgba(192,57,43,.15)}
+.bcall:hover,.bcall:active{background:linear-gradient(135deg,#C0392B,#96281B);color:white;box-shadow:0 4px 12px rgba(192,57,43,.35)}
+.bwa{background:linear-gradient(135deg,#e6f4ee,#c8ecd8);color:#1a7a4a;flex:1;box-shadow:0 2px 6px rgba(26,122,74,.15)}
+.bwa:hover,.bwa:active{background:linear-gradient(135deg,#1a7a4a,#145c38);color:white;box-shadow:0 4px 12px rgba(26,122,74,.3)}
+.bsm{background:#f0f0f0;color:#555;padding:9px 12px}
 .bsm:hover{background:#e0e0e0}
 .bdel:hover{background:#fde8e6;color:#C0392B}
 .pw{display:flex;border:1px solid #ddd;border-radius:8px;overflow:hidden;background:#f9f9f9}
@@ -396,6 +409,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 
 </div><!-- main-app -->
 
+<!-- DONOR UNAVAILABLE ALERT -->
+<div class="donor-alert-overlay" id="donorAlertOverlay" onclick="if(event.target===this)closeDonorAlert()">
+  <div class="donor-alert-box">
+    <div class="donor-alert-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="#C0392B"/>
+      </svg>
+    </div>
+    <div class="donor-alert-title">Donor Not Available</div>
+    <div class="donor-alert-msg">This donor has recently donated blood and is currently unavailable.<br>Please try contacting another donor. 🩸</div>
+    <button class="donor-alert-btn" onclick="closeDonorAlert()">Find Another Donor</button>
+  </div>
+</div>
+
 <!-- EDIT MODAL -->
 <div class="modal" id="editmodal">
   <div class="mbox">
@@ -445,6 +472,12 @@ var BLIST=['A+','A-','B+','B-','O+','O-','AB+','AB-'];
 var CFG_KEY='bl_cfg_v2';
 var donors={},editKey=null,stf='all',bgf='',busy=false,nTmr=null,db=null;
 
+function showDonorAlert(){
+  document.getElementById('donorAlertOverlay').classList.add('show');
+}
+function closeDonorAlert(){
+  document.getElementById('donorAlertOverlay').classList.remove('show');
+}
 function fmtDate(dateStr){
   if(!dateStr)return '';
   var d=new Date(dateStr);
@@ -576,36 +609,35 @@ function makeDonorCard(d){
   var card=document.createElement('div');card.className='dc'+(av?'':' dim');
   var top=document.createElement('div');top.className='dc-top';
   var badge=document.createElement('div');badge.className='bb';badge.style.background=c.bg;badge.textContent=d.blood||'?';
-  var info=document.createElement('div');info.style.cssText='flex:1;min-width:0';
+  var info=document.createElement('div');info.className='dc-info';
   var nm=document.createElement('div');nm.className='dc-name';nm.textContent=d.name||'';
   var lc=document.createElement('div');lc.className='dc-loc';lc.textContent=d.location||'';
-  info.appendChild(nm);info.appendChild(lc);
-  // Fix 4: Better status pill
-  var pill=document.createElement('div');pill.className='pill '+(av?'av':'un');
-  var pd=document.createElement('div');pd.className='pdot';
+  // Fix 2: pill below name, full width visible
   var statusText=av?'Waiting to help you':(d.donatedDate?'Donated – '+fmtDate(d.donatedDate):'Donated');
+  var pill=document.createElement('div');pill.className='pill '+(av?'av':'un');pill.style.cssText='margin-top:5px;display:inline-flex';
+  var pd=document.createElement('div');pd.className='pdot';
   pill.appendChild(pd);pill.appendChild(document.createTextNode(statusText));
-  pill.style.cssText='font-size:10px;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-  top.appendChild(badge);top.appendChild(info);top.appendChild(pill);
+  info.appendChild(nm);info.appendChild(lc);info.appendChild(pill);
+  top.appendChild(badge);top.appendChild(info);
   var pr=document.createElement('div');pr.className='dc-phone';
   var ps=document.createElement('span');ps.textContent=ph;
   var cb=document.createElement('button');cb.className='cpbtn';cb.title='Copy phone number';cb.innerHTML=ICOPY;
   cb.addEventListener('click',function(e){e.stopPropagation();cpText(ph,'Phone');});
   pr.appendChild(ps);pr.appendChild(cb);
   var acts=document.createElement('div');acts.className='dc-acts';
-  // Fix 3: Icon-only call and whatsapp buttons, Fix 6: alert if donated
+  // Fix 3: Modern icons, Fix 6: beautiful alert modal
   var ca=document.createElement('a');ca.className='btn bcall';
-  ca.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.64A2 2 0 012 .92h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
-  ca.title='Call Now';ca.style.cssText='padding:8px 14px;flex:1';
+  ca.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3" ry="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg><span style="font-size:12px">Call</span>';
+  ca.title='Call Now';ca.style.cssText='padding:9px 10px;flex:1';
   ca.addEventListener('click',function(e){
-    if(!av){e.preventDefault();notice('Donor is not available right now. Please try another donor.','err',4000);return;}
+    if(!av){e.preventDefault();showDonorAlert();return;}
     window.location.href='tel:'+ph;
   });
   var wa=document.createElement('a');wa.className='btn bwa';
-  wa.innerHTML='<svg viewBox="0 0 32 32" width="18" height="18" fill="none"><path d="M16 3C8.82 3 3 8.82 3 16c0 2.3.62 4.46 1.7 6.32L3 29l6.86-1.68A13 13 0 1016 3zm0 23.6a10.6 10.6 0 01-5.4-1.47l-.38-.23-4 .98 1.01-3.87-.25-.4A10.6 10.6 0 1116 26.6zm5.84-7.94c-.32-.16-1.88-.93-2.17-1.03s-.5-.16-.72.16-.82 1.03-1.01 1.24-.37.24-.69.08a8.65 8.65 0 01-2.55-1.57 9.57 9.57 0 01-1.77-2.2c-.19-.32 0-.49.14-.65s.32-.37.48-.56.21-.32.32-.53a.59.59 0 000-.56c-.08-.16-.72-1.72-.98-2.35s-.52-.54-.72-.55h-.6a1.15 1.15 0 00-.84.4 3.52 3.52 0 00-1.1 2.62 6.12 6.12 0 001.28 3.25 14.05 14.05 0 005.37 4.76c.75.32 1.33.51 1.79.65a4.3 4.3 0 001.98.13 3.24 3.24 0 002.13-1.5 2.63 2.63 0 00.18-1.5c-.07-.13-.28-.2-.6-.36z" fill="currentColor"/></svg>';
-  wa.title='WhatsApp';wa.style.cssText='padding:8px 14px;flex:1';
+  wa.innerHTML='<svg viewBox="0 0 24 24" width="17" height="17" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.124 1.526 5.855L0 24l6.303-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.65-.52-5.16-1.427l-.37-.22-3.74.893.924-3.638-.242-.375A9.972 9.972 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg><span style="font-size:12px">WhatsApp</span>';
+  wa.title='WhatsApp';wa.style.cssText='padding:9px 10px;flex:1';
   wa.addEventListener('click',function(e){
-    if(!av){e.preventDefault();notice('Donor is not available right now. Please try another donor.','err',4000);return;}
+    if(!av){e.preventDefault();showDonorAlert();return;}
     window.open('https://wa.me/'+wn+'?text='+wm,'_blank');
   });
   var eb=document.createElement('button');eb.className='btn bsm';eb.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';eb.title='Edit';eb.addEventListener('click',function(){openEdit(d._k);});
