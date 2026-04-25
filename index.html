@@ -20,21 +20,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .tab{background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,.55);padding:12px 4px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:all .15s;text-align:center}
 .tab:hover{color:white;background:rgba(255,255,255,.07)}
 .tab.on{color:white;border-bottom-color:white}
-.bgbar{background:white;border-bottom:1px solid #ddd;padding:9px 14px;display:none}
-.bgbar.show{display:block}
+.bgbar{display:none}
 .bglbl{font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
 .bgrow{display:flex;gap:5px;flex-wrap:wrap}
 .bgchip{padding:5px 11px;border-radius:20px;border:2px solid;font-size:13px;font-weight:800;cursor:pointer;background:white;transition:all .15s}
-.notice{padding:10px 14px;font-size:13px;font-weight:700;text-align:center;display:none;border-bottom:1px solid}
-.notice.show{display:block}
-.notice.ok{background:#e6f4ee;color:#1a7a4a;border-color:#b2dfc8}
-.notice.err{background:#fde8e6;color:#a32d2d;border-color:#f5c6c2}
-.notice.info{background:#e3f2fd;color:#1565C0;border-color:#bbdefb}
+.notice{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.85);background:rgba(30,30,30,0.93);color:white;font-size:14px;font-weight:700;padding:13px 24px;border-radius:30px;z-index:9999;display:none;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.3);pointer-events:none}
+.notice.show{display:block;animation:popIn .2s ease forwards}
+@keyframes popIn{from{transform:translate(-50%,-50%) scale(0.8);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.notice.ok{background:rgba(26,122,74,0.95)}
+.notice.err{background:rgba(163,45,45,0.95)}
+.notice.info{background:rgba(21,101,192,0.95)}
 .wrap{max-width:860px;margin:0 auto;padding:16px 14px 56px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px}
-.stat{background:white;border:1px solid #ddd;border-radius:10px;padding:12px 8px;text-align:center}
-.stat-n{font-size:24px;font-weight:800;line-height:1;margin-bottom:3px}
-.stat-l{font-size:10px;color:#777;text-transform:uppercase;letter-spacing:.4px;font-weight:700}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:14px}
+.stat{background:white;border:1px solid #eee;border-radius:10px;padding:8px 6px;text-align:center}
+.stat-n{font-size:18px;font-weight:800;line-height:1;margin-bottom:2px}
+.stat-l{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:.4px;font-weight:700}
 .sbox{background:white;border:1px solid #ddd;border-radius:10px;padding:13px;margin-bottom:14px}
 .inp{width:100%;border:1px solid #ddd;border-radius:8px;padding:10px 13px;font-family:inherit;font-size:15px;color:#111;background:#f9f9f9;outline:none;-webkit-appearance:none}
 .inp:focus{border-color:#C0392B;background:white}
@@ -113,9 +113,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .sh-urlrow{display:flex;gap:8px;margin-bottom:12px}
 .sh-url{flex:1;border:1px solid #ddd;border-radius:8px;padding:10px 12px;font-family:inherit;font-size:12px;color:#111;background:#f9f9f9;outline:none}
 .sh-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px}
-.shbtn{background:#f5f5f5;border:1px solid #ddd;border-radius:10px;padding:13px 6px;font-family:inherit;font-size:12px;font-weight:700;color:#111;cursor:pointer;text-align:center;min-height:58px;transition:all .15s}
-.shbtn:hover{background:#e8e8e8}
-.shbtn b{display:block;font-size:17px;margin-bottom:4px;font-weight:800}
+.shbtn{background:#f5f5f5;border:1px solid #ddd;border-radius:12px;padding:13px 6px;font-family:inherit;font-size:12px;font-weight:700;color:#333;cursor:pointer;text-align:center;min-height:68px;transition:all .15s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.shbtn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+.shbtn svg{width:28px;height:28px;display:block}
+.shbtn-wa{background:#e8f9ef;border-color:#b7e4c7}
+.shbtn-wa:hover{background:#d3f0e0}
+.shbtn-ms{background:#e8f0fe;border-color:#b3c8f9}
+.shbtn-ms:hover{background:#d3e3fd}
+.shbtn-tg{background:#e8f4fb;border-color:#b3d9f0}
+.shbtn-tg:hover{background:#d0eaf7}
+.shbtn-csv{background:#fff8e6;border-color:#f5dfa0}
+.shbtn-csv:hover{background:#fff0c0}
+.shbtn-print{background:#f5f0ff;border-color:#d8c8f5}
+.shbtn-print:hover{background:#ede0ff}
+.shbtn-add{background:#fde8e6;border-color:#f5c6c2}
+.shbtn-add:hover{background:#fcd6d2}
 .install{background:#fde8e6;border:1px solid rgba(192,57,43,.2);border-radius:10px;padding:13px;font-size:12px;color:#7f1d1d;line-height:1.9}
 .sh2{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .sh2-t{font-size:17px;font-weight:800}
@@ -229,10 +241,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
   <button class="tab"     onclick="goTab('share')">Share</button>
 </div>
 
-<div class="bgbar" id="bgbar">
-  <div class="bglbl">Filter by blood group</div>
-  <div class="bgrow" id="bgrow"></div>
-</div>
+<div class="bgbar" id="bgbar"></div>
 <div class="notice" id="notice"></div>
 
 <div id="t-donors" class="wrap">
@@ -249,6 +258,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
       <button class="fchip on" onclick="setSt('all',this)">All</button>
       <button class="fchip" onclick="setSt('available',this)">Available</button>
       <button class="fchip" onclick="setSt('unavailable',this)">Unavailable</button>
+    </div>
+    <div style="border-top:1px solid #f0f0f0;margin-top:10px;padding-top:10px">
+      <div class="bglbl" style="margin-bottom:7px">Blood Group:</div>
+      <div class="bgrow" id="bgrow"></div>
     </div>
   </div>
   <div class="sh2"><span class="sh2-t">All Donors</span><span class="sh2-c" id="dcnt"></span></div>
@@ -305,12 +318,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
       <button class="bprimary" style="width:auto;padding:10px 16px;font-size:14px;min-height:auto" onclick="cpLink()">Copy Link</button>
     </div>
     <div class="sh-btns">
-      <button class="shbtn" onclick="shWA()"><b>WA</b>WhatsApp</button>
-      <button class="shbtn" onclick="shTG()"><b>TG</b>Telegram</button>
-      <button class="shbtn" onclick="shMore()"><b>+</b>More Apps</button>
-      <button class="shbtn" onclick="exCSV()"><b>CSV</b>Export</button>
-      <button class="shbtn" onclick="window.print()"><b>P</b>Print</button>
-      <button class="shbtn" onclick="goTab('add')"><b>+</b>Add Donor</button>
+      <button class="shbtn shbtn-wa" onclick="shWA()">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#25D366"/><path d="M23.5 8.5A10.07 10.07 0 0016 5.5a10 10 0 00-8.66 14.97L5.5 26.5l6.18-1.62A10 10 0 0026.5 16a10.07 10.07 0 00-3-7.5zm-7.5 15.38a8.3 8.3 0 01-4.23-1.16l-.3-.18-3.13.82.83-3.04-.2-.31A8.32 8.32 0 1116 23.88zm4.57-6.22c-.25-.12-1.47-.72-1.7-.8s-.39-.12-.56.12-.64.8-.79.97-.29.18-.54.06a6.78 6.78 0 01-2-1.23 7.5 7.5 0 01-1.38-1.72c-.15-.25 0-.38.11-.5s.25-.29.37-.44a1.67 1.67 0 00.25-.41.46.46 0 000-.44c-.06-.12-.56-1.34-.77-1.84s-.4-.42-.56-.43h-.47a.9.9 0 00-.66.31 2.76 2.76 0 00-.86 2.05 4.79 4.79 0 001 2.54 11 11 0 004.2 3.72c.59.25 1.04.4 1.4.51a3.37 3.37 0 001.55.1 2.54 2.54 0 001.66-1.17 2.06 2.06 0 00.14-1.17c-.05-.1-.22-.16-.47-.28z" fill="white"/></svg>
+        WhatsApp
+      </button>
+      <button class="shbtn shbtn-ms" onclick="shMS()">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#0084FF"/><path d="M16 5.5C10.2 5.5 5.5 9.86 5.5 15.25c0 3.07 1.52 5.81 3.9 7.63V26.5l3.56-1.96a11.3 11.3 0 003.04.41c5.8 0 10.5-4.36 10.5-9.7S21.8 5.5 16 5.5zm1.04 13.07l-2.67-2.85-5.22 2.85 5.74-6.09 2.74 2.85 5.15-2.85-5.74 6.09z" fill="white"/></svg>
+        Messenger
+      </button>
+      <button class="shbtn shbtn-tg" onclick="shTG()">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#29B6F6"/><path d="M23.9 9.3l-2.8 13.2c-.2 1-.8 1.2-1.6.8l-4.4-3.2-2.1 2c-.2.2-.5.3-.9.3l.3-4.5 7.9-7.1c.3-.3 0-.5-.5-.2l-9.8 6.1-4.2-1.3c-.9-.3-.9-.9.2-1.3l16.4-6.3c.8-.3 1.5.2 1.5 1.5z" fill="white"/></svg>
+        Telegram
+      </button>
+      <button class="shbtn shbtn-csv" onclick="exCSV()">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3" width="24" height="26" rx="3" fill="#F9A825"/><path d="M8 12h16M8 17h16M8 22h10" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18 3v7h7" fill="none" stroke="white" stroke-width="1.5"/></svg>
+        Export CSV
+      </button>
+      <button class="shbtn shbtn-print" onclick="window.print()">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="11" width="20" height="14" rx="2" fill="#7C4DFF"/><rect x="9" y="3" width="14" height="10" rx="1" fill="#B39DDB"/><rect x="9" y="19" width="14" height="8" rx="1" fill="white"/><circle cx="22" cy="16" r="1.5" fill="white"/></svg>
+        Print List
+      </button>
+      <button class="shbtn shbtn-add" onclick="goTab('add')">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="13" fill="#C0392B"/><path d="M16 9v14M9 16h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+        Add Donor
+      </button>
     </div>
     <div class="install">
       <strong>Save to Phone Home Screen:</strong><br>
@@ -513,6 +544,8 @@ function renderBGChips(){
     btn.onclick=function(){setBG(b);};row.appendChild(btn);
   });
 }
+// render chips immediately so filter shows on first load without waiting for Firebase
+renderBGChips();
 function setBG(b){bgf=b;renderBGChips();renderDonors();}
 
 function makeDonorCard(d){
@@ -665,13 +698,13 @@ function delDonor(key,name){
 function goTab(tab){
   ['donors','add','emergency','share'].forEach(function(t){document.getElementById('t-'+t).style.display=t===tab?'':'none';});
   document.querySelectorAll('.tab').forEach(function(b,i){b.classList.toggle('on',['donors','add','emergency','share'][i]===tab);});
-  document.getElementById('bgbar').className='bgbar'+(tab==='donors'?' show':'');
   document.getElementById('notice').className='notice';
   if(tab==='share'){document.getElementById('shurl').value=window.location.href;var a=getArr();document.getElementById('sh-t').textContent=a.length;document.getElementById('sh-a').textContent=a.filter(function(d){return d.status==='available';}).length;}
 }
 
 function cpLink(){cpText(document.getElementById('shurl').value||window.location.href,'Link');}
 function shWA(){var u=document.getElementById('shurl').value||window.location.href;window.open('https://wa.me/?text='+encodeURIComponent('Join BloodLink - community blood donor network! Find donors in emergencies. Open here: '+u),'_blank');}
+function shMS(){var u=document.getElementById('shurl').value||window.location.href;window.open('https://www.facebook.com/dialog/send?link='+encodeURIComponent(u)+'&app_id=291494419107518&redirect_uri='+encodeURIComponent(u),'_blank');}
 function shTG(){var u=document.getElementById('shurl').value||window.location.href;window.open('https://t.me/share/url?url='+encodeURIComponent(u)+'&text='+encodeURIComponent('BloodLink - Community Blood Donor Network'),'_blank');}
 function shMore(){var u=document.getElementById('shurl').value||window.location.href;if(navigator.share){navigator.share({title:'BloodLink',text:'Community blood donor network',url:u});}else cpLink();}
 function exCSV(){
