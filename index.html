@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>BloodLink - Blood Donor Network</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>emailjs.init('DIzgm1efPnqn8Uxb2');</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;background:#f2f2f2;color:#111;font-size:15px}
@@ -33,7 +35,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .notice.ok{background:rgba(26,122,74,0.95)}
 .notice.err{background:rgba(163,45,45,0.95)}
 .notice.info{background:rgba(21,101,192,0.95)}
-/* donor alert modal */
+/* ── TRASH SYSTEM ── */
+.trash-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;color:#aaa;font-size:12px;font-weight:700;font-family:inherit;transition:color .2s}
+.trash-btn:hover{color:#C0392B}
+.trash-count{background:#C0392B;color:white;border-radius:20px;font-size:10px;font-weight:800;padding:1px 6px;min-width:18px;text-align:center;display:none}
+.trash-count.show{display:inline-block}
+/* Trash popup */
+.trash-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:flex-end;justify-content:center;padding:0}
+.trash-overlay.show{display:flex}
+.trash-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.2);animation:slideUp .3s ease}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.trash-header{padding:20px 20px 12px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
+.trash-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.trash-title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+.trash-close{background:none;border:none;cursor:pointer;color:#aaa;padding:4px;border-radius:8px;font-size:20px;line-height:1}
+.trash-close:hover{background:#f0f0f0;color:#333}
+.trash-subtitle{font-size:12px;color:#C0392B;font-weight:700;margin-bottom:8px}
+.trash-restore-all{background:#fde8e6;border:1px solid #f5c6c2;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:800;color:#C0392B;cursor:pointer;font-family:inherit;transition:all .15s}
+.trash-restore-all:hover{background:#C0392B;color:white}
+.trash-body{overflow-y:auto;flex:1;padding:12px 16px}
+.trash-item{background:#f9f9f9;border:1px solid #eee;border-radius:12px;padding:13px;margin-bottom:9px;display:flex;align-items:center;gap:12px}
+.trash-item-blood{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:white;flex-shrink:0}
+.trash-item-info{flex:1;min-width:0}
+.trash-item-name{font-size:14px;font-weight:800;color:#111;margin-bottom:2px}
+.trash-item-meta{font-size:11px;color:#aaa}
+.trash-item-days{font-size:11px;font-weight:700;color:#C0392B;flex-shrink:0;text-align:right}
+.trash-restore-btn{background:white;border:1px solid #ddd;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;color:#1a7a4a;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.trash-restore-btn:hover{background:#1a7a4a;color:white;border-color:#1a7a4a}
+.trash-footer{padding:12px 20px 20px;border-top:1px solid #f0f0f0;flex-shrink:0;text-align:center}
+.trash-footer-note{font-size:11px;color:#bbb;font-weight:600}
+.trash-empty{text-align:center;padding:36px 14px;color:#bbb}
+.trash-empty-icon{font-size:40px;margin-bottom:10px}
+/* Crumple animation */
+@keyframes crumple{
+  0%{transform:scale(1) rotate(0deg);opacity:1;filter:blur(0)}
+  30%{transform:scale(0.85) rotate(-3deg);opacity:.9;filter:blur(0)}
+  60%{transform:scale(0.5) rotate(8deg) translate(-20px,20px);opacity:.6;filter:blur(1px)}
+  100%{transform:scale(0) rotate(15deg) translate(-60px,60px);opacity:0;filter:blur(3px)}
+}
+.dc.crumpling{animation:crumple .55s ease-in forwards;pointer-events:none}
+/* Password modal */
+.pwd-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;align-items:center;justify-content:center;padding:16px}
+.pwd-overlay.show{display:flex}
+.pwd-box{background:white;border-radius:20px;padding:28px 24px;width:100%;max-width:340px;box-shadow:0 20px 60px rgba(0,0,0,.25);text-align:center}
+.pwd-icon{width:56px;height:56px;background:#f0f0f0;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px}
+.pwd-title{font-size:16px;font-weight:800;color:#111;margin-bottom:6px}
+.pwd-sub{font-size:12px;color:#aaa;margin-bottom:18px}
+.pwd-input{width:100%;border:2px solid #ddd;border-radius:12px;padding:12px 16px;font-size:18px;font-weight:800;letter-spacing:4px;text-align:center;font-family:inherit;outline:none;margin-bottom:10px;transition:border-color .2s}
+.pwd-input:focus{border-color:#C0392B}
+.pwd-err{font-size:12px;color:#C0392B;font-weight:700;margin-bottom:10px;display:none}
+.pwd-submit{background:#C0392B;color:white;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;width:100%;font-family:inherit;margin-bottom:8px;transition:background .15s}
+.pwd-submit:hover{background:#96281B}
+.pwd-cancel{background:#f5f5f5;color:#555;border:none;border-radius:12px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;width:100%;font-family:inherit}
+/* sh2 free forever → made with love */
 .donor-alert-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9998;display:none;align-items:center;justify-content:center;padding:20px}
 .donor-alert-overlay.show{display:flex;animation:fadeIn .2s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
@@ -287,7 +341,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
       <div class="bgwrap" id="bgrow"></div>
     </div>
   </div>
-  <div class="sh2"><span class="sh2-t">All Donors</span><span class="sh2-c" id="dcnt"></span></div>
+  <div class="sh2"><span class="sh2-t">All Donors</span><span style="font-size:11px;font-weight:800;color:#C0392B;background:#fde8e6;padding:3px 10px;border-radius:20px">🩸 Free Forever</span><span class="sh2-c" id="dcnt"></span></div>
   <div id="dlist"><div class="loading"><div class="spin"></div>Loading donors...</div></div>
 </div>
 
@@ -334,8 +388,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 
 <div id="t-share" class="wrap" style="display:none">
   <div class="shcard">
-    <div class="sh-title">Share BloodLink</div>
-    <div class="sh-desc">Share this link with your friends. Everyone who opens it sees the same live donor list. Anyone can add, edit, or remove donors — all changes update instantly for everyone.</div>
+    <div class="sh-title">Share BloodLink 🩸</div>
+    <div class="sh-desc" style="background:linear-gradient(135deg,#fde8e6,#fff5f5);border-left:3px solid #C0392B;border-radius:8px;padding:13px;font-size:13px;color:#7f1d1d;line-height:1.8;font-weight:600">
+      🩸 Blood is the most precious gift — it cannot be manufactured.<br>
+      Every 2 seconds, someone needs blood. One donation can save up to 3 lives.<br>
+      Share BloodLink and help connect donors with those in need. ❤️
+    </div>
     <div class="sh-urlrow">
       <input class="sh-url" id="shurl" readonly>
       <button class="bprimary" style="width:auto;padding:10px 16px;font-size:14px;min-height:auto" onclick="cpLink()">Copy Link</button>
@@ -353,13 +411,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="16" fill="#29B6F6"/><path d="M23.9 9.3l-2.8 13.2c-.2 1-.8 1.2-1.6.8l-4.4-3.2-2.1 2c-.2.2-.5.3-.9.3l.3-4.5 7.9-7.1c.3-.3 0-.5-.5-.2l-9.8 6.1-4.2-1.3c-.9-.3-.9-.9.2-1.3l16.4-6.3c.8-.3 1.5.2 1.5 1.5z" fill="white"/></svg>
         Telegram
       </button>
-      <button class="shbtn shbtn-csv" onclick="exCSV()">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3" width="24" height="26" rx="3" fill="#F9A825"/><path d="M8 12h16M8 17h16M8 22h10" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M18 3v7h7" fill="none" stroke="white" stroke-width="1.5"/></svg>
+      <button class="shbtn shbtn-csv" onclick="askPassword('export')">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3" width="24" height="26" rx="3" fill="#F9A825"/><path d="M8 12h16M8 17h16M8 22h10" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
         Export CSV
       </button>
-      <button class="shbtn shbtn-print" onclick="window.print()">
-        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="11" width="20" height="14" rx="2" fill="#7C4DFF"/><rect x="9" y="3" width="14" height="10" rx="1" fill="#B39DDB"/><rect x="9" y="19" width="14" height="8" rx="1" fill="white"/><circle cx="22" cy="16" r="1.5" fill="white"/></svg>
-        Print List
+      <button class="shbtn" style="background:#e8f0fe;border-color:#b3c8f9;color:#1a56db" onclick="askPassword('import')">
+        <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="3" width="24" height="26" rx="3" fill="#1a56db"/><path d="M16 8v12M11 16l5 5 5-5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 24h16" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
+        Import CSV
       </button>
       <button class="shbtn shbtn-add" onclick="goTab('add')">
         <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="16" cy="16" r="13" fill="#C0392B"/><path d="M16 9v14M9 16h14" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
@@ -389,8 +447,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 
 <!-- FOOTER -->
 <div style="position:fixed;bottom:0;left:0;right:0;background:white;border-top:1px solid #eee;padding:10px 18px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:#aaa;z-index:98">
+  <button class="trash-btn" onclick="openTrash()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+    Trash <span class="trash-count" id="trashCount">0</span>
+  </button>
   <span>Made with ❤️ by <strong style="color:#C0392B">Mahir</strong></span>
-  <span style="color:#bbb">Free Forever</span>
   <span style="color:#C0392B;font-weight:700;cursor:pointer" onclick="document.getElementById('aboutmodal').classList.add('open')">About</span>
 </div>
 
@@ -416,6 +477,43 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
     <button class="bprimary" onclick="document.getElementById('aboutmodal').classList.remove('open')">Close</button>
   </div>
 </div>
+
+<!-- TRASH POPUP -->
+<div class="trash-overlay" id="trashOverlay" onclick="if(event.target===this)closeTrash()">
+  <div class="trash-box">
+    <div class="trash-header">
+      <div class="trash-header-top">
+        <div class="trash-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          Trash
+        </div>
+        <button class="trash-close" onclick="closeTrash()">✕</button>
+      </div>
+      <div class="trash-subtitle" id="trashSubtitle">Deleted donors</div>
+      <button class="trash-restore-all" id="trashRestoreAll" onclick="restoreAllTrash()">↩ Restore All</button>
+    </div>
+    <div class="trash-body" id="trashBody"></div>
+    <div class="trash-footer">
+      <div class="trash-footer-note">⏳ Items are permanently deleted after 7 days</div>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD MODAL -->
+<div class="pwd-overlay" id="pwdOverlay" onclick="if(event.target===this)closePwd()">
+  <div class="pwd-box">
+    <div class="pwd-icon">🔐</div>
+    <div class="pwd-title" id="pwdTitle">Enter Password</div>
+    <div class="pwd-sub" id="pwdSub">This feature is password protected</div>
+    <input class="pwd-input" id="pwdInput" type="password" placeholder="••••••" maxlength="10" onkeydown="if(event.key==='Enter')submitPwd()">
+    <div class="pwd-err" id="pwdErr">❌ Wrong password. Try again.</div>
+    <button class="pwd-submit" onclick="submitPwd()">Unlock</button>
+    <button class="pwd-cancel" onclick="closePwd()">Cancel</button>
+  </div>
+</div>
+
+<!-- HIDDEN FILE INPUT FOR IMPORT -->
+<input type="file" id="importFileInput" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleImportFile(event)">
 
 <!-- DUPLICATE PHONE ALERT -->
 <div class="donor-alert-overlay" id="dupPhoneOverlay" onclick="if(event.target===this)closeDupPhoneAlert()">
@@ -601,6 +699,7 @@ function initFB(cfg){
       renderAll();setSync('live','Live');
     },function(){setSync('offline','Offline');notice('Connection lost. Check internet and refresh.','err',0);});
     db.ref('.info/connected').on('value',function(snap){setSync(snap.val()?'live':'busy',snap.val()?'Live':'Connecting');});
+    loadTrash();
   }catch(e){setSync('offline','Error');notice('Firebase error: '+e.message,'err',0);}
 }
 
@@ -656,18 +755,19 @@ function setBG(b){bgf=b;renderBGChips();renderDonors();}
 
 function makeDonorCard(d){
   var av=d.status==='available';
-  if(d.donatedDate){
+  // Auto restore to available after 3 months from donated date
+  if(!av&&d.donatedDate){
     var threeMonths=90*24*60*60*1000;
-    if(Date.now()-new Date(d.donatedDate).getTime()>=threeMonths&&!av){
-      db.ref('donors/'+d._k).update({status:'available',donatedDate:null});av=true;
+    var donatedTime=new Date(d.donatedDate).getTime();
+    if(!isNaN(donatedTime)&&Date.now()-donatedTime>=threeMonths){
+      db.ref('donors/'+d._k).update({status:'available',donatedDate:null});
+      av=true;
     }
   }
+  var statusText=av?'Waiting to help you 🩸':(d.donatedDate?'Donated – '+fmtDate(d.donatedDate):'Unavailable');
   var c=BC[d.blood]||{bg:'#C0392B',lt:'#fee'};
   var ph=d.phone||'';var wn=ph.replace(/\D/g,'');
   var wm=encodeURIComponent('Urgent: Blood needed. Blood type: '+(d.blood||'')+'. Please respond ASAP.');
-  var statusText=av?'Waiting to help you':(d.donatedDate?'Donated – '+fmtDate(d.donatedDate):'Donated');
-
-  var card=document.createElement('div');card.className='dc'+(av?'':' dim');
 
   // Colored top banner
   var banner=document.createElement('div');banner.className='dc-banner';
@@ -867,85 +967,214 @@ function saveEdit(){
   });
 }
 
+// ── TRASH SYSTEM ──
+var trashItems={};
+function loadTrash(){
+  if(!db)return;
+  db.ref('trash').on('value',function(snap){
+    var val=snap.val();
+    trashItems=(val&&typeof val==='object')?val:{};
+    // Auto delete items older than 7 days
+    var now=Date.now();var sevenDays=7*24*60*60*1000;
+    Object.keys(trashItems).forEach(function(k){
+      if(trashItems[k].deletedAt&&(now-trashItems[k].deletedAt)>=sevenDays){
+        db.ref('trash/'+k).remove();
+      }
+    });
+    updateTrashCount();
+  });
+}
+function updateTrashCount(){
+  var count=Object.keys(trashItems).length;
+  var el=document.getElementById('trashCount');
+  if(el){el.textContent=count;el.classList.toggle('show',count>0);}
+}
+function openTrash(){
+  renderTrashBody();
+  document.getElementById('trashOverlay').classList.add('show');
+}
+function closeTrash(){document.getElementById('trashOverlay').classList.remove('show');}
+function renderTrashBody(){
+  var body=document.getElementById('trashBody');if(!body)return;body.innerHTML='';
+  var items=Object.keys(trashItems).map(function(k){var d=Object.assign({},trashItems[k]);d._k=k;return d;}).sort(function(a,b){return(b.deletedAt||0)-(a.deletedAt||0);});
+  var sub=document.getElementById('trashSubtitle');
+  if(sub)sub.textContent=items.length+' deleted donor'+(items.length!==1?'s':'');
+  var rAll=document.getElementById('trashRestoreAll');
+  if(rAll)rAll.style.display=items.length?'':'none';
+  if(!items.length){
+    body.innerHTML='<div class="trash-empty"><div class="trash-empty-icon">🗑️</div><div style="font-size:14px;font-weight:700">Trash is empty</div><div style="font-size:12px;margin-top:4px">Deleted donors will appear here</div></div>';
+    return;
+  }
+  var now=Date.now();var sevenDays=7*24*60*60*1000;
+  items.forEach(function(d){
+    var c=BC[d.blood]||{bg:'#C0392B'};
+    var daysAgo=Math.floor((now-(d.deletedAt||now))/(24*60*60*1000));
+    var daysLeft=7-daysAgo;
+    var item=document.createElement('div');item.className='trash-item';
+    var blood=document.createElement('div');blood.className='trash-item-blood';blood.style.background=c.bg;blood.textContent=d.blood||'?';
+    var info=document.createElement('div');info.className='trash-item-info';
+    var name=document.createElement('div');name.className='trash-item-name';name.textContent=d.name||'';
+    var meta=document.createElement('div');meta.className='trash-item-meta';meta.textContent=(d.phone||'')+' • '+(d.location||'');
+    info.appendChild(name);info.appendChild(meta);
+    var right=document.createElement('div');right.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0';
+    var days=document.createElement('div');days.className='trash-item-days';
+    days.textContent=daysLeft<=0?'Expires today':daysLeft+'d left';
+    var restore=document.createElement('button');restore.className='trash-restore-btn';restore.textContent='↩ Restore';
+    restore.onclick=function(){restoreTrashItem(d._k);};
+    right.appendChild(days);right.appendChild(restore);
+    item.appendChild(blood);item.appendChild(info);item.appendChild(right);
+    body.appendChild(item);
+  });
+}
+function restoreTrashItem(key){
+  var d=trashItems[key];if(!d||!db)return;
+  var restored=Object.assign({},d);delete restored.deletedAt;delete restored._k;
+  db.ref('donors').push(restored,function(err){
+    if(!err){db.ref('trash/'+key).remove();renderTrashBody();notice(d.name+' restored successfully!','ok',3000);}
+  });
+}
+function restoreAllTrash(){
+  var keys=Object.keys(trashItems);if(!keys.length||!db)return;
+  keys.forEach(function(k){restoreTrashItem(k);});
+  setTimeout(function(){closeTrash();},400);
+}
+
+// ── CRUMPLE ANIMATION ──
 var SESSION_DELETE_COUNT=0;
 var SESSION_DELETE_MAX=3;
 
 function delDonor(key,name){
   if(!db)return;
-  if(SESSION_DELETE_COUNT>=SESSION_DELETE_MAX){
-    showDeleteBlockAlert();return;
-  }
+  if(SESSION_DELETE_COUNT>=SESSION_DELETE_MAX){showDeleteBlockAlert();return;}
   showDeleteConfirmAlert(key,name);
 }
-
 function showDeleteConfirmAlert(key,name){
   var overlay=document.getElementById('deleteConfirmOverlay');
   document.getElementById('deleteConfirmName').textContent=name;
   document.getElementById('deleteConfirmYes').onclick=function(){
     closeDeleteConfirmAlert();
-    doDelete(key,name);
+    doDeleteWithAnimation(key,name);
   };
   overlay.classList.add('show');
 }
 function closeDeleteConfirmAlert(){document.getElementById('deleteConfirmOverlay').classList.remove('show');}
 
-function doDelete(key,name){
+function doDeleteWithAnimation(key,name){
   SESSION_DELETE_COUNT++;
-  // If they just hit the 3rd delete, send email alert
-  if(SESSION_DELETE_COUNT>=SESSION_DELETE_MAX){
-    sendDeleteAlertEmail(name);
+  sendDeleteAlertEmail(name);
+  // Find the card element
+  var cards=document.querySelectorAll('#dlist .dc');
+  var targetCard=null;
+  cards.forEach(function(card){
+    var nameEl=card.querySelector('.dc-name');
+    if(nameEl&&nameEl.textContent===name)targetCard=card;
+  });
+  if(targetCard){
+    targetCard.classList.add('crumpling');
+    setTimeout(function(){doDelete(key,name);},520);
+  } else {
+    doDelete(key,name);
   }
-  setSync('busy','Saving');
-  db.ref('donors/'+key).remove(function(err){
-    if(err){setSync('offline','Error');notice('Delete failed: '+err.message,'err',5000);}
-    else{setSync('live','Live');notice(name+' has been removed from the network.','info',4000);}
+}
+function doDelete(key,name){
+  if(!db)return;
+  var d=donors[key];
+  // Move to trash first
+  var trashData=Object.assign({},d,{deletedAt:Date.now()});
+  db.ref('trash/'+key).set(trashData,function(){
+    db.ref('donors/'+key).remove(function(err){
+      if(err){setSync('offline','Error');notice('Delete failed: '+err.message,'err',5000);}
+      else{setSync('live','Live');notice(name+' moved to Trash. Restore anytime.','info',4000);}
+    });
   });
 }
-
-function showDeleteBlockAlert(){
-  document.getElementById('deleteBlockOverlay').classList.add('show');
-}
+function showDeleteBlockAlert(){document.getElementById('deleteBlockOverlay').classList.add('show');}
 function closeDeleteBlockAlert(){document.getElementById('deleteBlockOverlay').classList.remove('show');}
 
+// ── PASSWORD SYSTEM ──
+var pwdPendingAction='';
+var IMPORT_EXPORT_PWD='M6510';
+function askPassword(action){
+  pwdPendingAction=action;
+  var overlay=document.getElementById('pwdOverlay');
+  var title=document.getElementById('pwdTitle');
+  var sub=document.getElementById('pwdSub');
+  var inp=document.getElementById('pwdInput');
+  var err=document.getElementById('pwdErr');
+  if(action==='export'){title.textContent='Export CSV';sub.textContent='Enter password to export donor list';}
+  else{title.textContent='Import CSV';sub.textContent='Enter password to import donors';}
+  inp.value='';err.style.display='none';
+  overlay.classList.add('show');
+  setTimeout(function(){inp.focus();},200);
+}
+function closePwd(){
+  document.getElementById('pwdOverlay').classList.remove('show');
+  pwdPendingAction='';
+}
+function submitPwd(){
+  var val=document.getElementById('pwdInput').value;
+  var err=document.getElementById('pwdErr');
+  if(val===IMPORT_EXPORT_PWD){
+    closePwd();
+    if(pwdPendingAction==='export')exCSV();
+    else if(pwdPendingAction==='import')document.getElementById('importFileInput').click();
+  } else {
+    err.style.display='block';
+    document.getElementById('pwdInput').value='';
+    document.getElementById('pwdInput').focus();
+  }
+}
+
+// ── IMPORT CSV/EXCEL ──
+function handleImportFile(e){
+  var file=e.target.files[0];if(!file||!db)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var text=ev.target.result;
+    var lines=text.split('\n').map(function(l){return l.trim();}).filter(function(l){return l;});
+    if(lines.length<2){notice('File is empty or invalid.','err',4000);return;}
+    var headers=lines[0].split(',').map(function(h){return h.trim().toLowerCase().replace(/"/g,'');});
+    var nameIdx=headers.indexOf('name');var phoneIdx=headers.indexOf('phone');
+    var bloodIdx=headers.indexOf('blood');var locationIdx=headers.indexOf('location');
+    var statusIdx=headers.indexOf('status');
+    if(nameIdx<0||phoneIdx<0||bloodIdx<0){notice('CSV must have: name, phone, blood columns.','err',5000);return;}
+    var added=0;var skipped=0;
+    var existingPhones=getArr().map(function(d){return d.phone;});
+    lines.slice(1).forEach(function(line){
+      var cols=line.split(',').map(function(c){return c.trim().replace(/"/g,'');});
+      var name=cols[nameIdx]||'';var phone=fullPhone(cols[phoneIdx]||'');
+      var blood=cols[bloodIdx]||'';var location=locationIdx>=0?(cols[locationIdx]||''):'';
+      var status=statusIdx>=0?(cols[statusIdx]||'available'):'available';
+      if(!name||!phone||!blood){skipped++;return;}
+      if(existingPhones.indexOf(phone)>=0){skipped++;return;}
+      db.ref('donors').push({name:name,phone:phone,blood:blood,location:location,status:status,ts:Date.now()});
+      existingPhones.push(phone);added++;
+    });
+    notice(added+' donors imported! '+skipped+' skipped (duplicate/invalid).','ok',5000);
+    e.target.value='';
+  };
+  reader.readAsText(file);
+}
+
 function sendDeleteAlertEmail(lastDeletedName){
-  // Collect visitor info
   var dt=new Date();
   var dateStr=dt.toLocaleDateString('en-BD',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   var timeStr=dt.toLocaleTimeString('en-BD',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  var browser=navigator.userAgent;
-  var platform=navigator.platform||'Unknown';
-  var screenRes=screen.width+'x'+screen.height;
-  var lang=navigator.language||'Unknown';
-  var subject='⚠️ BloodLink Security Alert — Excessive Delete Attempts Detected';
-  var body='BloodLink Security Alert\n'
-    +'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n'
-    +'⚠️  A visitor has attempted to delete more than '+SESSION_DELETE_MAX+' donors in a single session.\n\n'
-    +'🕐  Date & Time\n'
-    +'    '+dateStr+' at '+timeStr+'\n\n'
-    +'🩸  Last Donor Deleted\n'
-    +'    '+lastDeletedName+'\n\n'
-    +'🔢  Total Deletes This Session\n'
-    +'    '+SESSION_DELETE_COUNT+' deletion(s) performed\n\n'
-    +'🌐  Site URL\n'
-    +'    '+window.location.href+'\n\n'
-    +'🖥️  Device & Browser\n'
-    +'    '+browser+'\n\n'
-    +'📱  Platform\n'
-    +'    '+platform+'\n\n'
-    +'🖥️  Screen Resolution\n'
-    +'    '+screenRes+'\n\n'
-    +'🌍  Browser Language\n'
-    +'    '+lang+'\n\n'
-    +'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
-    +'This is an automated alert from your BloodLink network.\n'
-    +'Please review your donor list and restore any wrongfully deleted entries.\n\n'
-    +'— BloodLink Security System';
-  // Open email client with mailto
-  var mailto='mailto:tipusultan6510@gmail.com'
-    +'?subject='+encodeURIComponent(subject)
-    +'&body='+encodeURIComponent(body);
-  var a=document.createElement('a');a.href=mailto;a.style.display='none';
-  document.body.appendChild(a);a.click();document.body.removeChild(a);
+  var donor=getArr().find(function(d){return d.name===lastDeletedName;})||{};
+  emailjs.send('service_l95bicl','template_etucv7i',{
+    donor_name: lastDeletedName,
+    delete_time: dateStr+' at '+timeStr,
+    device_info: navigator.userAgent,
+    platform: navigator.platform||'Unknown',
+    screen_res: screen.width+'x'+screen.height,
+    browser_lang: navigator.language||'Unknown',
+    delete_count: SESSION_DELETE_COUNT,
+    site_url: window.location.href
+  }).then(function(){
+    console.log('Alert email sent!');
+  }).catch(function(err){
+    console.error('Email failed:',err);
+  });
 }
 
 function goTab(tab){
