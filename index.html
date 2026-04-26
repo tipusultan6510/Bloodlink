@@ -22,8 +22,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .tab.on{color:white;border-bottom-color:white}
 .bgbar{display:none}
 .bglbl{font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
-.bgrow{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.bgchip{padding:4px 2px;border-radius:8px;border:2px solid;font-size:11px;font-weight:800;cursor:pointer;background:white;transition:all .15s;text-align:center;width:100%}
+.bgwrap{display:flex;flex-direction:row;gap:6px;align-items:stretch}
+.bgwrap-right{display:flex;flex-direction:column;gap:4px;flex:1}
+.bgrow-main{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.bgchip{padding:5px 2px;border-radius:8px;border:2px solid;font-size:11px;font-weight:800;cursor:pointer;background:white;transition:all .15s;text-align:center;width:100%}
+.bgchip-all{padding:5px 10px;border-radius:8px;border:2px solid;font-size:11px;font-weight:800;cursor:pointer;background:white;transition:all .15s;text-align:center;display:flex;align-items:center;justify-content:center;min-width:44px;align-self:stretch}
 .notice{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0.85);background:rgba(30,30,30,0.93);color:white;font-size:14px;font-weight:700;padding:13px 24px;border-radius:30px;z-index:9999;display:none;white-space:nowrap;box-shadow:0 8px 30px rgba(0,0,0,.3);pointer-events:none}
 .notice.show{display:block;animation:popIn .2s ease forwards}
 @keyframes popIn{from{transform:translate(-50%,-50%) scale(0.8);opacity:0}to{transform:translate(-50%,-50%) scale(1);opacity:1}}
@@ -281,7 +284,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
     </div>
     <div style="border-top:1px solid #f0f0f0;margin-top:10px;padding-top:10px">
       <div class="bglbl" style="margin-bottom:7px">Blood Group:</div>
-      <div class="bgrow" id="bgrow"></div>
+      <div class="bgwrap" id="bgrow"></div>
     </div>
   </div>
   <div class="sh2"><span class="sh2-t">All Donors</span><span class="sh2-c" id="dcnt"></span></div>
@@ -411,6 +414,49 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
       <div style="text-align:center"><div style="font-weight:800;color:#C0392B;font-size:15px">∞</div><div style="color:#aaa">Forever</div></div>
     </div>
     <button class="bprimary" onclick="document.getElementById('aboutmodal').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+<!-- DUPLICATE PHONE ALERT -->
+<div class="donor-alert-overlay" id="dupPhoneOverlay" onclick="if(event.target===this)closeDupPhoneAlert()">
+  <div class="donor-alert-box">
+    <div class="donor-alert-icon" style="background:#fff3cd">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    <div class="donor-alert-title" style="color:#92400e">⚠️ Number Already Registered</div>
+    <div class="donor-alert-msg" id="dupPhoneMsg"></div>
+    <button class="donor-alert-btn" style="background:#f59e0b" onclick="closeDupPhoneAlert()">Got It, I'll Check</button>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM ALERT -->
+<div class="donor-alert-overlay" id="deleteConfirmOverlay" onclick="if(event.target===this)closeDeleteConfirmAlert()">
+  <div class="donor-alert-box">
+    <div class="donor-alert-icon" style="background:#fde8e6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
+        <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/>
+      </svg>
+    </div>
+    <div class="donor-alert-title">Remove This Donor?</div>
+    <div class="donor-alert-msg">You are about to permanently remove <strong id="deleteConfirmName"></strong> from the network.<br><br>This will delete their record for <strong>all users</strong>. This action cannot be undone.</div>
+    <button class="donor-alert-btn" id="deleteConfirmYes" style="margin-bottom:9px">Yes, Remove Donor</button>
+    <button class="donor-alert-btn" style="background:#f5f5f5;color:#555" onclick="closeDeleteConfirmAlert()">Cancel</button>
+  </div>
+</div>
+
+<!-- DELETE BLOCKED ALERT -->
+<div class="donor-alert-overlay" id="deleteBlockOverlay" onclick="if(event.target===this)closeDeleteBlockAlert()">
+  <div class="donor-alert-box">
+    <div class="donor-alert-icon" style="background:#fde8e6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
+        <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+      </svg>
+    </div>
+    <div class="donor-alert-title" style="color:#C0392B">🚫 Delete Limit Reached</div>
+    <div class="donor-alert-msg">You have reached the maximum of <strong>3 deletions</strong> allowed per session.<br><br>To protect the donor network, further deletions are temporarily blocked.<br><br>Please close this page and try again after a few minutes.</div>
+    <button class="donor-alert-btn" onclick="closeDeleteBlockAlert()">Understood</button>
   </div>
 </div>
 
@@ -584,16 +630,25 @@ function renderAll(){
 }
 
 function renderBGChips(){
-  var row=document.getElementById('bgrow');if(!row)return;row.innerHTML='';
-  var ab=document.createElement('button');ab.className='bgchip';ab.textContent='All';
+  var wrap=document.getElementById('bgrow');if(!wrap)return;wrap.innerHTML='';
+  // "All" button - left side, vertically centered (full height)
+  var ab=document.createElement('button');ab.className='bgchip-all';ab.textContent='All';
   ab.style.cssText='background:'+(bgf===''?'#C0392B':'white')+';color:'+(bgf===''?'white':'#555')+';border-color:'+(bgf===''?'#C0392B':'#ccc');
-  ab.onclick=function(){setBG('');};row.appendChild(ab);
-  BLIST.forEach(function(b){
+  ab.onclick=function(){setBG('');};
+  wrap.appendChild(ab);
+  // Right side: 2 rows of 4
+  var right=document.createElement('div');right.className='bgwrap-right';
+  var row1=document.createElement('div');row1.className='bgrow-main';
+  var row2=document.createElement('div');row2.className='bgrow-main';
+  BLIST.forEach(function(b,i){
     var c=BC[b];var sel=bgf===b;
     var btn=document.createElement('button');btn.className='bgchip';btn.textContent=b;
     btn.style.cssText='background:'+(sel?c.bg:c.lt)+';color:'+(sel?'white':c.bg)+';border-color:'+c.bg;
-    btn.onclick=function(){setBG(b);};row.appendChild(btn);
+    btn.onclick=function(){setBG(b);};
+    if(i<4)row1.appendChild(btn);else row2.appendChild(btn);
   });
+  right.appendChild(row1);right.appendChild(row2);
+  wrap.appendChild(right);
 }
 // render chips immediately so filter shows on first load without waiting for Firebase
 renderBGChips();
@@ -739,8 +794,10 @@ function showEmg(bg,btn){
       fld.appendChild(fl);fld.appendChild(fv);fields.appendChild(fld);
     });
     var dacts=document.createElement('div');dacts.className='emg-acts';
-    var ca=document.createElement('a');ca.className='btn bcall';ca.href='tel:'+ph;ca.style.cssText='font-size:13px;padding:8px 10px;min-height:36px';ca.textContent='Call Now';
-    var wa=document.createElement('a');wa.className='btn bwa';wa.href='https://wa.me/'+wn+'?text='+wm;wa.target='_blank';wa.style.cssText='font-size:13px;padding:8px 10px;min-height:36px';wa.textContent='WhatsApp';
+    var ca=document.createElement('a');ca.className='btn bcall';ca.style.cssText='font-size:13px;padding:8px 10px;min-height:36px';ca.textContent='Call Now';
+    if(a){ca.href='tel:'+ph;}else{ca.href='#';ca.addEventListener('click',function(e){e.preventDefault();showDonorAlert();});}
+    var wa=document.createElement('a');wa.className='btn bwa';wa.style.cssText='font-size:13px;padding:8px 10px;min-height:36px';wa.textContent='WhatsApp';
+    if(a){wa.href='https://wa.me/'+wn+'?text='+wm;wa.target='_blank';}else{wa.href='#';wa.addEventListener('click',function(e){e.preventDefault();showDonorAlert();});}
     var cpPh=document.createElement('button');cpPh.className='cpbtn';cpPh.style.cssText='padding:5px 7px';cpPh.title='Copy phone number';cpPh.innerHTML=ICOPY;cpPh.addEventListener('click',function(){cpText(ph,'Phone');});
     var cpDt=document.createElement('button');cpDt.className='cpbtn';cpDt.style.cssText='padding:5px 7px';cpDt.title='Copy full details';cpDt.innerHTML=IDOC;cpDt.addEventListener('click',function(){cpText(detText,'Details');});
     dacts.appendChild(ca);dacts.appendChild(wa);dacts.appendChild(cpPh);dacts.appendChild(cpDt);
@@ -761,6 +818,11 @@ function addDonor(){
   if(!blood){notice('Please select a blood group.','err');return;}
   if(!location){notice('Please enter a location.','err');return;}
   var phone=fullPhone(praw);
+  // Check for duplicate phone number
+  var existing=getArr().filter(function(d){return d.phone===phone;});
+  if(existing.length>0){
+    showDupPhoneAlert(existing[0].name,phone);return;
+  }
   busy=true;var btn=document.getElementById('addbtn');btn.disabled=true;btn.textContent='Saving...';setSync('busy','Saving');
   db.ref('donors').push({name:name,phone:phone,blood:blood,location:location,status:status,ts:Date.now()},function(err){
     btn.disabled=false;btn.textContent='Add Donor to Network';busy=false;
@@ -770,6 +832,13 @@ function addDonor(){
       document.getElementById('fb').value='';document.getElementById('fl').value='';document.getElementById('fs').value='available';}
   });
 }
+
+function showDupPhoneAlert(existingName,phone){
+  var overlay=document.getElementById('dupPhoneOverlay');
+  document.getElementById('dupPhoneMsg').innerHTML='The number <strong>'+phone+'</strong> is already registered under <strong>'+existingName+'</strong>.<br><br>Each mobile number can only be added once to prevent duplicates.';
+  overlay.classList.add('show');
+}
+function closeDupPhoneAlert(){document.getElementById('dupPhoneOverlay').classList.remove('show');}
 
 function toggleDonatedDate(val){
   var w=document.getElementById('donatedDateWrap');
@@ -798,13 +867,85 @@ function saveEdit(){
   });
 }
 
+var SESSION_DELETE_COUNT=0;
+var SESSION_DELETE_MAX=3;
+
 function delDonor(key,name){
-  if(!db)return;if(!confirm('Remove "'+name+'" from the network?\nThis removes them for ALL users.'))return;
+  if(!db)return;
+  if(SESSION_DELETE_COUNT>=SESSION_DELETE_MAX){
+    showDeleteBlockAlert();return;
+  }
+  showDeleteConfirmAlert(key,name);
+}
+
+function showDeleteConfirmAlert(key,name){
+  var overlay=document.getElementById('deleteConfirmOverlay');
+  document.getElementById('deleteConfirmName').textContent=name;
+  document.getElementById('deleteConfirmYes').onclick=function(){
+    closeDeleteConfirmAlert();
+    doDelete(key,name);
+  };
+  overlay.classList.add('show');
+}
+function closeDeleteConfirmAlert(){document.getElementById('deleteConfirmOverlay').classList.remove('show');}
+
+function doDelete(key,name){
+  SESSION_DELETE_COUNT++;
+  // If they just hit the 3rd delete, send email alert
+  if(SESSION_DELETE_COUNT>=SESSION_DELETE_MAX){
+    sendDeleteAlertEmail(name);
+  }
   setSync('busy','Saving');
   db.ref('donors/'+key).remove(function(err){
     if(err){setSync('offline','Error');notice('Delete failed: '+err.message,'err',5000);}
-    else{setSync('live','Live');notice(name+' removed.','info',4000);}
+    else{setSync('live','Live');notice(name+' has been removed from the network.','info',4000);}
   });
+}
+
+function showDeleteBlockAlert(){
+  document.getElementById('deleteBlockOverlay').classList.add('show');
+}
+function closeDeleteBlockAlert(){document.getElementById('deleteBlockOverlay').classList.remove('show');}
+
+function sendDeleteAlertEmail(lastDeletedName){
+  // Collect visitor info
+  var dt=new Date();
+  var dateStr=dt.toLocaleDateString('en-BD',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var timeStr=dt.toLocaleTimeString('en-BD',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  var browser=navigator.userAgent;
+  var platform=navigator.platform||'Unknown';
+  var screenRes=screen.width+'x'+screen.height;
+  var lang=navigator.language||'Unknown';
+  var subject='⚠️ BloodLink Security Alert — Excessive Delete Attempts Detected';
+  var body='BloodLink Security Alert\n'
+    +'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n'
+    +'⚠️  A visitor has attempted to delete more than '+SESSION_DELETE_MAX+' donors in a single session.\n\n'
+    +'🕐  Date & Time\n'
+    +'    '+dateStr+' at '+timeStr+'\n\n'
+    +'🩸  Last Donor Deleted\n'
+    +'    '+lastDeletedName+'\n\n'
+    +'🔢  Total Deletes This Session\n'
+    +'    '+SESSION_DELETE_COUNT+' deletion(s) performed\n\n'
+    +'🌐  Site URL\n'
+    +'    '+window.location.href+'\n\n'
+    +'🖥️  Device & Browser\n'
+    +'    '+browser+'\n\n'
+    +'📱  Platform\n'
+    +'    '+platform+'\n\n'
+    +'🖥️  Screen Resolution\n'
+    +'    '+screenRes+'\n\n'
+    +'🌍  Browser Language\n'
+    +'    '+lang+'\n\n'
+    +'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'
+    +'This is an automated alert from your BloodLink network.\n'
+    +'Please review your donor list and restore any wrongfully deleted entries.\n\n'
+    +'— BloodLink Security System';
+  // Open email client with mailto
+  var mailto='mailto:tipusultan6510@gmail.com'
+    +'?subject='+encodeURIComponent(subject)
+    +'&body='+encodeURIComponent(body);
+  var a=document.createElement('a');a.href=mailto;a.style.display='none';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);
 }
 
 function goTab(tab){
