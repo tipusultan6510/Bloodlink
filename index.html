@@ -769,6 +769,8 @@ function makeDonorCard(d){
   var ph=d.phone||'';var wn=ph.replace(/\D/g,'');
   var wm=encodeURIComponent('Urgent: Blood needed. Blood type: '+(d.blood||'')+'. Please respond ASAP.');
 
+  var card=document.createElement('div');card.className='dc'+(av?'':' dim');
+
   // Colored top banner
   var banner=document.createElement('div');banner.className='dc-banner';
   banner.style.background='linear-gradient(90deg,'+c.bg+','+c.bg+'99)';
@@ -1182,6 +1184,7 @@ function goTab(tab){
   document.querySelectorAll('.tab').forEach(function(b,i){b.classList.toggle('on',['donors','add','emergency','share'][i]===tab);});
   document.getElementById('notice').className='notice';
   if(tab==='share'){document.getElementById('shurl').value=window.location.href;var a=getArr();document.getElementById('sh-t').textContent=a.length;document.getElementById('sh-a').textContent=a.filter(function(d){return d.status==='available';}).length;}
+  if(tab==='emergency'){buildEmgBtns();}
 }
 
 function cpLink(){cpText(document.getElementById('shurl').value||window.location.href,'Link');}
