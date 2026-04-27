@@ -47,37 +47,109 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 .notice.ok{background:rgba(26,122,74,0.95)}
 .notice.err{background:rgba(163,45,45,0.95)}
 .notice.info{background:rgba(21,101,192,0.95)}
-/* ── TRASH SYSTEM ── */
+/* ── LOGIN SCREEN ── */
+#login-screen{display:none;position:fixed;inset:0;z-index:9000;background:#fff5f5;flex-direction:column;align-items:center;justify-content:center;padding:28px;overflow:hidden}
+#login-screen.show{display:flex}
+.login-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.login-bg-circle{position:absolute;border-radius:50%;opacity:.07}
+.login-bg-c1{width:380px;height:380px;background:#C0392B;top:-120px;right:-120px}
+.login-bg-c2{width:280px;height:280px;background:#C0392B;bottom:-100px;left:-100px}
+.login-logo{display:flex;align-items:center;gap:11px;margin-bottom:8px;z-index:1}
+.login-logo-drop{width:40px;height:40px;background:linear-gradient(135deg,#C0392B,#e74c3c);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 6px 18px rgba(192,57,43,.3)}
+.login-title{font-size:28px;font-weight:900;color:#C0392B;letter-spacing:-1px}
+.login-sub{font-size:13px;color:#888;text-align:center;margin-bottom:32px;z-index:1;line-height:1.6}
+.login-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:340px;z-index:1;margin-bottom:20px}
+.login-card{background:white;border:2px solid #f0f0f0;border-radius:18px;padding:22px 14px;text-align:center;cursor:pointer;transition:all .2s;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.login-card:active{transform:scale(.97)}
+.login-card.admin-card:hover{border-color:#C0392B;box-shadow:0 6px 20px rgba(192,57,43,.15)}
+.login-card.user-card:hover{border-color:#1a7a4a;box-shadow:0 6px 20px rgba(26,122,74,.15)}
+.login-card-icon{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:22px}
+.admin-card .login-card-icon{background:#fde8e6}
+.user-card .login-card-icon{background:#e6f4ee}
+.login-card-title{font-size:15px;font-weight:800;color:#111;margin-bottom:3px}
+.login-card-desc{font-size:11px;color:#aaa;line-height:1.5}
+.login-form{width:100%;max-width:340px;z-index:1}
+.login-form-box{background:white;border:2px solid #f0f0f0;border-radius:18px;padding:22px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.login-form-title{font-size:15px;font-weight:800;color:#111;margin-bottom:3px;display:flex;align-items:center;gap:8px}
+.login-form-sub{font-size:12px;color:#aaa;margin-bottom:16px}
+.login-input{width:100%;background:#f9f9f9;border:2px solid #f0f0f0;border-radius:12px;padding:13px 16px;font-size:15px;color:#111;font-family:inherit;outline:none;transition:all .2s;margin-bottom:12px}
+.login-input::placeholder{color:#bbb}
+.login-input:focus{border-color:#C0392B;background:white}
+.login-input.pwd-field{letter-spacing:4px;font-size:18px;font-weight:800}
+.login-err{font-size:12px;color:#C0392B;font-weight:700;margin-bottom:12px;display:none}
+.login-btn{width:100%;padding:14px;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s}
+.login-btn-admin{background:#C0392B;color:white;box-shadow:0 4px 14px rgba(192,57,43,.3)}
+.login-btn-user{background:#1a7a4a;color:white;box-shadow:0 4px 14px rgba(26,122,74,.3)}
+.login-btn:hover{opacity:.92;transform:scale(1.01)}
+.login-back{background:none;border:none;color:#bbb;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;width:100%;padding:8px}
+.login-back:hover{color:#888}
+
+/* ── IDENTITY BADGE (3-dot menu) ── */
+.id-btn{background:rgba(255,255,255,.15);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
+.id-btn:hover{background:rgba(255,255,255,.25)}
+.id-menu{position:fixed;top:60px;right:12px;background:white;border:1px solid #eee;border-radius:16px;padding:8px;z-index:500;min-width:200px;box-shadow:0 8px 30px rgba(0,0,0,.12);display:none;animation:fadeSlideIn .2s ease}
+.id-menu.show{display:block}
+@keyframes fadeSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.id-menu-header{padding:10px 12px 10px;border-bottom:1px solid #f0f0f0;margin-bottom:6px}
+.id-menu-role{font-size:10px;font-weight:800;color:#aaa;text-transform:uppercase;letter-spacing:1px;margin-bottom:3px}
+.id-menu-name{font-size:14px;font-weight:800;color:#111}
+.id-menu-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;margin-top:4px}
+.id-menu-badge.admin{background:#fde8e6;color:#C0392B;border:1px solid rgba(192,57,43,.2)}
+.id-menu-badge.user{background:#e6f4ee;color:#1a7a4a;border:1px solid rgba(26,122,74,.2)}
+.id-menu-item{width:100%;background:none;border:none;color:#555;font-size:13px;font-weight:700;padding:10px 12px;border-radius:10px;cursor:pointer;font-family:inherit;text-align:left;display:flex;align-items:center;gap:8px;transition:all .15s}
+.id-menu-item:hover{background:#f5f5f5;color:#111}
+.id-menu-item.danger{color:#C0392B}
+.id-menu-item.danger:hover{background:#fde8e6}
 .trash-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;color:#aaa;font-size:12px;font-weight:700;font-family:inherit;transition:color .2s}
 .trash-btn:hover{color:#C0392B}
 .trash-count{background:#C0392B;color:white;border-radius:20px;font-size:10px;font-weight:800;padding:1px 6px;min-width:18px;text-align:center;display:none}
 .trash-count.show{display:inline-block}
-/* Trash popup */
-.trash-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:flex-end;justify-content:center;padding:0}
+/* Trash popup - smart redesign */
+.trash-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(4px)}
 .trash-overlay.show{display:flex}
-.trash-box{background:white;border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 -8px 40px rgba(0,0,0,.2);animation:slideUp .3s ease}
+.trash-box{background:#0f0f0f;border-radius:28px 28px 0 0;width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -12px 50px rgba(0,0,0,.5);animation:slideUp .35s cubic-bezier(.34,1.56,.64,1)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.trash-header{padding:20px 20px 12px;border-bottom:1px solid #f0f0f0;flex-shrink:0}
-.trash-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
-.trash-title{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
-.trash-close{background:none;border:none;cursor:pointer;color:#aaa;padding:4px;border-radius:8px;font-size:20px;line-height:1}
-.trash-close:hover{background:#f0f0f0;color:#333}
-.trash-subtitle{font-size:12px;color:#C0392B;font-weight:700;margin-bottom:8px}
-.trash-restore-all{background:#fde8e6;border:1px solid #f5c6c2;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:800;color:#C0392B;cursor:pointer;font-family:inherit;transition:all .15s}
-.trash-restore-all:hover{background:#C0392B;color:white}
-.trash-body{overflow-y:auto;flex:1;padding:12px 16px}
-.trash-item{background:#f9f9f9;border:1px solid #eee;border-radius:12px;padding:13px;margin-bottom:9px;display:flex;align-items:center;gap:12px}
-.trash-item-blood{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:white;flex-shrink:0}
+
+/* Trash header */
+.trash-header{padding:10px 20px 0;flex-shrink:0}
+.trash-drag-bar{width:36px;height:4px;background:rgba(255,255,255,.2);border-radius:99px;margin:0 auto 16px}
+.trash-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.trash-title{font-size:18px;font-weight:900;display:flex;align-items:center;gap:10px;color:white;letter-spacing:-.3px}
+.trash-title-icon{width:34px;height:34px;background:rgba(192,57,43,.25);border:1px solid rgba(192,57,43,.4);border-radius:10px;display:flex;align-items:center;justify-content:center}
+.trash-close{background:rgba(255,255,255,.1);border:none;cursor:pointer;color:rgba(255,255,255,.6);width:32px;height:32px;border-radius:50%;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.trash-close:hover{background:rgba(255,255,255,.2);color:white}
+.trash-meta-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+.trash-subtitle{font-size:12px;color:rgba(255,255,255,.4);font-weight:600}
+.trash-restore-all{background:linear-gradient(135deg,#1a7a4a,#22a05a);border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:800;color:white;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:5px}
+.trash-restore-all:hover{transform:scale(1.04);box-shadow:0 4px 12px rgba(26,122,74,.4)}
+
+/* Trash body */
+.trash-body{overflow-y:auto;flex:1;padding:14px 16px}
+.trash-body::-webkit-scrollbar{width:0}
+.trash-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:background .15s}
+.trash-item:hover{background:rgba(255,255,255,.08)}
+.trash-item-blood{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:white;flex-shrink:0;position:relative}
+.trash-item-blood::after{content:'';position:absolute;inset:0;border-radius:12px;background:rgba(255,255,255,.15)}
 .trash-item-info{flex:1;min-width:0}
-.trash-item-name{font-size:14px;font-weight:800;color:#111;margin-bottom:2px}
-.trash-item-meta{font-size:11px;color:#aaa}
-.trash-item-days{font-size:11px;font-weight:700;color:#C0392B;flex-shrink:0;text-align:right}
-.trash-restore-btn{background:white;border:1px solid #ddd;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:800;color:#1a7a4a;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
-.trash-restore-btn:hover{background:#1a7a4a;color:white;border-color:#1a7a4a}
-.trash-footer{padding:12px 20px 20px;border-top:1px solid #f0f0f0;flex-shrink:0;text-align:center}
-.trash-footer-note{font-size:11px;color:#bbb;font-weight:600}
-.trash-empty{text-align:center;padding:36px 14px;color:#bbb}
-.trash-empty-icon{font-size:40px;margin-bottom:10px}
+.trash-item-name{font-size:14px;font-weight:800;color:white;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trash-item-meta{font-size:11px;color:rgba(255,255,255,.35);display:flex;align-items:center;gap:6px}
+.trash-item-meta-dot{width:3px;height:3px;background:rgba(255,255,255,.2);border-radius:50%}
+.trash-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.trash-item-days{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.trash-item-days.urgent{background:rgba(192,57,43,.25);color:#e57373;border:1px solid rgba(192,57,43,.3)}
+.trash-item-days.safe{background:rgba(255,255,255,.08);color:rgba(255,255,255,.4);border:1px solid rgba(255,255,255,.1)}
+.trash-restore-btn{background:rgba(26,122,74,.2);border:1px solid rgba(26,122,74,.4);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:800;color:#4ade80;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.trash-restore-btn:hover{background:rgba(26,122,74,.4);transform:scale(1.05)}
+
+/* Trash footer */
+.trash-footer{padding:12px 20px 28px;flex-shrink:0;text-align:center;border-top:1px solid rgba(255,255,255,.06)}
+.trash-footer-note{font-size:11px;color:rgba(255,255,255,.25);font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px}
+
+/* Trash empty */
+.trash-empty{text-align:center;padding:44px 14px;color:rgba(255,255,255,.3)}
+.trash-empty-icon{font-size:48px;margin-bottom:12px;display:block;opacity:.4}
+.trash-empty-title{font-size:15px;font-weight:800;color:rgba(255,255,255,.4);margin-bottom:4px}
+.trash-empty-sub{font-size:12px;color:rgba(255,255,255,.2)}
 /* Card delete - simple smooth fade */
 @keyframes cardFadeOut{
   0%{opacity:1;transform:scale(1)}
@@ -304,6 +376,59 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
   </div>
 </div>
 
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+  <div class="login-bg">
+    <div class="login-bg-circle login-bg-c1"></div>
+    <div class="login-bg-circle login-bg-c2"></div>
+  </div>
+  <div class="login-logo">
+    <div class="login-logo-drop"></div>
+    <div class="login-title">BloodLink</div>
+  </div>
+  <div class="login-sub">Community Blood Donor Network<br>Choose how you want to continue</div>
+
+  <!-- Role Selection -->
+  <div class="login-cards" id="login-role-select">
+    <div class="login-card admin-card" onclick="showLoginForm('admin')">
+      <div class="login-card-icon">🛡️</div>
+      <div class="login-card-title">Admin</div>
+      <div class="login-card-desc">Full access with password</div>
+    </div>
+    <div class="login-card user-card" onclick="showLoginForm('user')">
+      <div class="login-card-icon">🩸</div>
+      <div class="login-card-title">User</div>
+      <div class="login-card-desc">Browse & help donors</div>
+    </div>
+  </div>
+
+  <!-- Admin Form -->
+  <div class="login-form" id="login-admin-form" style="display:none">
+    <div class="login-form-box">
+      <div class="login-form-title">🛡️ Admin Login</div>
+      <div class="login-form-sub">Enter the admin password to continue</div>
+      <input class="login-input pwd-field" id="admin-pwd-input" type="password" placeholder="••••••" maxlength="10" onkeydown="if(event.key==='Enter')submitAdminLogin()">
+      <div class="login-err" id="admin-pwd-err">❌ Wrong password. Try again.</div>
+      <button class="login-btn login-btn-admin" onclick="submitAdminLogin()">Enter as Admin</button>
+      <button class="login-back" onclick="backToRoleSelect()">← Back</button>
+    </div>
+  </div>
+
+  <!-- User Form -->
+  <div class="login-form" id="login-user-form" style="display:none">
+    <div class="login-form-box">
+      <div class="login-form-title">🩸 Enter Your Name</div>
+      <div class="login-form-sub">Your name helps us track activity for security</div>
+      <input class="login-input" id="user-name-input" type="text" placeholder="e.g. Rahim Ahmed" maxlength="40" onkeydown="if(event.key==='Enter')submitUserLogin()">
+      <div class="login-err" id="user-name-err">⚠️ Please enter your name to continue.</div>
+      <button class="login-btn login-btn-user" onclick="submitUserLogin()">Continue as User</button>
+      <button class="login-back" onclick="backToRoleSelect()">← Back</button>
+    </div>
+  </div>
+
+  <div style="height:8px"></div>
+</div>
+
 <!-- MAIN APP -->
 <div id="main-app" style="display:none">
 
@@ -315,11 +440,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
       <div class="hdr-sub">Community Donor Network</div>
     </div>
   </div>
-  <div class="lbadge">
-    <div class="ldot pulse" id="ldot"></div>
-    <span id="ltxt">Connecting</span>
+  <div style="display:flex;align-items:center;gap:10px">
+    <div class="lbadge">
+      <div class="ldot pulse" id="ldot"></div>
+      <span id="ltxt">Connecting</span>
+    </div>
+    <button class="id-btn" onclick="toggleIdMenu()" id="idMenuBtn" title="Account">
+      <svg viewBox="0 0 24 24" fill="white" width="16" height="16"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+    </button>
   </div>
 </header>
+
+<!-- IDENTITY MENU -->
+<div class="id-menu" id="idMenu">
+  <div class="id-menu-header">
+    <div class="id-menu-role" id="idMenuRole">ROLE</div>
+    <div class="id-menu-name" id="idMenuName">Name</div>
+    <span class="id-menu-badge" id="idMenuBadge">User</span>
+  </div>
+  <button class="id-menu-item" onclick="switchToAdmin()">
+    🛡️ Switch to Admin
+  </button>
+  <button class="id-menu-item danger" onclick="logoutIdentity()">
+    🚪 Sign Out
+  </button>
+</div>
 
 <div class="tabs">
   <button class="tab on"  onclick="goTab('donors')">Donors</button>
@@ -339,7 +484,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
     <div class="stat"><div class="stat-n" id="sn-r">0</div><div class="stat-l">Areas</div></div>
   </div>
   <div class="sbox">
-    <input class="inp" id="msearch" placeholder="Search name, phone, or area..." oninput="renderDonors()">
+    <input class="inp" id="msearch" placeholder="Search name, phone, or area..." 
+      oninput="renderDonors()" 
+      onkeydown="if(event.key==='Enter'||event.key==='Go'){event.preventDefault();this.blur();renderDonors();}"
+      onsearch="this.blur();renderDonors()">
     <div class="frow">
       <span class="flbl">Status:</span>
       <button class="fchip on" onclick="setSt('all',this)">All</button>
@@ -493,19 +641,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;ba
 <div class="trash-overlay" id="trashOverlay" onclick="if(event.target===this)closeTrash()">
   <div class="trash-box">
     <div class="trash-header">
+      <div class="trash-drag-bar"></div>
       <div class="trash-header-top">
         <div class="trash-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          <div class="trash-title-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="17" height="17"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
+          </div>
           Trash
         </div>
         <button class="trash-close" onclick="closeTrash()">✕</button>
       </div>
-      <div class="trash-subtitle" id="trashSubtitle">Deleted donors</div>
-      <button class="trash-restore-all" id="trashRestoreAll" onclick="restoreAllTrash()">↩ Restore All</button>
+      <div class="trash-meta-row">
+        <div class="trash-subtitle" id="trashSubtitle">No deleted donors</div>
+        <button class="trash-restore-all" id="trashRestoreAll" onclick="restoreAllTrash()" style="display:none">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" width="12" height="12"><path d="M3 12a9 9 0 109-9H3"/><polyline points="3 8 3 12 7 12"/></svg>
+          Restore All
+        </button>
+      </div>
     </div>
     <div class="trash-body" id="trashBody"></div>
     <div class="trash-footer">
-      <div class="trash-footer-note">⏳ Items are permanently deleted after 7 days</div>
+      <div class="trash-footer-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="12" height="12"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Items are permanently deleted after 3 days
+      </div>
     </div>
   </div>
 </div>
@@ -695,7 +854,6 @@ function doSetup(){
 
 function launchApp(cfg){
   document.getElementById('setup-screen').style.display='none';
-  document.getElementById('main-app').style.display='block';
   initFB(cfg);
 }
 
@@ -980,17 +1138,157 @@ function saveEdit(){
   });
 }
 
-// ── TRASH SYSTEM ──
+// ── IDENTITY SYSTEM ──
+var ADMIN_PASSWORD='M6510';
+var currentUser={role:'',name:''};
+
+function initIdentity(){
+  var saved=localStorage.getItem('bl_identity');
+  if(saved){
+    try{
+      var id=JSON.parse(saved);
+      if(id&&id.role&&id.name){
+        currentUser=id;
+        startApp();
+        return;
+      }
+    }catch(e){}
+  }
+  document.getElementById('login-screen').classList.add('show');
+}
+
+function showLoginForm(role){
+  document.getElementById('login-role-select').style.display='none';
+  if(role==='admin'){
+    document.getElementById('login-admin-form').style.display='block';
+    setTimeout(function(){document.getElementById('admin-pwd-input').focus();},200);
+  } else {
+    document.getElementById('login-user-form').style.display='block';
+    setTimeout(function(){document.getElementById('user-name-input').focus();},200);
+  }
+}
+
+function backToRoleSelect(){
+  document.getElementById('login-role-select').style.display='grid';
+  document.getElementById('login-admin-form').style.display='none';
+  document.getElementById('login-user-form').style.display='none';
+  document.getElementById('admin-pwd-input').value='';
+  document.getElementById('user-name-input').value='';
+  document.getElementById('admin-pwd-err').style.display='none';
+  document.getElementById('user-name-err').style.display='none';
+}
+
+function submitAdminLogin(){
+  var pwd=document.getElementById('admin-pwd-input').value;
+  var err=document.getElementById('admin-pwd-err');
+  if(pwd===ADMIN_PASSWORD){
+    err.style.display='none';
+    saveIdentity('admin','Admin');
+  } else {
+    err.style.display='block';
+    document.getElementById('admin-pwd-input').value='';
+    document.getElementById('admin-pwd-input').focus();
+  }
+}
+
+function submitUserLogin(){
+  var name=(document.getElementById('user-name-input').value||'').trim();
+  var err=document.getElementById('user-name-err');
+  if(!name){err.style.display='block';return;}
+  err.style.display='none';
+  saveIdentity('user',name);
+}
+
+function saveIdentity(role,name){
+  currentUser={role:role,name:name};
+  localStorage.setItem('bl_identity',JSON.stringify(currentUser));
+  document.getElementById('login-screen').classList.remove('show');
+  startApp();
+  // Save to Firebase after app starts (db will be ready)
+  setTimeout(function(){
+    if(db){
+      var userLog={name:name,role:role,lastLogin:Date.now(),device:navigator.userAgent.substring(0,100)};
+      db.ref('users/'+name.replace(/[^a-zA-Z0-9]/g,'_')).set(userLog);
+    }
+  },1500);
+}
+
+function startApp(){
+  document.getElementById('main-app').style.display='block';
+  updateIdMenu();
+}
+
+function updateIdMenu(){
+  var role=currentUser.role;var name=currentUser.name;
+  document.getElementById('idMenuRole').textContent=role.toUpperCase();
+  document.getElementById('idMenuName').textContent=name;
+  var badge=document.getElementById('idMenuBadge');
+  badge.textContent=role==='admin'?'🛡️ Admin':'🩸 User';
+  badge.className='id-menu-badge '+(role==='admin'?'admin':'user');
+  // Show/hide switch to admin option
+  var switchBtn=document.querySelector('#idMenu .id-menu-item');
+  if(switchBtn)switchBtn.style.display=role==='admin'?'none':'flex';
+}
+
+function toggleIdMenu(){
+  var menu=document.getElementById('idMenu');
+  menu.classList.toggle('show');
+  if(menu.classList.contains('show')){
+    setTimeout(function(){
+      document.addEventListener('click',function closeMenu(e){
+        if(!menu.contains(e.target)&&e.target.id!=='idMenuBtn'){
+          menu.classList.remove('show');
+          document.removeEventListener('click',closeMenu);
+        }
+      });
+    },100);
+  }
+}
+
+function switchToAdmin(){
+  document.getElementById('idMenu').classList.remove('show');
+  // Show password prompt
+  var overlay=document.getElementById('pwdOverlay');
+  var title=document.getElementById('pwdTitle');
+  var sub=document.getElementById('pwdSub');
+  var inp=document.getElementById('pwdInput');
+  var err=document.getElementById('pwdErr');
+  title.textContent='Switch to Admin';
+  sub.textContent='Enter admin password to get full access';
+  inp.value='';err.style.display='none';
+  pwdPendingAction='switchAdmin';
+  overlay.classList.add('show');
+  setTimeout(function(){inp.focus();},200);
+}
+
+function logoutIdentity(){
+  localStorage.removeItem('bl_identity');
+  currentUser={role:'',name:''};
+  document.getElementById('idMenu').classList.remove('show');
+  document.getElementById('main-app').style.display='none';
+  // Reset login form
+  backToRoleSelect();
+  document.getElementById('login-screen').classList.add('show');
+}
+
+function isAdmin(){return currentUser.role==='admin';}
+
+window.addEventListener('click',function(e){
+  var menu=document.getElementById('idMenu');
+  if(menu&&!menu.contains(e.target)&&e.target.id!=='idMenuBtn'){
+    menu.classList.remove('show');
+  }
+});
 var trashItems={};
+var TRASH_DAYS=3;
 function loadTrash(){
   if(!db)return;
   db.ref('trash').on('value',function(snap){
     var val=snap.val();
     trashItems=(val&&typeof val==='object')?val:{};
-    // Auto delete items older than 7 days
-    var now=Date.now();var sevenDays=7*24*60*60*1000;
+    var now=Date.now();var expiry=TRASH_DAYS*24*60*60*1000;
     Object.keys(trashItems).forEach(function(k){
-      if(trashItems[k].deletedAt&&(now-trashItems[k].deletedAt)>=sevenDays){
+      if(trashItems[k].deletedAt&&(now-trashItems[k].deletedAt)>=expiry){
         db.ref('trash/'+k).remove();
       }
     });
@@ -1013,9 +1311,9 @@ function renderTrashBody(){
   var sub=document.getElementById('trashSubtitle');
   if(sub)sub.textContent=items.length+' deleted donor'+(items.length!==1?'s':'');
   var rAll=document.getElementById('trashRestoreAll');
-  if(rAll)rAll.style.display=items.length?'':'none';
+  if(rAll)rAll.style.display=items.length?'flex':'none';
   if(!items.length){
-    body.innerHTML='<div class="trash-empty"><div class="trash-empty-icon">🗑️</div><div style="font-size:14px;font-weight:700">Trash is empty</div><div style="font-size:12px;margin-top:4px">Deleted donors will appear here</div></div>';
+    body.innerHTML='<div class="trash-empty"><span class="trash-empty-icon">🗑️</span><div class="trash-empty-title">Trash is empty</div><div class="trash-empty-sub">Deleted donors will appear here for 7 days</div></div>';
     return;
   }
   var now=Date.now();var sevenDays=7*24*60*60*1000;
@@ -1023,17 +1321,41 @@ function renderTrashBody(){
     var c=BC[d.blood]||{bg:'#C0392B'};
     var daysAgo=Math.floor((now-(d.deletedAt||now))/(24*60*60*1000));
     var daysLeft=7-daysAgo;
+    var urgent=daysLeft<=2;
     var item=document.createElement('div');item.className='trash-item';
-    var blood=document.createElement('div');blood.className='trash-item-blood';blood.style.background=c.bg;blood.textContent=d.blood||'?';
+
+    var blood=document.createElement('div');blood.className='trash-item-blood';
+    blood.style.background=c.bg;blood.textContent=d.blood||'?';
+
     var info=document.createElement('div');info.className='trash-item-info';
     var name=document.createElement('div');name.className='trash-item-name';name.textContent=d.name||'';
-    var meta=document.createElement('div');meta.className='trash-item-meta';meta.textContent=(d.phone||'')+' • '+(d.location||'');
+    var meta=document.createElement('div');meta.className='trash-item-meta';
+    meta.innerHTML=(d.phone||'')+'<span class="trash-item-meta-dot"></span>'+(d.location||'');
+
     info.appendChild(name);info.appendChild(meta);
-    var right=document.createElement('div');right.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0';
-    var days=document.createElement('div');days.className='trash-item-days';
+
+    var right=document.createElement('div');right.className='trash-item-right';
+    var days=document.createElement('div');
+    days.className='trash-item-days '+(urgent?'urgent':'safe');
     days.textContent=daysLeft<=0?'Expires today':daysLeft+'d left';
-    var restore=document.createElement('button');restore.className='trash-restore-btn';restore.textContent='↩ Restore';
+
+    var restore=document.createElement('button');restore.className='trash-restore-btn';
+    restore.innerHTML='↩ Restore';
     restore.onclick=function(){restoreTrashItem(d._k);};
+    right.appendChild(days);right.appendChild(restore);
+    // Admin only: permanent delete button
+    if(isAdmin()){
+      var permDel=document.createElement('button');
+      permDel.style.cssText='background:rgba(192,57,43,.15);border:1px solid rgba(192,57,43,.3);border-radius:20px;padding:5px 10px;font-size:10px;font-weight:800;color:#e57373;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap';
+      permDel.textContent='🗑 Delete';
+      permDel.onclick=function(){
+        if(db)db.ref('trash/'+d._k).remove(function(){
+          notice(d.name+' permanently deleted.','info',3000);
+        });
+      };
+      right.appendChild(permDel);
+    }
+
     right.appendChild(days);right.appendChild(restore);
     item.appendChild(blood);item.appendChild(info);item.appendChild(right);
     body.appendChild(item);
@@ -1058,7 +1380,7 @@ var SESSION_DELETE_MAX=3;
 
 function delDonor(key,name){
   if(!db)return;
-  if(SESSION_DELETE_COUNT>=SESSION_DELETE_MAX){showDeleteBlockAlert();return;}
+  if(!isAdmin()&&SESSION_DELETE_COUNT>=SESSION_DELETE_MAX){showDeleteBlockAlert();return;}
   showDeleteConfirmAlert(key,name);
 }
 function showDeleteConfirmAlert(key,name){
@@ -1073,12 +1395,10 @@ function showDeleteConfirmAlert(key,name){
 function closeDeleteConfirmAlert(){document.getElementById('deleteConfirmOverlay').classList.remove('show');}
 
 function doDeleteWithAnimation(key,name){
-  SESSION_DELETE_COUNT++;
-  // Send email only on the 3rd delete
-  if(SESSION_DELETE_COUNT===SESSION_DELETE_MAX){
-    sendDeleteAlertEmail(name);
+  if(!isAdmin()){
+    SESSION_DELETE_COUNT++;
+    if(SESSION_DELETE_COUNT===SESSION_DELETE_MAX){sendDeleteAlertEmail(name);}
   }
-  // Find the card element and animate
   var cards=document.querySelectorAll('#dlist .dc');
   var targetCard=null;
   cards.forEach(function(card){
@@ -1087,10 +1407,8 @@ function doDeleteWithAnimation(key,name){
   });
   if(targetCard){
     targetCard.classList.add('folding');
-    setTimeout(function(){doDelete(key,name);},580);
-  } else {
-    doDelete(key,name);
-  }
+    setTimeout(function(){doDelete(key,name);},380);
+  } else {doDelete(key,name);}
 }
 function doDelete(key,name){
   if(!db)return;
@@ -1109,7 +1427,7 @@ function closeDeleteBlockAlert(){document.getElementById('deleteBlockOverlay').c
 
 // ── PASSWORD SYSTEM ──
 var pwdPendingAction='';
-var IMPORT_EXPORT_PWD='M6510';
+var IMPORT_EXPORT_PWD=ADMIN_PASSWORD;
 function askPassword(action){
   pwdPendingAction=action;
   var overlay=document.getElementById('pwdOverlay');
@@ -1130,15 +1448,18 @@ function closePwd(){
 function submitPwd(){
   var val=document.getElementById('pwdInput').value;
   var err=document.getElementById('pwdErr');
-  if(val===IMPORT_EXPORT_PWD){
-    var action=pwdPendingAction; // save before closing
+  if(val===IMPORT_EXPORT_PWD||val===ADMIN_PASSWORD){
+    var action=pwdPendingAction;
     document.getElementById('pwdOverlay').classList.remove('show');
     pwdPendingAction='';
     if(action==='export')exCSV();
     else if(action==='import'){
-      setTimeout(function(){
-        document.getElementById('importFileInput').click();
-      },150);
+      setTimeout(function(){document.getElementById('importFileInput').click();},150);
+    } else if(action==='switchAdmin'){
+      currentUser.role='admin';
+      localStorage.setItem('bl_identity',JSON.stringify(currentUser));
+      updateIdMenu();
+      notice('Switched to Admin mode ✅','ok',3000);
     }
   } else {
     err.style.display='block';
@@ -1185,7 +1506,10 @@ function sendDeleteAlertEmail(lastDeletedName){
   var timeStr=dt.toLocaleTimeString('en-BD',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
   var params={
     to_email: 'tipusultan6510@gmail.com',
+    name: 'BloodLink Alert',
+    email: 'tipusultan6510@gmail.com',
     donor_name: lastDeletedName||'Unknown',
+    deleted_by: (currentUser.name||'Unknown')+' ('+( currentUser.role||'user')+')',
     delete_time: dateStr+' at '+timeStr,
     device_info: (navigator.userAgent||'Unknown').substring(0,150),
     platform: navigator.platform||'Unknown',
@@ -1194,7 +1518,7 @@ function sendDeleteAlertEmail(lastDeletedName){
     delete_count: String(SESSION_DELETE_COUNT),
     site_url: window.location.href||'Unknown'
   };
-  emailjs.send('service_l95bicl','template_etucv7i',params)
+  emailjs.send('service_vq5pg4b','template_etucv7i',params)
     .then(function(res){console.log('Email sent! Status:',res.status);})
     .catch(function(err){console.error('Email error:',JSON.stringify(err));});
 }
@@ -1230,13 +1554,12 @@ var HARDCODED_CFG={
 };
 
 window.addEventListener('load',function(){
-  // Init EmailJS
   if(typeof emailjs!=='undefined'){
     try{emailjs.init('DIzgm1efPnqn8Uxb2');}catch(e){console.warn('EmailJS init failed:',e);}
   }
-  // Launch app
   document.getElementById('setup-screen').style.display='none';
   launchApp(HARDCODED_CFG);
+  initIdentity();
 });
 </script>
 </body>
