@@ -1204,18 +1204,37 @@ var ADMIN_PASSWORD='M6510';
 var currentUser={role:'',name:''};
 
 function initIdentity(){
-  var saved=localStorage.getItem('bl_identity');
-  if(saved){
-    try{
-      var id=JSON.parse(saved);
-      if(id&&id.role&&id.name){
-        currentUser=id;
-        startApp();
-        return;
+  var saved=null;
+  try{saved=JSON.parse(localStorage.getItem('bl_identity')||'null');}catch(e){}
+  // Force re-login if no uid (old sessions) - gives everyone new Name#001 ID
+  if(saved&&saved.role&&saved.name&&saved.uid&&saved.displayId){
+    currentUser=saved;
+    startApp();
+    // Restore added keys
+    waitForDb(function(){
+      if(saved.role!=='admin'){
+        var safeKey=saved.uid.replace(/[^a-zA-Z0-9_]/g,'_');
+        db.ref('userAddedKeys/'+safeKey).once('value',function(snap){
+          var val=snap.val();
+          if(val&&typeof val==='object'){
+            SESSION_ADDED_KEYS=Object.values(val).filter(Boolean);
+            renderDonors();
+          }
+        });
       }
-    }catch(e){}
+    });
+  } else {
+    // Clear any old session without uid - force fresh login
+    localStorage.removeItem('bl_identity');
+    document.getElementById('login-screen').classList.add('show');
   }
-  document.getElementById('login-screen').classList.add('show');
+}
+
+// Wait for Firebase db to be ready before running callback
+function waitForDb(cb,tries){
+  tries=tries||0;
+  if(db){cb();}
+  else if(tries<20){setTimeout(function(){waitForDb(cb,tries+1);},300);}
 }
 
 function showLoginForm(role){
@@ -1230,7 +1249,7 @@ function showLoginForm(role){
 }
 
 function backToRoleSelect(){
-  document.getElementById('login-role-select').style.display='grid';
+  document.getElementById('login-role-select').style.display='flex';
   document.getElementById('login-admin-form').style.display='none';
   document.getElementById('login-user-form').style.display='none';
   document.getElementById('admin-pwd-input').value='';
@@ -1241,54 +1260,73 @@ function backToRoleSelect(){
 
 function submitUserLogin(){
   var name=(document.getElementById('user-name-input').value||'').trim();
-  var err=document.getElementById('user-name-err');
-  if(!name){err.style.display='block';return;}
-  err.style.display='none';
-  // Check localStorage for existing identity
-  var saved=null;
-  try{saved=JSON.parse(localStorage.getItem('bl_identity')||'null');}catch(e){}
-  if(saved&&saved.name===name&&saved.uid&&saved.role==='user'){
-    // Same person returning - reuse ID
-    saveIdentity('user',name,saved.uid,saved.displayId);
-  } else {
-    // New user - get next sequential number from Firebase
-    db.ref('userCounter').transaction(function(current){
-      return (current||0)+1;
-    },function(err,committed,snap){
+  var errEl=document.getElementById('user-name-err');
+  if(!name){errEl.style.display='block';return;}
+  errEl.style.display='none';
+  var btn=document.querySelector('#login-user-form .login-btn');
+  if(btn){btn.disabled=true;btn.textContent='Please wait...';}
+  waitForDb(function(){
+    // Check if same person returning with same name
+    var saved=null;
+    try{saved=JSON.parse(localStorage.getItem('bl_identity')||'null');}catch(e){}
+    if(saved&&saved.name===name&&saved.uid&&saved.displayId&&saved.role==='user'){
+      if(btn){btn.disabled=false;btn.textContent='Continue as User';}
+      saveIdentity('user',name,saved.uid,saved.displayId);
+      return;
+    }
+    // New user - get sequential number
+    db.ref('userCounter').transaction(function(cur){return (cur||0)+1;},
+    function(txErr,committed,snap){
+      if(btn){btn.disabled=false;btn.textContent='Continue as User';}
+      if(txErr||!committed){
+        // Fallback if transaction fails
+        var fallback=Date.now().toString().slice(-3);
+        var displayId=name+'#'+fallback;
+        var safeUid=name.replace(/[^a-zA-Z0-9]/g,'_')+'_'+fallback;
+        saveIdentity('user',name,safeUid,displayId);
+        return;
+      }
       var num=snap.val()||1;
-      var padded=String(num).padStart(3,'0'); // 001, 002, 003...
+      var padded=String(num).padStart(3,'0');
       var displayId=name+'#'+padded;
       var safeUid=name.replace(/[^a-zA-Z0-9]/g,'_')+'_'+padded;
       saveIdentity('user',name,safeUid,displayId);
     });
-  }
+  });
 }
 
 function submitAdminLogin(){
   var pwd=document.getElementById('admin-pwd-input').value;
-  var err=document.getElementById('admin-pwd-err');
-  if(pwd===ADMIN_PASSWORD){
-    err.style.display='none';
-    // Admin gets sequential Admin#001, Admin#002 etc
+  var errEl=document.getElementById('admin-pwd-err');
+  if(pwd!==ADMIN_PASSWORD){
+    errEl.style.display='block';
+    document.getElementById('admin-pwd-input').value='';
+    document.getElementById('admin-pwd-input').focus();
+    return;
+  }
+  errEl.style.display='none';
+  var btn=document.querySelector('#login-admin-form .login-btn');
+  if(btn){btn.disabled=true;btn.textContent='Verifying...';}
+  waitForDb(function(){
     var saved=null;
     try{saved=JSON.parse(localStorage.getItem('bl_identity')||'null');}catch(e){}
     if(saved&&saved.role==='admin'&&saved.uid&&saved.displayId){
+      if(btn){btn.disabled=false;btn.textContent='Enter as Admin';}
       saveIdentity('admin','Admin',saved.uid,saved.displayId);
-    } else {
-      db.ref('adminCounter').transaction(function(current){
-        return (current||0)+1;
-      },function(err,committed,snap){
-        var num=snap.val()||1;
-        var padded=String(num).padStart(3,'0');
-        var displayId='Admin#'+padded;
-        saveIdentity('admin','Admin','admin_'+padded,displayId);
-      });
+      return;
     }
-  } else {
-    err.style.display='block';
-    document.getElementById('admin-pwd-input').value='';
-    document.getElementById('admin-pwd-input').focus();
-  }
+    db.ref('adminCounter').transaction(function(cur){return (cur||0)+1;},
+    function(txErr,committed,snap){
+      if(btn){btn.disabled=false;btn.textContent='Enter as Admin';}
+      if(txErr||!committed){
+        saveIdentity('admin','Admin','admin_001','Admin#001');
+        return;
+      }
+      var num=snap.val()||1;
+      var padded=String(num).padStart(3,'0');
+      saveIdentity('admin','Admin','admin_'+padded,'Admin#'+padded);
+    });
+  });
 }
 
 function saveIdentity(role,name,uid,displayId){
@@ -1315,8 +1353,10 @@ function saveIdentity(role,name,uid,displayId){
 }
 
 function startApp(){
-  document.getElementById('main-app').style.display='block';
+  var app=document.getElementById('main-app');
+  app.style.display='block';
   updateIdMenu();
+  goTab('donors');
 }
 
 function updateIdMenu(){
@@ -1362,11 +1402,22 @@ function switchToAdmin(){
 
 function logoutIdentity(){
   localStorage.removeItem('bl_identity');
-  currentUser={role:'',name:''};
+  currentUser={role:'',name:'',uid:'',displayId:''};
+  SESSION_ADDED_KEYS=[];
+  SESSION_EDIT_COUNT=0;
+  SESSION_DELETE_COUNT=0;
   document.getElementById('idMenu').classList.remove('show');
   document.getElementById('main-app').style.display='none';
-  // Reset login form
+  document.getElementById('main-app').style.display='';
+  // Reset login form completely
   backToRoleSelect();
+  document.getElementById('admin-pwd-input').value='';
+  document.getElementById('user-name-input').value='';
+  // Reset buttons
+  var adminBtn=document.querySelector('#login-admin-form .login-btn');
+  var userBtn=document.querySelector('#login-user-form .login-btn');
+  if(adminBtn){adminBtn.disabled=false;adminBtn.textContent='Enter as Admin';}
+  if(userBtn){userBtn.disabled=false;userBtn.textContent='Continue as User';}
   document.getElementById('login-screen').classList.add('show');
 }
 
@@ -1488,6 +1539,11 @@ var SESSION_LIMIT=3;
 function delDonor(key,name){
   if(!db)return;
   if(!isAdmin()){
+    // ✅ Check 1: Can only delete donors they added
+    if(SESSION_ADDED_KEYS.indexOf(key)<0){
+      showOwnDeleteAlert();return;
+    }
+    // ✅ Check 2: Max 3 deletes per session
     if(SESSION_DELETE_COUNT>=SESSION_LIMIT){
       showLimitAlert('delete');return;
     }
@@ -1506,7 +1562,15 @@ function showDeleteConfirmAlert(key,name){
 function closeDeleteConfirmAlert(){document.getElementById('deleteConfirmOverlay').classList.remove('show');}
 
 function doDeleteWithAnimation(key,name){
-  if(!isAdmin())SESSION_DELETE_COUNT++;
+  if(!isAdmin()){
+    SESSION_DELETE_COUNT++;
+    var idx=SESSION_ADDED_KEYS.indexOf(key);
+    if(idx>-1)SESSION_ADDED_KEYS.splice(idx,1);
+    if(currentUser.uid){
+      var safeKey=currentUser.uid.replace(/[^a-zA-Z0-9_]/g,'_');
+      db.ref('userAddedKeys/'+safeKey+'/'+key).remove();
+    }
+  }
   var cards=document.querySelectorAll('#dlist .dc');
   var targetCard=null;
   cards.forEach(function(card){
@@ -1532,13 +1596,27 @@ function doDelete(key,name){
 function showLimitAlert(type){
   var titleEl=document.getElementById('limitAlertTitle');
   var msgEl=document.getElementById('limitAlertMsg');
-  if(titleEl)titleEl.textContent=type==='delete'?'Delete Limit Reached':'Edit Limit Reached';
-  if(msgEl)msgEl.innerHTML='You can only <strong>'+(type==='delete'?'delete':'edit')+'</strong> up to <strong>3 donors</strong> per session.<br><br>Close the app and reopen to reset, or contact Admin.';
+  if(type==='delete'){
+    if(titleEl)titleEl.textContent='Delete Limit Reached';
+    if(msgEl)msgEl.innerHTML='You can only <strong>delete 3 donors</strong> per session.<br><br>You have reached your limit for this session.<br>Close the app and reopen to reset, or contact Admin.';
+  } else {
+    if(titleEl)titleEl.textContent='Edit Limit Reached';
+    if(msgEl)msgEl.innerHTML='You can only <strong>edit 3 donors</strong> per session.<br><br>You have reached your limit for this session.<br>Close the app and reopen to reset, or contact Admin.';
+  }
   document.getElementById('limitAlertOverlay').classList.add('show');
 }
 function closeLimitAlert(){document.getElementById('limitAlertOverlay').classList.remove('show');}
+
+function showOwnDeleteAlert(){
+  var titleEl=document.getElementById('limitAlertTitle');
+  var msgEl=document.getElementById('limitAlertMsg');
+  if(titleEl)titleEl.textContent='Cannot Delete';
+  if(msgEl)msgEl.innerHTML='You can only delete donors that <strong>you added</strong>.<br><br>You have added <strong style="color:#C0392B;font-size:17px">'+SESSION_ADDED_KEYS.length+'</strong> donor(s) this session.<br><br>Contact Admin to remove others.';
+  document.getElementById('limitAlertOverlay').classList.add('show');
+}
+
 // keep old names working
-function showDeleteBlockAlert(){showLimitAlert('delete');}
+function showDeleteBlockAlert(){showOwnDeleteAlert();}
 function closeDeleteBlockAlert(){closeLimitAlert();}
 
 // ── PASSWORD SYSTEM ──
