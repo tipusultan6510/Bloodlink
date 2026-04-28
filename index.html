@@ -735,17 +735,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
   </div>
 </div>
 
-<!-- DELETE BLOCKED ALERT -->
-<div class="donor-alert-overlay" id="deleteBlockOverlay" onclick="if(event.target===this)closeDeleteBlockAlert()">
+<!-- LIMIT ALERT -->
+<div class="donor-alert-overlay" id="limitAlertOverlay" onclick="if(event.target===this)closeLimitAlert()">
   <div class="donor-alert-box">
-    <div class="donor-alert-icon" style="background:#fde8e6">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#C0392B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
-        <circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+    <div class="donor-alert-icon" style="background:#fff8e6">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#e67e22" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26">
+        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+        <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
       </svg>
     </div>
-    <div class="donor-alert-title" style="color:#C0392B">Cannot Delete</div>
-    <div class="donor-alert-msg">You can only delete donors that <strong>you added</strong> in this session.<br><br>You have not added this donor, so you cannot delete them.<br><br>Contact Admin if needed.</div>
-    <button class="donor-alert-btn" onclick="closeDeleteBlockAlert()">Understood</button>
+    <div class="donor-alert-title" id="limitAlertTitle" style="color:#e67e22">Limit Reached</div>
+    <div class="donor-alert-msg" id="limitAlertMsg">You have reached the limit of <strong>3 actions</strong> per session.<br><br>Please close and reopen the app to reset, or contact Admin.</div>
+    <button class="donor-alert-btn" style="background:#e67e22" onclick="closeLimitAlert()">Understood</button>
   </div>
 </div>
 
@@ -1006,8 +1007,7 @@ function makeDonorCard(d){
 
   // Action buttons
   var acts=document.createElement('div');acts.className='dc-acts';
-  var canManage=isAdmin()||SESSION_ADDED_KEYS.indexOf(d._k)>=0;
-  acts.style.gridTemplateColumns=canManage?'1fr 1fr auto auto':'1fr 1fr';
+  acts.style.gridTemplateColumns='1fr 1fr auto auto';
 
   var ca=document.createElement('a');ca.className='btn bcall';
   ca.innerHTML='<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.99 1.18 2 2 0 013 .92h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.34 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>Call';
@@ -1020,18 +1020,14 @@ function makeDonorCard(d){
   var eb=document.createElement('button');eb.className='btn bsm';
   eb.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>';
   eb.title='Edit';
-  if(!isAdmin()){eb.style.display='none';}
   eb.addEventListener('click',function(){openEdit(d._k);});
 
-  var canDelete=isAdmin()||SESSION_ADDED_KEYS.indexOf(d._k)>=0;
   var db_=document.createElement('button');db_.className='btn bsm bdel';
   db_.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="15" height="15"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>';
   db_.title='Delete';
-  if(!canDelete){db_.style.display='none';}
   db_.addEventListener('click',function(){delDonor(d._k,d.name||'');});
 
-  acts.appendChild(ca);acts.appendChild(wa);
-  if(isAdmin()||SESSION_ADDED_KEYS.indexOf(d._k)>=0){acts.appendChild(eb);acts.appendChild(db_);}
+  acts.appendChild(ca);acts.appendChild(wa);acts.appendChild(eb);acts.appendChild(db_);
   body.appendChild(acts);
   card.appendChild(body);
   return card;
@@ -1152,6 +1148,7 @@ function toggleDonatedDate(val){
   if(w)w.style.display=val==='unavailable'?'':'none';
 }
 function openEdit(key){
+  if(!isAdmin()&&SESSION_EDIT_COUNT>=SESSION_LIMIT){showLimitAlert('edit');return;}
   var d=donors[key];if(!d)return;editKey=key;
   document.getElementById('en').value=d.name||'';document.getElementById('ep').value=shortPhone(d.phone||'');
   document.getElementById('eb').value=d.blood||'O+';document.getElementById('el').value=d.location||'';
@@ -1170,7 +1167,10 @@ function saveEdit(){
   db.ref('donors/'+editKey).update(u,function(err){
     btn.disabled=false;btn.textContent='Save Changes';busy=false;
     if(err){setSync('offline','Error');notice('Save failed: '+err.message,'err',5000);}
-    else{setSync('live','Live');closeModal();notice('Donor updated for all users.','ok',4000);}
+    else{
+      if(!isAdmin())SESSION_EDIT_COUNT++;
+      setSync('live','Live');closeModal();notice('Donor updated for all users.','ok',4000);
+    }
   });
 }
 
@@ -1275,21 +1275,6 @@ function switchToUser(){
   notice('Switched to User mode','info',2500);
 }
 
-function toggleIdMenu(){
-  var menu=document.getElementById('idMenu');
-  menu.classList.toggle('show');
-  if(menu.classList.contains('show')){
-    setTimeout(function(){
-      document.addEventListener('click',function closeMenu(e){
-        if(!menu.contains(e.target)&&e.target.id!=='idMenuBtn'){
-          menu.classList.remove('show');
-          document.removeEventListener('click',closeMenu);
-        }
-      });
-    },100);
-  }
-}
-
 function switchToAdmin(){
   document.getElementById('idMenu').classList.remove('show');
   // Show password prompt
@@ -1318,9 +1303,16 @@ function logoutIdentity(){
 
 function isAdmin(){return currentUser.role==='admin';}
 
+function toggleIdMenu(e){
+  if(e)e.stopPropagation();
+  var menu=document.getElementById('idMenu');
+  menu.classList.toggle('show');
+}
+
 window.addEventListener('click',function(e){
   var menu=document.getElementById('idMenu');
-  if(menu&&!menu.contains(e.target)&&e.target.id!=='idMenuBtn'){
+  var btn=document.getElementById('idMenuBtn');
+  if(menu&&menu.classList.contains('show')&&!menu.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){
     menu.classList.remove('show');
   }
 });
@@ -1419,12 +1411,16 @@ function restoreAllTrash(){
   setTimeout(function(){closeTrash();},400);
 }
 
+// ── SESSION LIMIT SYSTEM ──
+var SESSION_EDIT_COUNT=0;
+var SESSION_DELETE_COUNT=0;
+var SESSION_LIMIT=3;
+
 function delDonor(key,name){
   if(!db)return;
   if(!isAdmin()){
-    // User can only delete donors they added this session
-    if(SESSION_ADDED_KEYS.indexOf(key)<0){
-      showDeleteBlockAlert();return;
+    if(SESSION_DELETE_COUNT>=SESSION_LIMIT){
+      showLimitAlert('delete');return;
     }
   }
   showDeleteConfirmAlert(key,name);
@@ -1441,9 +1437,7 @@ function showDeleteConfirmAlert(key,name){
 function closeDeleteConfirmAlert(){document.getElementById('deleteConfirmOverlay').classList.remove('show');}
 
 function doDeleteWithAnimation(key,name){
-  // Remove from session added keys if present
-  var idx=SESSION_ADDED_KEYS.indexOf(key);
-  if(idx>-1)SESSION_ADDED_KEYS.splice(idx,1);
+  if(!isAdmin())SESSION_DELETE_COUNT++;
   var cards=document.querySelectorAll('#dlist .dc');
   var targetCard=null;
   cards.forEach(function(card){
@@ -1466,8 +1460,17 @@ function doDelete(key,name){
     });
   });
 }
-function showDeleteBlockAlert(){document.getElementById('deleteBlockOverlay').classList.add('show');}
-function closeDeleteBlockAlert(){document.getElementById('deleteBlockOverlay').classList.remove('show');}
+function showLimitAlert(type){
+  var titleEl=document.getElementById('limitAlertTitle');
+  var msgEl=document.getElementById('limitAlertMsg');
+  if(titleEl)titleEl.textContent=type==='delete'?'Delete Limit Reached':'Edit Limit Reached';
+  if(msgEl)msgEl.innerHTML='You can only <strong>'+(type==='delete'?'delete':'edit')+'</strong> up to <strong>3 donors</strong> per session.<br><br>Close the app and reopen to reset, or contact Admin.';
+  document.getElementById('limitAlertOverlay').classList.add('show');
+}
+function closeLimitAlert(){document.getElementById('limitAlertOverlay').classList.remove('show');}
+// keep old names working
+function showDeleteBlockAlert(){showLimitAlert('delete');}
+function closeDeleteBlockAlert(){closeLimitAlert();}
 
 // ── PASSWORD SYSTEM ──
 var pwdPendingAction='';
