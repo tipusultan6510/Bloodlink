@@ -59,9 +59,11 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 .login-bg-circle{position:absolute;border-radius:50%;opacity:.07}
 .login-bg-c1{width:380px;height:380px;background:#C0392B;top:-120px;right:-120px}
 .login-bg-c2{width:280px;height:280px;background:#C0392B;bottom:-100px;left:-100px}
-.login-logo{display:flex;align-items:center;gap:11px;margin-bottom:8px;z-index:1}
-.login-logo-drop{width:40px;height:40px;background:linear-gradient(135deg,#C0392B,#e74c3c);border-radius:50% 50% 50% 0;transform:rotate(-45deg);box-shadow:0 6px 18px rgba(192,57,43,.3)}
-.login-title{font-size:28px;font-weight:900;color:#C0392B;letter-spacing:-1px}
+.login-logo{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:8px;z-index:1}
+.login-logo-wrap{position:relative;display:flex;align-items:center;justify-content:center}
+.login-logo-glow{position:absolute;width:90px;height:90px;border-radius:24px;background:radial-gradient(circle,rgba(192,57,43,0.35) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);z-index:-1;animation:glowPulse 2.5s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:0.6;transform:translate(-50%,-50%) scale(1)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.15)}}
+.login-title{font-size:30px;font-weight:900;color:#C0392B;letter-spacing:-1px}
 .login-sub{font-size:13px;color:#aaa;text-align:center;margin-bottom:28px;z-index:1;line-height:1.6;max-width:280px}
 .login-cards{display:flex;flex-direction:column;gap:10px;width:100%;max-width:360px;z-index:1;margin-bottom:20px}
 .login-card{background:white;border:1.5px solid #f0f0f0;border-radius:16px;padding:16px 18px;cursor:pointer;transition:all .2s;box-shadow:0 2px 10px rgba(0,0,0,.05);display:flex;align-items:center;gap:14px;text-align:left}
@@ -392,7 +394,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     <div class="login-bg-circle login-bg-c2"></div>
   </div>
   <div class="login-logo">
-    <div class="login-logo-drop"></div>
+    <div class="login-logo-wrap">
+      <svg width="72" height="72" viewBox="0 0 80 80" style="filter:drop-shadow(0 8px 24px rgba(192,57,43,0.45)) drop-shadow(0 2px 8px rgba(192,57,43,0.3))">
+        <rect width="80" height="80" rx="20" fill="#C62828"/>
+        <path d="M40 20 C40 20 22 30 22 45 C22 55 30 62 40 62 C50 62 58 55 58 45 C58 30 40 20 40 20Z" fill="white"/>
+        <rect x="36" y="36" width="8" height="18" rx="4" fill="#C62828"/>
+        <rect x="31" y="41" width="18" height="8" rx="4" fill="#C62828"/>
+      </svg>
+      <div class="login-logo-glow"></div>
+    </div>
     <div class="login-title">BloodLink</div>
   </div>
   <div class="login-sub">Find blood donors instantly<br>in your community 🩸</div>
@@ -449,7 +459,12 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 
 <header class="hdr">
   <div class="hdr-left">
-    <div class="drop"></div>
+    <svg width="34" height="34" viewBox="0 0 80 80" style="filter:drop-shadow(0 2px 6px rgba(0,0,0,0.25));flex-shrink:0">
+      <rect width="80" height="80" rx="20" fill="rgba(255,255,255,0.15)"/>
+      <path d="M40 20 C40 20 22 30 22 45 C22 55 30 62 40 62 C50 62 58 55 58 45 C58 30 40 20 40 20Z" fill="white"/>
+      <rect x="36" y="36" width="8" height="18" rx="4" fill="rgba(192,57,43,0.9)"/>
+      <rect x="31" y="41" width="18" height="8" rx="4" fill="rgba(192,57,43,0.9)"/>
+    </svg>
     <div>
       <div class="hdr-title">BloodLink</div>
       <div class="hdr-sub">Community Donor Network</div>
@@ -469,10 +484,16 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 <!-- IDENTITY MENU -->
 <div class="id-menu" id="idMenu">
   <div class="id-menu-header">
-    <div class="id-menu-role" id="idMenuRole">ROLE</div>
-    <div class="id-menu-name" id="idMenuName">Name</div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+      <div style="width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,#C0392B,#e74c3c);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">🩸</div>
+      <div>
+        <div class="id-menu-role" id="idMenuRole">USER</div>
+        <div class="id-menu-name" id="idMenuName">Name#001</div>
+      </div>
+    </div>
     <span class="id-menu-badge" id="idMenuBadge">User</span>
   </div>
+  <div style="height:1px;background:#f5f5f5;margin:4px 0 6px"></div>
   <button class="id-menu-item" id="switchAdminBtn" onclick="switchToAdmin()" style="display:none">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
     Switch to Admin
@@ -1124,11 +1145,15 @@ function addDonor(){
   busy=true;var btn=document.getElementById('addbtn');btn.disabled=true;btn.textContent='Saving...';setSync('busy','Saving');
   var newRef=db.ref('donors').push();
   var newKey=newRef.key;
-  newRef.set({name:name,phone:phone,blood:blood,location:location,status:status,ts:Date.now(),addedBy:currentUser.name||'user'},function(err){
+  newRef.set({name:name,phone:phone,blood:blood,location:location,status:status,ts:Date.now(),addedBy:currentUser.uid||currentUser.name||'user'},function(err){
     btn.disabled=false;btn.textContent='Add Donor to Network';busy=false;
     if(err){setSync('offline','Error');notice('Save failed: '+err.message,'err',6000);}
     else{
       SESSION_ADDED_KEYS.push(newKey);
+      // Save key to Firebase so user can delete even after refresh
+      var safeKey=(currentUser.uid||'anon').replace(/[^a-zA-Z0-9_]/g,'_');
+      var keyObj={};keyObj[newKey]=newKey;
+      db.ref('userAddedKeys/'+safeKey).update(keyObj);
       setSync('live','Live');notice(name+' added — visible to all users now.','ok',5000);
       document.getElementById('fn').value='';document.getElementById('fp').value='';
       document.getElementById('fb').value='';document.getElementById('fl').value='';document.getElementById('fs').value='available';
@@ -1214,12 +1239,51 @@ function backToRoleSelect(){
   document.getElementById('user-name-err').style.display='none';
 }
 
+function submitUserLogin(){
+  var name=(document.getElementById('user-name-input').value||'').trim();
+  var err=document.getElementById('user-name-err');
+  if(!name){err.style.display='block';return;}
+  err.style.display='none';
+  // Check localStorage for existing identity
+  var saved=null;
+  try{saved=JSON.parse(localStorage.getItem('bl_identity')||'null');}catch(e){}
+  if(saved&&saved.name===name&&saved.uid&&saved.role==='user'){
+    // Same person returning - reuse ID
+    saveIdentity('user',name,saved.uid,saved.displayId);
+  } else {
+    // New user - get next sequential number from Firebase
+    db.ref('userCounter').transaction(function(current){
+      return (current||0)+1;
+    },function(err,committed,snap){
+      var num=snap.val()||1;
+      var padded=String(num).padStart(3,'0'); // 001, 002, 003...
+      var displayId=name+'#'+padded;
+      var safeUid=name.replace(/[^a-zA-Z0-9]/g,'_')+'_'+padded;
+      saveIdentity('user',name,safeUid,displayId);
+    });
+  }
+}
+
 function submitAdminLogin(){
   var pwd=document.getElementById('admin-pwd-input').value;
   var err=document.getElementById('admin-pwd-err');
   if(pwd===ADMIN_PASSWORD){
     err.style.display='none';
-    saveIdentity('admin','Admin');
+    // Admin gets sequential Admin#001, Admin#002 etc
+    var saved=null;
+    try{saved=JSON.parse(localStorage.getItem('bl_identity')||'null');}catch(e){}
+    if(saved&&saved.role==='admin'&&saved.uid&&saved.displayId){
+      saveIdentity('admin','Admin',saved.uid,saved.displayId);
+    } else {
+      db.ref('adminCounter').transaction(function(current){
+        return (current||0)+1;
+      },function(err,committed,snap){
+        var num=snap.val()||1;
+        var padded=String(num).padStart(3,'0');
+        var displayId='Admin#'+padded;
+        saveIdentity('admin','Admin','admin_'+padded,displayId);
+      });
+    }
   } else {
     err.style.display='block';
     document.getElementById('admin-pwd-input').value='';
@@ -1227,24 +1291,25 @@ function submitAdminLogin(){
   }
 }
 
-function submitUserLogin(){
-  var name=(document.getElementById('user-name-input').value||'').trim();
-  var err=document.getElementById('user-name-err');
-  if(!name){err.style.display='block';return;}
-  err.style.display='none';
-  saveIdentity('user',name);
-}
-
-function saveIdentity(role,name){
-  currentUser={role:role,name:name};
+function saveIdentity(role,name,uid,displayId){
+  if(!displayId)displayId=name+'#001';
+  currentUser={role:role,name:name,uid:uid,displayId:displayId};
   localStorage.setItem('bl_identity',JSON.stringify(currentUser));
   document.getElementById('login-screen').classList.remove('show');
   startApp();
-  // Save to Firebase after app starts (db will be ready)
   setTimeout(function(){
     if(db){
-      var userLog={name:name,role:role,lastLogin:Date.now(),device:navigator.userAgent.substring(0,100)};
-      db.ref('users/'+name.replace(/[^a-zA-Z0-9]/g,'_')).set(userLog);
+      var safeKey=uid.replace(/[^a-zA-Z0-9_]/g,'_');
+      var userLog={name:name,role:role,uid:uid,displayId:displayId,lastLogin:Date.now(),device:navigator.userAgent.substring(0,80)};
+      db.ref('users/'+safeKey).set(userLog);
+      if(role!=='admin'){
+        db.ref('userAddedKeys/'+safeKey).once('value',function(snap){
+          var val=snap.val();
+          if(val&&typeof val==='object'){
+            SESSION_ADDED_KEYS=Object.values(val).filter(Boolean);
+          }
+        });
+      }
     }
   },1500);
 }
@@ -1256,8 +1321,9 @@ function startApp(){
 
 function updateIdMenu(){
   var role=currentUser.role;var name=currentUser.name;
-  document.getElementById('idMenuRole').textContent=role==='admin'?'ADMINISTRATOR':'USER';
-  document.getElementById('idMenuName').textContent=name;
+  var displayId=currentUser.displayId||name;
+  document.getElementById('idMenuRole').textContent=role==='admin'?'ADMINISTRATOR':'COMMUNITY USER';
+  document.getElementById('idMenuName').textContent=displayId;
   var badge=document.getElementById('idMenuBadge');
   badge.textContent=role==='admin'?'🛡️ Admin':'🩸 User';
   badge.className='id-menu-badge '+(role==='admin'?'admin':'user');
@@ -1265,6 +1331,9 @@ function updateIdMenu(){
   var switchUserBtn=document.getElementById('switchUserBtn');
   if(switchAdminBtn)switchAdminBtn.style.display=role==='admin'?'none':'flex';
   if(switchUserBtn)switchUserBtn.style.display=role==='admin'?'flex':'none';
+  // Update header badge too
+  var hdrBadge=document.getElementById('hdrUserBadge');
+  if(hdrBadge)hdrBadge.textContent=displayId;
 }
 
 function switchToUser(){
