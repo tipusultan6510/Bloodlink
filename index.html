@@ -92,8 +92,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 .login-btn-admin{background:#C0392B;color:white;box-shadow:0 4px 14px rgba(192,57,43,.3)}
 .login-btn-user{background:#1a7a4a;color:white;box-shadow:0 4px 14px rgba(26,122,74,.3)}
 .login-btn:hover{opacity:.92;transform:scale(1.01)}
-.login-back{background:none;border:none;color:#bbb;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:10px;width:100%;padding:8px}
-.login-back:hover{color:#888}
+.login-admin-trigger{background:none;border:1px solid #eee;color:#bbb;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;padding:8px 18px;border-radius:20px;transition:all .2s;display:flex;align-items:center;gap:6px;margin-top:12px;z-index:1}
+.login-admin-trigger:hover{background:#fde8e6;color:#C0392B;border-color:#f5c6c2}
 
 /* ── IDENTITY BADGE (3-dot menu) ── */
 .id-btn{background:rgba(255,255,255,.15);border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
@@ -111,6 +111,23 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 .id-menu-item:hover{background:#f5f5f5;color:#111}
 .id-menu-item.danger{color:#C0392B}
 .id-menu-item.danger:hover{background:#fde8e6}
+/* ── MESSAGE ALL ── */
+.msgall-box{background:white;border:1.5px solid #f0f0f0;border-radius:16px;padding:18px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.msgall-header{margin-bottom:14px}
+.msgall-title{font-size:15px;font-weight:800;color:#111;margin-bottom:3px}
+.msgall-sub{font-size:12px;color:#aaa;font-weight:600}
+.msgall-progress{margin-bottom:14px}
+.msgall-bar-wrap{background:#f0f0f0;border-radius:99px;height:6px;margin-bottom:7px;overflow:hidden}
+.msgall-bar{height:100%;background:linear-gradient(90deg,#C0392B,#e74c3c);border-radius:99px;transition:width .4s ease;width:0%}
+.msgall-count{font-size:12px;font-weight:800;color:#C0392B}
+.msgall-btns{display:flex;gap:10px}
+.msgall-btn{background:#C0392B;color:white;border:none;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px;transition:all .2s}
+.msgall-btn:hover{background:#96281B;transform:scale(1.02)}
+.msgall-btn:disabled{background:#ddd;color:#aaa;cursor:not-allowed;transform:none}
+.msgall-next-btn{background:#1a7a4a;color:white;border:none;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s}
+.msgall-next-btn:hover{background:#145c38}
+.msgall-done{font-size:13px;font-weight:800;color:#1a7a4a;margin-top:10px}
+
 .trash-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;color:#aaa;font-size:12px;font-weight:700;font-family:inherit;transition:color .2s}
 .trash-btn:hover{color:#C0392B}
 .trash-count{background:#C0392B;color:white;border-radius:20px;font-size:10px;font-weight:800;padding:1px 6px;min-width:18px;text-align:center;display:none}
@@ -417,15 +434,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
       </div>
       <div class="login-card-arrow">›</div>
     </div>
-    <div class="login-card admin-card" onclick="showLoginForm('admin')">
-      <div class="login-card-icon" style="font-size:16px">🛡️</div>
-      <div>
-        <div class="login-card-title" style="font-size:13px;color:#555">Admin Access</div>
-        <div class="login-card-desc">Manage donors with password</div>
-      </div>
-      <div class="login-card-arrow" style="color:#ccc">›</div>
-    </div>
   </div>
+  <button class="login-admin-trigger" onclick="showLoginForm('admin')">🛡️ Admin Access</button>
 
   <!-- Admin Form -->
   <div class="login-form" id="login-admin-form" style="display:none">
@@ -444,7 +454,10 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     <div class="login-form-box">
       <div class="login-form-title">🩸 Enter Your Name</div>
       <div class="login-form-sub">Your name helps us track activity for security</div>
-      <input class="login-input" id="user-name-input" type="text" placeholder="e.g. Mahir Ahmed" maxlength="40" onkeydown="if(event.key==='Enter')submitUserLogin()">
+      <div style="position:relative">
+        <input class="login-input" id="user-name-input" type="text" placeholder="e.g. Mahir Ahmed" maxlength="40" onkeydown="if(event.key==='Enter')submitUserLogin()" style="padding-right:110px">
+        <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;color:#bbb;font-weight:700;pointer-events:none;white-space:nowrap">আপনার নাম লিখুন</span>
+      </div>
       <div class="login-err" id="user-name-err">⚠️ Please enter your name to continue.</div>
       <button class="login-btn login-btn-user" onclick="submitUserLogin()">Continue as User</button>
       <button class="login-back" onclick="backToRoleSelect()">← Back</button>
@@ -511,7 +524,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 <div class="tabs">
   <button class="tab on"  onclick="goTab('donors')">Donors</button>
   <button class="tab"     onclick="goTab('add')">Add Donor</button>
-  <button class="tab"     onclick="goTab('emergency')">Emergency</button>
   <button class="tab"     onclick="goTab('share')">Share</button>
 </div>
 
@@ -543,6 +555,31 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
   </div>
   <div class="sh2"><span class="sh2-t">All Donors</span><span style="font-size:11px;font-weight:800;color:#C0392B;background:#fde8e6;padding:3px 10px;border-radius:20px">🩸 Free Forever</span><span class="sh2-c" id="dcnt"></span></div>
   <div id="dlist"><div class="loading"><div class="spin"></div>Loading donors...</div></div>
+  <!-- MESSAGE ALL PANEL -->
+  <div id="msgAllPanel" style="display:none;margin-top:12px">
+    <div class="msgall-box">
+      <div class="msgall-header">
+        <div class="msgall-title">📨 Message All Donors</div>
+        <div class="msgall-sub" id="msgAllSub">Select a blood group to message donors</div>
+      </div>
+      <div class="msgall-progress" id="msgAllProgress" style="display:none">
+        <div class="msgall-bar-wrap"><div class="msgall-bar" id="msgAllBar"></div></div>
+        <div class="msgall-count" id="msgAllCount"></div>
+      </div>
+      <div class="msgall-btns">
+        <button class="msgall-btn" id="msgAllBtn" onclick="startMessageAll()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Message All
+        </button>
+        <button class="msgall-next-btn" id="msgAllNextBtn" onclick="nextBatch()" style="display:none">
+          Next 10 →
+        </button>
+      </div>
+      <div class="msgall-done" id="msgAllDone" style="display:none">
+        ✅ All messages sent!
+      </div>
+    </div>
+  </div>
 </div>
 
 <div id="t-add" class="wrap" style="display:none">
@@ -576,15 +613,6 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     <div style="font-size:14px;font-weight:800;color:#C0392B;margin-bottom:4px">Every donor matters</div>
     <div style="font-size:12px;color:#a04040;line-height:1.7">One donation can save up to 3 lives.<br>Thank you for being part of this network.</div>
   </div>
-</div>
-
-<div id="t-emergency" class="wrap" style="display:none">
-  <div class="emg">
-    <div class="emg-t">EMERGENCY MODE</div>
-    <div class="emg-s">Tap a blood group to instantly find available donors</div>
-    <div class="emg-bgs" id="emgbtns"></div>
-  </div>
-  <div id="emgres"></div>
 </div>
 
 <div id="t-share" class="wrap" style="display:none">
@@ -652,8 +680,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
     Trash <span class="trash-count" id="trashCount">0</span>
   </button>
-  <span>Made with ❤️ by <strong style="color:#C0392B">Mahir</strong></span>
-  <span style="color:#C0392B;font-weight:700;cursor:pointer" onclick="document.getElementById('aboutmodal').classList.add('open')">About</span>
+  <span style="color:#C0392B;font-weight:700;cursor:pointer;font-size:12px" onclick="document.getElementById('aboutmodal').classList.add('open')">About</span>
 </div>
 
 <!-- ABOUT MODAL -->
@@ -963,7 +990,89 @@ function renderBGChips(){
 }
 // render chips immediately so filter shows on first load without waiting for Firebase
 renderBGChips();
-function setBG(b){bgf=b;renderBGChips();renderDonors();}
+function setBG(b){
+  bgf=b;
+  renderBGChips();
+  renderDonors();
+  updateMsgAllPanel();
+}
+
+function nextBatch(){
+  document.getElementById('msgAllNextBtn').style.display='none';
+  document.getElementById('msgAllBtn').disabled=true;
+  sendBatch();
+}
+var msgAllDonors=[];
+var msgAllBatchIndex=0;
+var MSG_BATCH_SIZE=10;
+
+function updateMsgAllPanel(){
+  var panel=document.getElementById('msgAllPanel');
+  if(!panel)return;
+  if(!bgf){panel.style.display='none';return;}
+  // Get available donors for selected blood group
+  var available=getArr().filter(function(d){return d.blood===bgf&&d.status==='available'&&d.phone;});
+  if(available.length===0){panel.style.display='none';return;}
+  panel.style.display='block';
+  msgAllDonors=available;
+  msgAllBatchIndex=0;
+  // Reset UI
+  document.getElementById('msgAllSub').textContent=available.length+' available '+bgf+' donors found';
+  document.getElementById('msgAllProgress').style.display='none';
+  document.getElementById('msgAllNextBtn').style.display='none';
+  document.getElementById('msgAllDone').style.display='none';
+  document.getElementById('msgAllBtn').disabled=false;
+  document.getElementById('msgAllBtn').textContent='Message All '+available.length+' Donors';
+  document.getElementById('msgAllBar').style.width='0%';
+}
+
+function startMessageAll(){
+  msgAllBatchIndex=0;
+  document.getElementById('msgAllProgress').style.display='block';
+  document.getElementById('msgAllDone').style.display='none';
+  sendBatch();
+}
+
+function sendBatch(){
+  var btn=document.getElementById('msgAllBtn');
+  var nextBtn=document.getElementById('msgAllNextBtn');
+  var total=msgAllDonors.length;
+  var start=msgAllBatchIndex;
+  var end=Math.min(start+MSG_BATCH_SIZE,total);
+  var batch=msgAllDonors.slice(start,end);
+  var msg=encodeURIComponent('🚨 Blood Needed!\n\nBlood Group: '+bgf+'\nUrgently needed. Please respond ASAP if you can donate.\n\nThank you 🙏');
+  // Open each chat with small delay to avoid popup blocker
+  batch.forEach(function(d,i){
+    setTimeout(function(){
+      var num=(d.phone||'').replace(/\D/g,'');
+      if(num.length===10)num='880'+num;
+      else if(num.startsWith('0'))num='880'+num.slice(1);
+      window.open('https://wa.me/'+num+'?text='+msg,'_blank');
+    },i*600);
+  });
+  msgAllBatchIndex=end;
+  // Update progress bar
+  var pct=Math.round((end/total)*100);
+  document.getElementById('msgAllBar').style.width=pct+'%';
+  document.getElementById('msgAllCount').textContent='Sent '+end+' of '+total+' messages';
+  if(end>=total){
+    // All done
+    setTimeout(function(){
+      btn.disabled=true;
+      nextBtn.style.display='none';
+      document.getElementById('msgAllDone').style.display='block';
+      document.getElementById('msgAllCount').textContent='✅ All '+total+' donors messaged!';
+    },batch.length*600+200);
+  } else {
+    // More batches remaining
+    setTimeout(function(){
+      btn.disabled=true;
+      nextBtn.style.display='block';
+      nextBtn.textContent='Next '+(Math.min(MSG_BATCH_SIZE,total-end))+' →';
+      document.getElementById('msgAllCount').textContent='Sent '+end+' of '+total+' — tap Next for more';
+    },batch.length*600+200);
+  }
+}
 
 function makeDonorCard(d){
   var av=d.status==='available';
@@ -1239,6 +1348,8 @@ function waitForDb(cb,tries){
 
 function showLoginForm(role){
   document.getElementById('login-role-select').style.display='none';
+  var at=document.querySelector('.login-admin-trigger');
+  if(at)at.style.display='none';
   if(role==='admin'){
     document.getElementById('login-admin-form').style.display='block';
     setTimeout(function(){document.getElementById('admin-pwd-input').focus();},200);
@@ -1250,6 +1361,8 @@ function showLoginForm(role){
 
 function backToRoleSelect(){
   document.getElementById('login-role-select').style.display='flex';
+  var at=document.querySelector('.login-admin-trigger');
+  if(at)at.style.display='flex';
   document.getElementById('login-admin-form').style.display='none';
   document.getElementById('login-user-form').style.display='none';
   document.getElementById('admin-pwd-input').value='';
@@ -1279,11 +1392,14 @@ function submitUserLogin(){
     function(txErr,committed,snap){
       if(btn){btn.disabled=false;btn.textContent='Continue as User';}
       if(txErr||!committed){
-        // Fallback if transaction fails
-        var fallback=Date.now().toString().slice(-3);
-        var displayId=name+'#'+fallback;
-        var safeUid=name.replace(/[^a-zA-Z0-9]/g,'_')+'_'+fallback;
-        saveIdentity('user',name,safeUid,displayId);
+        db.ref('userCounter').once('value',function(s){
+          var num=(s.val()||1);
+          db.ref('userCounter').set(num+1);
+          var padded=String(num).padStart(3,'0');
+          var displayId=name+'#'+padded;
+          var safeUid=name.replace(/[^a-zA-Z0-9]/g,'_')+'_'+padded;
+          saveIdentity('user',name,safeUid,displayId);
+        });
         return;
       }
       var num=snap.val()||1;
@@ -1695,11 +1811,20 @@ function handleImportFile(e){
 
 
 function goTab(tab){
-  ['donors','add','emergency','share'].forEach(function(t){document.getElementById('t-'+t).style.display=t===tab?'':'none';});
-  document.querySelectorAll('.tab').forEach(function(b,i){b.classList.toggle('on',['donors','add','emergency','share'][i]===tab);});
+  ['donors','add','share'].forEach(function(t){
+    var el=document.getElementById('t-'+t);
+    if(el)el.style.display=t===tab?'':'none';
+  });
+  document.querySelectorAll('.tab').forEach(function(b){
+    b.classList.toggle('on',b.getAttribute('onclick')==="goTab('"+tab+"')");
+  });
   document.getElementById('notice').className='notice';
-  if(tab==='share'){document.getElementById('shurl').value=window.location.href;var a=getArr();document.getElementById('sh-t').textContent=a.length;document.getElementById('sh-a').textContent=a.filter(function(d){return d.status==='available';}).length;}
-  if(tab==='emergency'){buildEmgBtns();}
+  if(tab==='share'){
+    document.getElementById('shurl').value=window.location.href;
+    var a=getArr();
+    document.getElementById('sh-t').textContent=a.length;
+    document.getElementById('sh-a').textContent=a.filter(function(d){return d.status==='available';}).length;
+  }
 }
 
 function cpLink(){cpText(document.getElementById('shurl').value||window.location.href,'Link');}
