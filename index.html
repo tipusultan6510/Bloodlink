@@ -111,20 +111,15 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 .id-menu-item:hover{background:#f5f5f5;color:#111}
 .id-menu-item.danger{color:#C0392B}
 .id-menu-item.danger:hover{background:#fde8e6}
-/* ── MESSAGE ALL ── */
-.msgall-box{background:#fde8e6;border-radius:12px;padding:12px 14px;margin-bottom:2px}
-.msgall-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.msgall-title{font-size:13px;font-weight:800;color:#C0392B;margin-bottom:1px}
-.msgall-sub{font-size:11px;color:#a04040;font-weight:600}
-.msgall-progress{margin-top:10px}
-.msgall-bar-wrap{background:rgba(192,57,43,.2);border-radius:99px;height:4px;overflow:hidden;margin-bottom:5px}
-.msgall-bar{height:100%;background:#C0392B;border-radius:99px;transition:width .4s ease;width:0%}
-.msgall-count{font-size:11px;font-weight:700;color:#C0392B}
-.msgall-btn{background:#C0392B;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;flex-shrink:0}
-.msgall-btn:hover{background:#96281B}
-.msgall-btn:disabled{background:rgba(192,57,43,.3);cursor:not-allowed}
-.msgall-next-btn{background:white;color:#1a7a4a;border:1.5px solid #1a7a4a;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px}
-.msgall-done{font-size:12px;font-weight:800;color:#1a7a4a;margin-top:8px}
+/* ── COPY NUMBERS ── */
+.copynums-bar{display:none;background:#fde8e6;border-radius:12px;padding:11px 14px;margin-bottom:10px;align-items:center;justify-content:space-between;gap:10px}
+.copynums-bar.show{display:flex}
+.copynums-info{flex:1}
+.copynums-title{font-size:13px;font-weight:800;color:#C0392B;margin-bottom:1px}
+.copynums-sub{font-size:11px;color:#a04040;font-weight:600}
+.copynums-btn{background:#C0392B;color:white;border:none;border-radius:8px;padding:9px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.copynums-btn:hover{background:#96281B}
+.copynums-btn.copied{background:#1a7a4a}
 
 .trash-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;color:#aaa;font-size:12px;font-weight:700;font-family:inherit;transition:color .2s}
 .trash-btn:hover{color:#C0392B}
@@ -541,25 +536,13 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     </div>
   </div>
   <div class="sh2"><span class="sh2-t">All Donors</span><span style="font-size:11px;font-weight:800;color:#C0392B;background:#fde8e6;padding:3px 10px;border-radius:20px">🩸 Free Forever</span><span class="sh2-c" id="dcnt"></span></div>
-  <!-- MESSAGE ALL PANEL - above donors list -->
-  <div id="msgAllPanel" style="display:none;margin-bottom:10px">
-    <div class="msgall-box">
-      <div class="msgall-top">
-        <div>
-          <div class="msgall-title">🩸 Message All Available Donors</div>
-          <div class="msgall-sub" id="msgAllSub"></div>
-        </div>
-        <button class="msgall-btn" id="msgAllBtn" onclick="startMessageAll()">Send via WhatsApp</button>
-      </div>
-      <div class="msgall-progress" id="msgAllProgress" style="display:none">
-        <div class="msgall-bar-wrap"><div class="msgall-bar" id="msgAllBar"></div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center">
-          <div class="msgall-count" id="msgAllCount"></div>
-          <button class="msgall-next-btn" id="msgAllNextBtn" onclick="nextBatch()" style="display:none">Next →</button>
-        </div>
-      </div>
-      <div class="msgall-done" id="msgAllDone" style="display:none">✅ All messages sent!</div>
+  <!-- COPY NUMBERS BAR -->
+  <div class="copynums-bar" id="copyNumsBar">
+    <div class="copynums-info">
+      <div class="copynums-title" id="copyNumsTitle">📋 Copy All Numbers</div>
+      <div class="copynums-sub" id="copyNumsSub"></div>
     </div>
+    <button class="copynums-btn" id="copyNumsBtn" onclick="copyAllNumbers()">Copy</button>
   </div>
   <div id="dlist"><div class="loading"><div class="spin"></div>Loading donors...</div></div>
 </div>
@@ -976,80 +959,50 @@ function setBG(b){
   bgf=b;
   renderBGChips();
   renderDonors();
-  updateMsgAllPanel();
+  updateCopyNumsBar();
 }
 
-function nextBatch(){
-  document.getElementById('msgAllNextBtn').style.display='none';
-  sendBatch();
-}
-var msgAllDonors=[];
-var msgAllBatchIndex=0;
-var MSG_BATCH_SIZE=10;
-
-function updateMsgAllPanel(){
-  var panel=document.getElementById('msgAllPanel');
-  if(!panel)return;
-  if(!bgf){panel.style.display='none';return;}
-  // Get available donors for selected blood group
+// ── COPY NUMBERS SYSTEM ──
+function updateCopyNumsBar(){
+  var bar=document.getElementById('copyNumsBar');
+  if(!bar)return;
+  if(!bgf){bar.classList.remove('show');return;}
   var available=getArr().filter(function(d){return d.blood===bgf&&d.status==='available'&&d.phone;});
-  if(available.length===0){panel.style.display='none';return;}
-  panel.style.display='block';
-  msgAllDonors=available;
-  msgAllBatchIndex=0;
-  // Reset UI
-  document.getElementById('msgAllSub').textContent=available.length+' available '+bgf+' donors found';
-  document.getElementById('msgAllProgress').style.display='none';
-  document.getElementById('msgAllNextBtn').style.display='none';
-  document.getElementById('msgAllDone').style.display='none';
-  document.getElementById('msgAllBtn').disabled=false;
-  document.getElementById('msgAllBtn').textContent='Message All '+available.length+' Donors';
-  document.getElementById('msgAllBar').style.width='0%';
+  if(!available.length){bar.classList.remove('show');return;}
+  bar.classList.add('show');
+  document.getElementById('copyNumsSub').textContent=available.length+' available '+bgf+' donor numbers';
+  document.getElementById('copyNumsBtn').textContent='Copy';
+  document.getElementById('copyNumsBtn').className='copynums-btn';
 }
 
-function startMessageAll(){
-  var btn=document.getElementById('msgAllBtn');
-  btn.disabled=true;
-  msgAllBatchIndex=0;
-  document.getElementById('msgAllProgress').style.display='block';
-  document.getElementById('msgAllDone').style.display='none';
-  document.getElementById('msgAllNextBtn').style.display='none';
-  sendBatch();
-}
-
-function sendBatch(){
-  var total=msgAllDonors.length;
-  var start=msgAllBatchIndex;
-  var end=Math.min(start+MSG_BATCH_SIZE,total);
-  var batch=msgAllDonors.slice(start,end);
-  var msg=encodeURIComponent('🚨 Blood Needed!\n\nBlood Group: '+bgf+'\nUrgently needed. Please respond ASAP if you can donate.\n\nThank you 🙏');
-  var i=0;
-  function openNext(){
-    if(i>=batch.length){
-      msgAllBatchIndex=end;
-      var pct=Math.round((end/total)*100);
-      document.getElementById('msgAllBar').style.width=pct+'%';
-      if(end>=total){
-        document.getElementById('msgAllCount').textContent='✅ All '+total+' donors messaged!';
-        document.getElementById('msgAllDone').style.display='block';
-      } else {
-        var rem=Math.min(MSG_BATCH_SIZE,total-end);
-        document.getElementById('msgAllCount').textContent='Sent '+end+' of '+total;
-        document.getElementById('msgAllNextBtn').style.display='inline-block';
-        document.getElementById('msgAllNextBtn').textContent='Next '+rem+' →';
-      }
-      return;
-    }
-    var d=batch[i];
-    var num=(d.phone||'').replace(/\D/g,'');
-    if(num.length===10)num='880'+num;
-    else if(num.startsWith('0'))num='880'+num.slice(1);
-    window.open('https://wa.me/'+num+'?text='+msg,'_blank');
-    document.getElementById('msgAllCount').textContent='Opening '+(start+i+1)+' of '+total+'...';
-    i++;
-    setTimeout(openNext,900);
+function copyAllNumbers(){
+  var available=getArr().filter(function(d){return d.blood===bgf&&d.status==='available'&&d.phone;});
+  if(!available.length)return;
+  var numbers=available.map(function(d){return d.name+': '+d.phone;}).join('\n');
+  var btn=document.getElementById('copyNumsBtn');
+  function onCopied(){
+    btn.textContent='✅ Copied!';
+    btn.className='copynums-btn copied';
+    setTimeout(function(){
+      btn.textContent='Copy';
+      btn.className='copynums-btn';
+    },2500);
   }
-  openNext();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(numbers).then(onCopied).catch(function(){
+      fallbackCopy(numbers);onCopied();
+    });
+  } else {
+    fallbackCopy(numbers);onCopied();
+  }
+}
+
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text;ta.style.cssText='position:fixed;opacity:0;top:0;left:0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);
 }
 
 function makeDonorCard(d){
