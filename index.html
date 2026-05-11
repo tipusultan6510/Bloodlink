@@ -112,72 +112,62 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 .id-menu-item.danger{color:#C0392B}
 .id-menu-item.danger:hover{background:#fde8e6}
 /* ── MESSAGE ALL ── */
-.msgall-box{background:white;border:1.5px solid #f0f0f0;border-radius:16px;padding:18px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.msgall-header{margin-bottom:14px}
-.msgall-title{font-size:15px;font-weight:800;color:#111;margin-bottom:3px}
-.msgall-sub{font-size:12px;color:#aaa;font-weight:600}
-.msgall-progress{margin-bottom:14px}
-.msgall-bar-wrap{background:#f0f0f0;border-radius:99px;height:6px;margin-bottom:7px;overflow:hidden}
+.msgall-box{background:white;border:1.5px solid #f0f0f0;border-radius:14px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.msgall-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:0}
+.msgall-title{font-size:14px;font-weight:800;color:#111;margin-bottom:2px}
+.msgall-sub{font-size:11px;color:#aaa;font-weight:600}
+.msgall-progress{margin-top:12px}
+.msgall-bar-wrap{background:#f0f0f0;border-radius:99px;height:5px;overflow:hidden}
 .msgall-bar{height:100%;background:linear-gradient(90deg,#C0392B,#e74c3c);border-radius:99px;transition:width .4s ease;width:0%}
-.msgall-count{font-size:12px;font-weight:800;color:#C0392B}
-.msgall-btns{display:flex;gap:10px}
-.msgall-btn{background:#C0392B;color:white;border:none;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:7px;transition:all .2s}
-.msgall-btn:hover{background:#96281B;transform:scale(1.02)}
-.msgall-btn:disabled{background:#ddd;color:#aaa;cursor:not-allowed;transform:none}
-.msgall-next-btn{background:#1a7a4a;color:white;border:none;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s}
+.msgall-count{font-size:11px;font-weight:800;color:#888}
+.msgall-btn{background:#C0392B;color:white;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;flex-shrink:0}
+.msgall-btn:hover{background:#96281B}
+.msgall-btn:disabled{background:#ddd;color:#aaa;cursor:not-allowed}
+.msgall-next-btn{background:#1a7a4a;color:white;border:none;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s}
 .msgall-next-btn:hover{background:#145c38}
-.msgall-done{font-size:13px;font-weight:800;color:#1a7a4a;margin-top:10px}
+.msgall-done{font-size:12px;font-weight:800;color:#1a7a4a;margin-top:8px}
 
 .trash-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;color:#aaa;font-size:12px;font-weight:700;font-family:inherit;transition:color .2s}
 .trash-btn:hover{color:#C0392B}
 .trash-count{background:#C0392B;color:white;border-radius:20px;font-size:10px;font-weight:800;padding:1px 6px;min-width:18px;text-align:center;display:none}
 .trash-count.show{display:inline-block}
 /* Trash popup - smart redesign */
-.trash-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(4px)}
+.trash-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:300;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
 .trash-overlay.show{display:flex}
-.trash-box{background:#ffffff;border-radius:28px 28px 0 0;width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -12px 50px rgba(0,0,0,.5);animation:slideUp .35s cubic-bezier(.34,1.56,.64,1)}
+.trash-box{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 -4px 30px rgba(0,0,0,.1),0 -1px 0 rgba(0,0,0,.06);animation:slideUp .35s cubic-bezier(.34,1.56,.64,1)}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-
-/* Trash header */
 .trash-header{padding:10px 20px 0;flex-shrink:0}
-.trash-drag-bar{width:36px;height:4px;background:#e0e0e0;border-radius:99px;margin:0 auto 16px}
+.trash-drag-bar{width:40px;height:4px;background:#ebebeb;border-radius:99px;margin:0 auto 14px}
 .trash-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-.trash-title{font-size:18px;font-weight:900;display:flex;align-items:center;gap:10px;color:#111;letter-spacing:-.3px}
-.trash-title-icon{width:34px;height:34px;background:#fde8e6;border:1px solid rgba(192,57,43,.2);border-radius:10px;display:flex;align-items:center;justify-content:center}
-.trash-close{background:#f5f5f5;border:none;cursor:pointer;color:#999;width:32px;height:32px;border-radius:50%;font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center;transition:all .15s}
-.trash-close:hover{background:#eee;color:#333}
-.trash-meta-row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid #f0f0f0}
-.trash-subtitle{font-size:12px;color:#aaa;font-weight:600}
-.trash-restore-all{background:linear-gradient(135deg,#1a7a4a,#22a05a);border:none;border-radius:20px;padding:7px 16px;font-size:12px;font-weight:800;color:white;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:5px}
-.trash-restore-all:hover{transform:scale(1.04);box-shadow:0 4px 12px rgba(26,122,74,.4)}
-
-/* Trash body */
-.trash-body{overflow-y:auto;flex:1;padding:14px 16px}
+.trash-title{font-size:17px;font-weight:900;display:flex;align-items:center;gap:9px;color:#111}
+.trash-title-icon{width:32px;height:32px;background:#fde8e6;border-radius:10px;display:flex;align-items:center;justify-content:center}
+.trash-close{background:#f5f5f5;border:none;cursor:pointer;color:#aaa;width:30px;height:30px;border-radius:50%;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.trash-close:hover{background:#fde8e6;color:#C0392B}
+.trash-meta-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f5f5f5}
+.trash-subtitle{font-size:12px;color:#ccc;font-weight:600}
+.trash-restore-all{background:#e6f4ee;border:none;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:#1a7a4a;cursor:pointer;font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:5px}
+.trash-restore-all:hover{background:#1a7a4a;color:white}
+.trash-body{overflow-y:auto;flex:1;padding:12px 16px}
 .trash-body::-webkit-scrollbar{width:0}
-.trash-item{background:#f9f9f9;border:1px solid #eee;border-radius:16px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:background .15s}
-.trash-item:hover{background:#f0f0f0}
-.trash-item-blood{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:white;flex-shrink:0;position:relative}
-.trash-item-blood::after{content:'';position:absolute;inset:0;border-radius:12px;background:rgba(255,255,255,.15)}
+.trash-item{background:#fff;border:1.5px solid #f0f0f0;border-radius:14px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:11px;transition:all .15s;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.trash-item:hover{border-color:#ddd;box-shadow:0 3px 12px rgba(0,0,0,.08)}
+.trash-item-blood{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;color:white;flex-shrink:0}
 .trash-item-info{flex:1;min-width:0}
-.trash-item-name{font-size:14px;font-weight:800;color:#111;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.trash-item-meta{font-size:11px;color:#aaa;display:flex;align-items:center;gap:6px}
-.trash-item-meta-dot{width:3px;height:3px;background:#ccc;border-radius:50%}
-.trash-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
-.trash-item-days{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;white-space:nowrap}
-.trash-item-days.urgent{background:rgba(192,57,43,.25);color:#e57373;border:1px solid rgba(192,57,43,.3)}
-.trash-item-days.safe{background:#f0f0f0;color:#aaa;border:1px solid #e0e0e0}
-.trash-restore-btn{background:rgba(26,122,74,.2);border:1px solid rgba(26,122,74,.4);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:800;color:#4ade80;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
-.trash-restore-btn:hover{background:rgba(26,122,74,.4);transform:scale(1.05)}
-
-/* Trash footer */
-.trash-footer{padding:12px 20px 28px;flex-shrink:0;text-align:center;border-top:1px solid #f0f0f0}
-.trash-footer-note{font-size:11px;color:#bbb;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px}
-
-/* Trash empty */
-.trash-empty{text-align:center;padding:44px 14px;color:#ccc}
-.trash-empty-icon{font-size:48px;margin-bottom:12px;display:block;opacity:.4}
-.trash-empty-title{font-size:15px;font-weight:800;color:#bbb;margin-bottom:4px}
-.trash-empty-sub{font-size:12px;color:#ccc}
+.trash-item-name{font-size:14px;font-weight:800;color:#111;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.trash-item-meta{font-size:11px;color:#ccc;display:flex;align-items:center;gap:5px}
+.trash-item-meta-dot{width:3px;height:3px;background:#e0e0e0;border-radius:50%}
+.trash-item-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.trash-item-days{font-size:10px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.trash-item-days.urgent{background:#fde8e6;color:#C0392B}
+.trash-item-days.safe{background:#f5f5f5;color:#ccc}
+.trash-restore-btn{background:#e6f4ee;border:none;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:800;color:#1a7a4a;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.trash-restore-btn:hover{background:#1a7a4a;color:white}
+.trash-footer{padding:12px 20px 28px;flex-shrink:0;text-align:center;border-top:1px solid #f5f5f5}
+.trash-footer-note{font-size:11px;color:#ddd;font-weight:600;display:flex;align-items:center;justify-content:center;gap:5px}
+.trash-empty{text-align:center;padding:44px 14px}
+.trash-empty-icon{font-size:44px;margin-bottom:10px;display:block;opacity:.25}
+.trash-empty-title{font-size:15px;font-weight:800;color:#ccc;margin-bottom:4px}
+.trash-empty-sub{font-size:12px;color:#ddd}
 /* Card delete - simple smooth fade */
 @keyframes cardFadeOut{
   0%{opacity:1;transform:scale(1)}
@@ -454,10 +444,8 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     <div class="login-form-box">
       <div class="login-form-title">🩸 Enter Your Name</div>
       <div class="login-form-sub">Your name helps us track activity for security</div>
-      <div style="position:relative">
-        <input class="login-input" id="user-name-input" type="text" placeholder="e.g. Mahir Ahmed" maxlength="40" onkeydown="if(event.key==='Enter')submitUserLogin()" style="padding-right:110px">
-        <span style="position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:12px;color:#bbb;font-weight:700;pointer-events:none;white-space:nowrap">আপনার নাম লিখুন</span>
-      </div>
+      <input class="login-input" id="user-name-input" type="text" placeholder="e.g. Mahir Ahmed" maxlength="40" onkeydown="if(event.key==='Enter')submitUserLogin()">
+      <div style="font-size:11px;color:#C0392B;font-weight:700;margin-top:-8px;margin-bottom:10px;text-align:right">আপনার নাম লিখুন ✍️</div>
       <div class="login-err" id="user-name-err">⚠️ Please enter your name to continue.</div>
       <button class="login-btn login-btn-user" onclick="submitUserLogin()">Continue as User</button>
       <button class="login-back" onclick="backToRoleSelect()">← Back</button>
@@ -554,32 +542,27 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     </div>
   </div>
   <div class="sh2"><span class="sh2-t">All Donors</span><span style="font-size:11px;font-weight:800;color:#C0392B;background:#fde8e6;padding:3px 10px;border-radius:20px">🩸 Free Forever</span><span class="sh2-c" id="dcnt"></span></div>
-  <div id="dlist"><div class="loading"><div class="spin"></div>Loading donors...</div></div>
-  <!-- MESSAGE ALL PANEL -->
-  <div id="msgAllPanel" style="display:none;margin-top:12px">
+  <!-- MESSAGE ALL PANEL - above donors list -->
+  <div id="msgAllPanel" style="display:none;margin-bottom:10px">
     <div class="msgall-box">
-      <div class="msgall-header">
-        <div class="msgall-title">📨 Message All Donors</div>
-        <div class="msgall-sub" id="msgAllSub">Select a blood group to message donors</div>
+      <div class="msgall-top">
+        <div>
+          <div class="msgall-title">📨 Message All</div>
+          <div class="msgall-sub" id="msgAllSub"></div>
+        </div>
+        <button class="msgall-btn" id="msgAllBtn" onclick="startMessageAll()">Send</button>
       </div>
       <div class="msgall-progress" id="msgAllProgress" style="display:none">
         <div class="msgall-bar-wrap"><div class="msgall-bar" id="msgAllBar"></div></div>
-        <div class="msgall-count" id="msgAllCount"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <div class="msgall-count" id="msgAllCount"></div>
+          <button class="msgall-next-btn" id="msgAllNextBtn" onclick="nextBatch()" style="display:none">Next →</button>
+        </div>
       </div>
-      <div class="msgall-btns">
-        <button class="msgall-btn" id="msgAllBtn" onclick="startMessageAll()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-          Message All
-        </button>
-        <button class="msgall-next-btn" id="msgAllNextBtn" onclick="nextBatch()" style="display:none">
-          Next 10 →
-        </button>
-      </div>
-      <div class="msgall-done" id="msgAllDone" style="display:none">
-        ✅ All messages sent!
-      </div>
+      <div class="msgall-done" id="msgAllDone" style="display:none">✅ All messages sent!</div>
     </div>
   </div>
+  <div id="dlist"><div class="loading"><div class="spin"></div>Loading donors...</div></div>
 </div>
 
 <div id="t-add" class="wrap" style="display:none">
@@ -999,7 +982,6 @@ function setBG(b){
 
 function nextBatch(){
   document.getElementById('msgAllNextBtn').style.display='none';
-  document.getElementById('msgAllBtn').disabled=true;
   sendBatch();
 }
 var msgAllDonors=[];
@@ -1027,51 +1009,48 @@ function updateMsgAllPanel(){
 }
 
 function startMessageAll(){
+  var btn=document.getElementById('msgAllBtn');
+  btn.disabled=true;
   msgAllBatchIndex=0;
   document.getElementById('msgAllProgress').style.display='block';
   document.getElementById('msgAllDone').style.display='none';
+  document.getElementById('msgAllNextBtn').style.display='none';
   sendBatch();
 }
 
 function sendBatch(){
-  var btn=document.getElementById('msgAllBtn');
-  var nextBtn=document.getElementById('msgAllNextBtn');
   var total=msgAllDonors.length;
   var start=msgAllBatchIndex;
   var end=Math.min(start+MSG_BATCH_SIZE,total);
   var batch=msgAllDonors.slice(start,end);
   var msg=encodeURIComponent('🚨 Blood Needed!\n\nBlood Group: '+bgf+'\nUrgently needed. Please respond ASAP if you can donate.\n\nThank you 🙏');
-  // Open each chat with small delay to avoid popup blocker
-  batch.forEach(function(d,i){
-    setTimeout(function(){
-      var num=(d.phone||'').replace(/\D/g,'');
-      if(num.length===10)num='880'+num;
-      else if(num.startsWith('0'))num='880'+num.slice(1);
-      window.open('https://wa.me/'+num+'?text='+msg,'_blank');
-    },i*600);
-  });
-  msgAllBatchIndex=end;
-  // Update progress bar
-  var pct=Math.round((end/total)*100);
-  document.getElementById('msgAllBar').style.width=pct+'%';
-  document.getElementById('msgAllCount').textContent='Sent '+end+' of '+total+' messages';
-  if(end>=total){
-    // All done
-    setTimeout(function(){
-      btn.disabled=true;
-      nextBtn.style.display='none';
-      document.getElementById('msgAllDone').style.display='block';
-      document.getElementById('msgAllCount').textContent='✅ All '+total+' donors messaged!';
-    },batch.length*600+200);
-  } else {
-    // More batches remaining
-    setTimeout(function(){
-      btn.disabled=true;
-      nextBtn.style.display='block';
-      nextBtn.textContent='Next '+(Math.min(MSG_BATCH_SIZE,total-end))+' →';
-      document.getElementById('msgAllCount').textContent='Sent '+end+' of '+total+' — tap Next for more';
-    },batch.length*600+200);
+  var i=0;
+  function openNext(){
+    if(i>=batch.length){
+      msgAllBatchIndex=end;
+      var pct=Math.round((end/total)*100);
+      document.getElementById('msgAllBar').style.width=pct+'%';
+      if(end>=total){
+        document.getElementById('msgAllCount').textContent='✅ All '+total+' donors messaged!';
+        document.getElementById('msgAllDone').style.display='block';
+      } else {
+        var rem=Math.min(MSG_BATCH_SIZE,total-end);
+        document.getElementById('msgAllCount').textContent='Sent '+end+' of '+total;
+        document.getElementById('msgAllNextBtn').style.display='inline-block';
+        document.getElementById('msgAllNextBtn').textContent='Next '+rem+' →';
+      }
+      return;
+    }
+    var d=batch[i];
+    var num=(d.phone||'').replace(/\D/g,'');
+    if(num.length===10)num='880'+num;
+    else if(num.startsWith('0'))num='880'+num.slice(1);
+    window.open('https://wa.me/'+num+'?text='+msg,'_blank');
+    document.getElementById('msgAllCount').textContent='Opening '+(start+i+1)+' of '+total+'...';
+    i++;
+    setTimeout(openNext,900);
   }
+  openNext();
 }
 
 function makeDonorCard(d){
