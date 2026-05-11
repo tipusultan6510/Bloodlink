@@ -22,7 +22,7 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 .ldot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex-shrink:0}
 .ldot.pulse{animation:bl .9s infinite}
 @keyframes bl{0%,100%{opacity:1}50%{opacity:.2}}
-.tabs{background:#9b2226;display:grid;grid-template-columns:repeat(4,1fr)}
+.tabs{background:#9b2226;display:grid;grid-template-columns:repeat(3,1fr)}
 .tab{background:none;border:none;border-bottom:3px solid transparent;color:rgba(255,255,255,.55);padding:12px 4px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;transition:all .15s;text-align:center}
 .tab:hover{color:white;background:rgba(255,255,255,.07)}
 .tab.on{color:white;border-bottom-color:white}
@@ -112,19 +112,18 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 .id-menu-item.danger{color:#C0392B}
 .id-menu-item.danger:hover{background:#fde8e6}
 /* ── MESSAGE ALL ── */
-.msgall-box{background:white;border:1.5px solid #f0f0f0;border-radius:14px;padding:14px 16px;box-shadow:0 2px 10px rgba(0,0,0,.05)}
-.msgall-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:0}
-.msgall-title{font-size:14px;font-weight:800;color:#111;margin-bottom:2px}
-.msgall-sub{font-size:11px;color:#aaa;font-weight:600}
-.msgall-progress{margin-top:12px}
-.msgall-bar-wrap{background:#f0f0f0;border-radius:99px;height:5px;overflow:hidden}
-.msgall-bar{height:100%;background:linear-gradient(90deg,#C0392B,#e74c3c);border-radius:99px;transition:width .4s ease;width:0%}
-.msgall-count{font-size:11px;font-weight:800;color:#888}
-.msgall-btn{background:#C0392B;color:white;border:none;border-radius:10px;padding:10px 18px;font-size:13px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;flex-shrink:0}
+.msgall-box{background:#fde8e6;border-radius:12px;padding:12px 14px;margin-bottom:2px}
+.msgall-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.msgall-title{font-size:13px;font-weight:800;color:#C0392B;margin-bottom:1px}
+.msgall-sub{font-size:11px;color:#a04040;font-weight:600}
+.msgall-progress{margin-top:10px}
+.msgall-bar-wrap{background:rgba(192,57,43,.2);border-radius:99px;height:4px;overflow:hidden;margin-bottom:5px}
+.msgall-bar{height:100%;background:#C0392B;border-radius:99px;transition:width .4s ease;width:0%}
+.msgall-count{font-size:11px;font-weight:700;color:#C0392B}
+.msgall-btn{background:#C0392B;color:white;border:none;border-radius:8px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s;white-space:nowrap;flex-shrink:0}
 .msgall-btn:hover{background:#96281B}
-.msgall-btn:disabled{background:#ddd;color:#aaa;cursor:not-allowed}
-.msgall-next-btn{background:#1a7a4a;color:white;border:none;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit;transition:all .2s}
-.msgall-next-btn:hover{background:#145c38}
+.msgall-btn:disabled{background:rgba(192,57,43,.3);cursor:not-allowed}
+.msgall-next-btn{background:white;color:#1a7a4a;border:1.5px solid #1a7a4a;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:800;cursor:pointer;font-family:inherit;margin-top:6px}
 .msgall-done{font-size:12px;font-weight:800;color:#1a7a4a;margin-top:8px}
 
 .trash-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:0;color:#aaa;font-size:12px;font-weight:700;font-family:inherit;transition:color .2s}
@@ -547,14 +546,14 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
     <div class="msgall-box">
       <div class="msgall-top">
         <div>
-          <div class="msgall-title">📨 Message All</div>
+          <div class="msgall-title">🩸 Message All Available Donors</div>
           <div class="msgall-sub" id="msgAllSub"></div>
         </div>
-        <button class="msgall-btn" id="msgAllBtn" onclick="startMessageAll()">Send</button>
+        <button class="msgall-btn" id="msgAllBtn" onclick="startMessageAll()">Send via WhatsApp</button>
       </div>
       <div class="msgall-progress" id="msgAllProgress" style="display:none">
         <div class="msgall-bar-wrap"><div class="msgall-bar" id="msgAllBar"></div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
           <div class="msgall-count" id="msgAllCount"></div>
           <button class="msgall-next-btn" id="msgAllNextBtn" onclick="nextBatch()" style="display:none">Next →</button>
         </div>
