@@ -657,74 +657,33 @@ body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-
 
 <!-- ABOUT MODAL -->
 <div class="modal" id="aboutmodal" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="mbox" style="max-width:400px;padding:0;overflow:hidden;border-radius:20px">
+  <div class="mbox" style="max-width:320px;padding:28px 22px 20px;border-radius:20px;text-align:center">
 
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#C0392B,#e74c3c);padding:28px 24px 20px;text-align:center">
-      <div style="width:64px;height:64px;background:rgba(255,255,255,.15);border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
-        <svg width="36" height="36" viewBox="0 0 80 80"><path d="M40 10 C40 10 18 24 18 44 C18 56 28 66 40 66 C52 66 62 56 62 44 C62 24 40 10 40 10Z" fill="white"/><rect x="36" y="34" width="8" height="20" rx="4" fill="#C62828"/><rect x="30" y="40" width="20" height="8" rx="4" fill="#C62828"/></svg>
-      </div>
-      <div style="font-size:22px;font-weight:900;color:white;letter-spacing:-0.5px">BloodLink</div>
-      <div style="font-size:12px;color:rgba(255,255,255,.7);margin-top:2px">Community Blood Donor Network</div>
+    <div style="width:52px;height:52px;background:#fde8e6;border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+      <svg width="24" height="24" viewBox="0 0 80 80"><path d="M40 10 C40 10 18 24 18 44 C18 56 28 66 40 66 C52 66 62 56 62 44 C62 24 40 10 40 10Z" fill="#C0392B"/><rect x="36" y="34" width="8" height="20" rx="4" fill="white"/><rect x="30" y="40" width="20" height="8" rx="4" fill="white"/></svg>
     </div>
 
-    <div style="padding:20px 22px;max-height:70vh;overflow-y:auto">
+    <div style="font-size:15px;font-weight:700;color:#C0392B;margin-bottom:2px">BloodLink</div>
+    <div style="font-size:11px;color:#aaa;margin-bottom:18px">Community Blood Donor Network</div>
 
-      <!-- Description -->
-      <div style="background:#fff5f5;border-left:3px solid #C0392B;border-radius:0 10px 10px 0;padding:13px 14px;margin-bottom:16px">
-        <div style="font-size:13px;color:#555;line-height:1.8">
-          Created by <strong style="color:#111">Mahir Ahmed Tipu</strong> — because in an emergency, every second counts.
-        </div>
-        <div style="font-size:13px;color:#555;line-height:1.8;margin-top:6px">
-          If you face any issue, feel free to reach out.
-          <a href="https://wa.me/8801770788005" target="_blank" style="display:inline-flex;align-items:center;gap:4px;background:#25D366;color:white;text-decoration:none;font-size:11px;font-weight:800;padding:3px 10px;border-radius:20px;margin-left:4px;vertical-align:middle">
-            <svg viewBox="0 0 24 24" width="12" height="12" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.124 1.526 5.855L0 24l6.303-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
-            WhatsApp
-          </a>
-        </div>
-      </div>
+    <p style="font-size:13px;color:#555;line-height:1.75;margin:0 0 6px">
+      Created by <strong style="color:#111">Mahir Ahmed Tipu</strong> to help people easily find blood donors in their community.
+    </p>
+    <p style="font-size:13px;color:#555;line-height:1.75;margin:0 0 16px">
+      Because in an emergency, every second counts. 🩸
+    </p>
 
-      <!-- Dua -->
-      <div style="text-align:center;background:linear-gradient(135deg,#fff8f0,#fff5f5);border:1px solid rgba(192,57,43,.1);border-radius:12px;padding:14px;margin-bottom:16px">
-        <div style="font-size:20px;margin-bottom:6px">🤲</div>
-        <div style="font-size:13px;color:#7f1d1d;font-weight:600;line-height:1.7">If this helped you in any way,<br>please keep me in your prayers.</div>
-      </div>
-
-      <!-- React -->
-      <div style="background:white;border:1.5px solid #fde8e6;border-radius:14px;padding:14px;margin-bottom:16px;text-align:center">
-        <div style="font-size:12px;color:#aaa;font-weight:700;margin-bottom:10px">Did BloodLink make you smile? Show some love! 😊</div>
-        <button id="aboutReactBtn" onclick="toggleReact()" style="background:#fde8e6;border:2px solid #f5c6c2;border-radius:50px;padding:10px 22px;font-size:22px;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:8px">
-          <span>❤️</span>
-          <span style="font-size:14px;font-weight:800;color:#C0392B" id="reactCount">0</span>
-        </button>
-        <div style="font-size:11px;color:#ccc;margin-top:8px" id="reactLabel">Be the first to react</div>
-      </div>
-
-      <!-- Kind Words -->
-      <div style="margin-bottom:16px">
-        <div style="font-size:14px;font-weight:800;color:#111;margin-bottom:10px;display:flex;align-items:center;gap:7px">
-          💌 Kind Words from the Community
-        </div>
-
-        <!-- Message feed -->
-        <div id="kindWordsFeed" style="margin-bottom:12px;min-height:60px"></div>
-
-        <!-- Write message -->
-        <div style="background:#f9f9f9;border:1.5px solid #eee;border-radius:12px;padding:12px">
-          <textarea id="kindWordInput" placeholder="Leave a thank you or share your story... 🌸" maxlength="150" style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px;color:#111;resize:none;outline:none;line-height:1.6;height:60px"></textarea>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
-            <span style="font-size:11px;color:#ccc" id="kindWordCount">0 / 150</span>
-            <button onclick="submitKindWord()" style="background:#C0392B;color:white;border:none;border-radius:20px;padding:7px 18px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit">Send 💌</button>
-          </div>
-        </div>
-      </div>
-
+    <div style="background:#f9f9f9;border-radius:12px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;text-align:left">
+      <span style="font-size:18px;flex-shrink:0">🤲</span>
+      <span style="font-size:12px;color:#777;line-height:1.6">If this helped you, please keep me in your prayers.</span>
     </div>
 
-    <!-- Close -->
-    <div style="padding:12px 22px 20px;border-top:1px solid #f5f5f5;text-align:center">
-      <button class="bprimary" onclick="document.getElementById('aboutmodal').classList.remove('open')" style="max-width:200px;margin:0 auto;display:block">Close</button>
-    </div>
+    <a href="https://wa.me/8801770788005" target="_blank" style="width:100%;display:flex;align-items:center;justify-content:center;gap:6px;background:#25D366;color:white;text-decoration:none;font-size:13px;font-weight:700;padding:11px 16px;border-radius:12px;margin-bottom:10px;box-sizing:border-box">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.127.556 4.124 1.526 5.855L0 24l6.303-1.504A11.954 11.954 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0z"/></svg>
+      Any problem? Contact me
+    </a>
+
+    <button class="bprimary" onclick="document.getElementById('aboutmodal').classList.remove('open')" style="min-height:auto;padding:11px;font-size:13px">Close</button>
 
   </div>
 </div>
@@ -986,7 +945,10 @@ function initFB(cfg){
 function runMigrationOnce(){
   var migKey='bl_migration_v1';
   if(localStorage.getItem(migKey))return;
-  var unavailable=Object.keys(donors).filter(function(k){return donors[k].status==='unavailable';});
+  // only migrate those who are unavailable WITHOUT a donatedDate
+  var unavailable=Object.keys(donors).filter(function(k){
+    return donors[k].status==='unavailable' && !donors[k].donatedDate;
+  });
   if(!unavailable.length){localStorage.setItem(migKey,'done');return;}
   // migrate all unavailable to available in Firebase
   unavailable.forEach(function(k){
@@ -2046,6 +2008,7 @@ document.addEventListener('click',function(e){
 });
 
 document.getElementById('editmodal').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('aboutmodal').addEventListener('click',function(e){if(e.target===this)clearInterval(kindWordTimer);});
 
 var HARDCODED_CFG={
   apiKey:"AIzaSyDJrZEOeWujaWXMK2aoJnaJ9HNMD2XUINg",
